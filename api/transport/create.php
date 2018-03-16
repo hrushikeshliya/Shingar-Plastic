@@ -6,25 +6,24 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
-// include database and object files
+// include database and object file
 include_once '../config/database.php';
-include_once '../objects/department.php';
+include_once '../objects/transport.php';
  
-// get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-$obj = new Department($db);
+$obj = new Transport($db);
  
 $data = json_decode(file_get_contents("php://input"));
  
-$obj->id = $data->id; 
 $obj->name = $data->name;
-$obj->billName = $data->billName;
-$obj->billPercent = $data->billPercent;
-$obj->active = $data->active;
+$obj->shortName = $data->shortName;
+$obj->contactPerson = $data->contactPerson;
+$obj->mobile = $data->mobile;
+$obj->mobile2 = $data->mobile2;
 
-if($obj->update()){
+if($obj->create()){
     echo '{';
         echo '"message": "Success"';
     echo '}';

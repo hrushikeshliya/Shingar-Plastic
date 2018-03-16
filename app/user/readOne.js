@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 	var id = $(this).attr('data-id');
 	
-	$.getJSON("http://shingarplastic.com/api/user/readOne.php?id=" + id, function(data){
+	$.getJSON("http://shingarplastic.com/api/user/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
 		var read_one_html="";
 		
@@ -15,7 +15,6 @@ $(document).ready(function(){
 
 		read_one_html+="<table class='table table-bordered table-hover'>";
 		 
-
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Username</td>";
 		        read_one_html+="<td>" + data.username + "</td>";
@@ -63,10 +62,9 @@ $(document).ready(function(){
 
 		read_one_html+="</table>";
 		
-		
 		$("#page-content").html(read_one_html);
 		 
-		changePageTitle("User Details");
+		changePageTitle("User Details");   // Change Needed HERE
 	});
 
     });

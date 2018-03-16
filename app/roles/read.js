@@ -1,6 +1,5 @@
 $(document).ready(function(){
     show(); 
-    
     $(document).on('click', '.read-button', function(){
     show();
 });
@@ -9,7 +8,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON("http://shingarplastic.com/api/roles/read.php", function(data){
+$.getJSON("http://shingarplastic.com/api/roles/read.php", function(data){   // Change Needed HERE
  
  
 read_html="";
@@ -27,7 +26,7 @@ read_html+="<table class='table table-bordered table-hover'>";
     read_html+="</tr>";
      
 
-$.each(data.roles, function(key, val) {
+$.each(data.roles, function(key, val) {   // Change Needed HERE
  	
     read_html+="<tr>";
  
@@ -54,11 +53,9 @@ $.each(data.roles, function(key, val) {
  
 });
 
- 
-
 read_html+="</table>";
 $("#page-content").html(read_html);
-changePageTitle("Roles Administration");
+changePageTitle("Role Administration");   // Change Needed HERE
 });
  
 }

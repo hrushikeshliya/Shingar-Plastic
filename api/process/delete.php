@@ -6,28 +6,26 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
  
- 
 // include database and object file
 include_once '../config/database.php';
-include_once '../objects/roles.php';
+include_once '../objects/process.php';
  
-
 $database = new Database();
 $db = $database->getConnection();
  
-$role = new Role($db);
+$obj = new Process($db);
  
 $data = json_decode(file_get_contents("php://input"));
  
-$role->id = $data->id;
+$obj->id = $data->id;
  
-if($role->delete()){
+if($obj->delete()){
     echo '{';
         echo '"message": "Success."';
     echo '}';
 } else {
     echo '{';
-        echo '"message": "Oops! Something Went Wrong"';
+        echo '"message": "Internal Server Error"';
     echo '}';
 }
 ?>

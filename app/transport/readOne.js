@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 	var id = $(this).attr('data-id');
 	
-	$.getJSON("http://shingarplastic.com/api/roles/readOne.php?id=" + id, function(data){
+	$.getJSON("http://shingarplastic.com/api/transport/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
 		var read_one_html="";
 		
@@ -15,23 +15,41 @@ $(document).ready(function(){
 
 		read_one_html+="<table class='table table-bordered table-hover'>";
 		 
-
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Id</td>";
 		        read_one_html+="<td>" + data.id + "</td>";
 		    read_one_html+="</tr>";
 		    
 		    read_one_html+="<tr>";
-		        read_one_html+="<td>Role Name</td>";
+		        read_one_html+="<td>Transport Name</td>";
 		        read_one_html+="<td>" + data.name + "</td>";
 		    read_one_html+="</tr>";
-		    
+
+		    read_one_html+="<tr>";
+				read_one_html+="<td>Transport Short Name</td>";
+				read_one_html+="<td>" + data.shortName + "</td>";
+			read_one_html+="</tr>";			
+
+			read_one_html+="<tr>";
+				read_one_html+="<td>Contact Person</td>";
+				read_one_html+="<td>" + data.contactPerson + "</td>";
+			read_one_html+="</tr>";		
+
+			read_one_html+="<tr>";
+				read_one_html+="<td>Mobile</td>";
+				read_one_html+="<td>" + data.mobile + "</td>";
+			read_one_html+="</tr>";
+
+			read_one_html+="<tr>";
+				read_one_html+="<td>Mobile 2</td>";
+				read_one_html+="<td>" + data.mobile2+ "</td>";
+			read_one_html+="</tr>";
+			
 		read_one_html+="</table>";
-		
 		
 		$("#page-content").html(read_one_html);
 		 
-		changePageTitle("Role Details");
+		changePageTitle("Transport Details");   // Change Needed HERE
 	});
 
     });

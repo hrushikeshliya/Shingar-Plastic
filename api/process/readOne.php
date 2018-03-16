@@ -7,26 +7,27 @@ header('Content-Type: application/json');
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/roles.php';
+include_once '../objects/process.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-$role = new Role($db);
+$obj = new Process($db);
 
 // set ID property of User to be edited
-$role->id = isset($_GET['id']) ? $_GET['id'] : die();
+$obj->id = isset($_GET['id']) ? $_GET['id'] : die();
  
 // query Object
-$stmt = $role->readOne();
+$stmt = $obj->readOne();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     
         $response=array(
-            "id" => $role ->id,
-            "name" => $row['name']
+            "id" => $obj ->id,
+            "name" => $row['name'],
+            "active" => $row['active']
         );
   
 // make it json format

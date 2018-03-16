@@ -25,30 +25,30 @@ var username = $.cookie('username');;
 		});
 
 
-	var create_navBar_html="";
+	var create_html="";
 
-	create_navBar_html += "<nav class='navbar navbar-inverse'>";
-	create_navBar_html += "  <div class='container-fluid'>";
-	create_navBar_html += "    <div class='navbar-header'>";
-	create_navBar_html += "      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#myNavbar'>";
-	create_navBar_html += "        <span class='icon-bar'></span>";
-	create_navBar_html += "        <span class='icon-bar'></span>";
-	create_navBar_html += "        <span class='icon-bar'></span>";                       
-	create_navBar_html += "      </button>";
-	create_navBar_html += "      <a class='navbar-brand' href='../home.php'>SP</a>";
-	create_navBar_html += "    </div>";
-	create_navBar_html += "    <div class='collapse navbar-collapse' id='myNavbar'>";
-	create_navBar_html += "      <ul class='nav navbar-nav'>";
-	create_navBar_html +=         navList;
-	create_navBar_html += "      </ul>";
-	create_navBar_html += "      <li><a>Date : "+ date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear(); +"</a></li>";
-	create_navBar_html += "      <li><a>User : "+$.cookie('username');+"</a></li>";
-	create_navBar_html += "      <li><a href='index.php'><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>";
-	create_navBar_html += "    </div>";
-	create_navBar_html += "  </div>";
-	create_navBar_html += "</nav>";
+	create_html += "<nav class='navbar navbar-inverse'>";
+	create_html += "  <div class='container-fluid'>";
+	create_html += "    <div class='navbar-header'>";
+	create_html += "      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#myNavbar'>";
+	create_html += "        <span class='icon-bar'></span>";
+	create_html += "        <span class='icon-bar'></span>";
+	create_html += "        <span class='icon-bar'></span>";                       
+	create_html += "      </button>";
+	create_html += "      <a class='navbar-brand' href='../home.php'>SP</a>";
+	create_html += "    </div>";
+	create_html += "    <div class='collapse navbar-collapse' id='myNavbar'>";
+	create_html += "      <ul class='nav navbar-nav'>";
+	create_html +=         navList;
+	create_html += "      </ul>";
+	create_html += "      <li><a>Date : "+ date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear(); +"</a></li>";
+	create_html += "      <li><a>User : "+$.cookie('username');+"</a></li>";
+	create_html += "      <li><a href='index.php'><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>";
+	create_html += "    </div>";
+	create_html += "  </div>";
+	create_html += "</nav>";
 
-	$("#nav").html(create_navBar_html);
+	$("#nav").html(create_html);
         
 });
 

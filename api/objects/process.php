@@ -1,14 +1,15 @@
 <?php
 
-class Role{
+class Process{
 
     // database connection and table name
     private $conn;
-    private $table_name = "roles";
+    private $table_name = "process";
  
     // object properties
     public $id;
     public $name;
+    public $active;
 
     // constructor with $db as database connection
     public function __construct($db){
@@ -16,14 +17,14 @@ class Role{
     	}
 
 	function read(){	
-	    $query = "SELECT * FROM roles where deleted = 0 ";	
+	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 ";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
     
     function readOne(){	
-	    $query = "SELECT * FROM roles where deleted = 0 AND id = ?";	
+	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 AND id = ?";	
 	    $stmt = $this->conn->prepare($query);	
         $stmt->bindParam(1, $this->id);
         $stmt->execute();	 	
@@ -34,7 +35,8 @@ class Role{
         $query = "UPDATE
                     " . $this->table_name . "
                 SET
-                    name = :name                             
+                    name = :name,
+                    active = :active                          
                 WHERE
                     Id = :id";
     
@@ -43,9 +45,10 @@ class Role{
         // sanitize
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->id=htmlspecialchars(strip_tags($this->id));
-           
+
         // bind new values
         $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':active', $this->active);
         $stmt->bindParam(':id', $this->id);
 
         if($stmt->execute()){
@@ -74,6 +77,28 @@ class Role{
         return false;
         
     }
+
+    function create(){
+        
+            $query = "INSERT INTO
+                       " . $this->table_name . "
+                   SET
+                       name=:name";
+        
+           $stmt = $this->conn->prepare($query);
+        
+           // sanitize
+           $this->name=htmlspecialchars(strip_tags($this->name));
+                
+           // bind values
+           $stmt->bindParam(":name", $this->name);
+        
+           if($stmt->execute()){
+               return true;
+           }else{
+               return false;
+           }
+       }
 
 	
 }

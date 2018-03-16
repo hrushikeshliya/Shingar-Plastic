@@ -8,20 +8,24 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/roles.php';
+include_once '../objects/transport.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-$role = new Role($db);
+$obj = new Transport($db);
  
 $data = json_decode(file_get_contents("php://input"));
  
-$role->id = $data->id; 
-$role->name = $data->name;
+$obj->id = $data->id; 
+$obj->name = $data->name;
+$obj->shortName = $data->shortName;
+$obj->contactPerson = $data->contactPerson;
+$obj->mobile = $data->mobile;
+$obj->mobile2 = $data->mobile2;
 
-if($role->update()){
+if($obj->update()){
     echo '{';
         echo '"message": "Success"';
     echo '}';

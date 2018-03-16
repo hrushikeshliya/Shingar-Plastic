@@ -4,7 +4,7 @@ $(document).ready(function(){
         
         var id = $(this).attr('data-id');
         
-        $.getJSON("http://shingarplastic.com/api/user/readOne.php?id=" + id, function(data){
+        $.getJSON("http://shingarplastic.com/api/user/readOne.php?id=" + id, function(data){  // Change Needed HERE
  
  	     var firstName = data.firstName;
 	     var middleName = data.middleName;
@@ -41,72 +41,72 @@ $(document).ready(function(){
 
 		status_options_html+="</select>";
 
-		var update_product_html="";
+		var update_html="";
 		 
-		update_product_html+="<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
-		    update_product_html+="<span class='glyphicon glyphicon-arrow-left'></span> Go Back";
-		update_product_html+="</div>";
+		update_html+="<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
+		    update_html+="<span class='glyphicon glyphicon-arrow-left'></span> Go Back";
+		update_html+="</div>";
 		
-		update_product_html+="<form id='update-form' action='#' method='post' border='0'>";
-		    update_product_html+="<table class='table table-hover table-responsive table-bordered'>";
+		update_html+="<form id='update-form' action='#' method='post' border='0'>";
+		    update_html+="<table class='table table-hover table-responsive table-bordered'>";
 
-				update_product_html+="<tr>";
-					update_product_html+="<td>Username</td>";
-					update_product_html+="<td>" + username + "</td>";
-				update_product_html+="</tr>";
+				update_html+="<tr>";
+					update_html+="<td>Username</td>";
+					update_html+="<td>" + username + "</td>";
+				update_html+="</tr>";
 
-		        update_product_html+="<tr>";
-		            update_product_html+="<td>First Name</td>";
-		            update_product_html+="<td><input value=\"" + firstName + "\" type='text' name='firstName' class='form-control' required /></td>";
-		        update_product_html+="</tr>";
+		        update_html+="<tr>";
+		            update_html+="<td>First Name</td>";
+		            update_html+="<td><input value=\"" + firstName + "\" type='text' name='firstName' class='form-control' required /></td>";
+		        update_html+="</tr>";
 
-		        update_product_html+="<tr>";
-		            update_product_html+="<td>Middle Name</td>";
-		            update_product_html+="<td><input value=\"" + middleName + "\" type='text' name='middleName' class='form-control' required /></td>";
-		        update_product_html+="</tr>";
+		        update_html+="<tr>";
+		            update_html+="<td>Middle Name</td>";
+		            update_html+="<td><input value=\"" + middleName + "\" type='text' name='middleName' class='form-control' required /></td>";
+		        update_html+="</tr>";
 		        
-		        update_product_html+="<tr>";
-		            update_product_html+="<td>Last Name</td>";
-		            update_product_html+="<td><input value=\"" + lastName + "\" type='text' name='lastName' class='form-control' required /></td>";
-				update_product_html+="</tr>";
+		        update_html+="<tr>";
+		            update_html+="<td>Last Name</td>";
+		            update_html+="<td><input value=\"" + lastName + "\" type='text' name='lastName' class='form-control' required /></td>";
+				update_html+="</tr>";
 			
-				update_product_html+="<tr>";
-					update_product_html+="<td>Role</td>";
-					update_product_html+="<td>" + roles_options_html + "</td>";
-				update_product_html+="</tr>";
+				update_html+="<tr>";
+					update_html+="<td>Role</td>";
+					update_html+="<td>" + roles_options_html + "</td>";
+				update_html+="</tr>";
 
-				update_product_html+="<tr>";
-					update_product_html+="<td>Email</td>";
-					update_product_html+="<td><input value=\"" + email + "\" type='text' name='email' class='form-control' required /></td>";
-				update_product_html+="</tr>";
+				update_html+="<tr>";
+					update_html+="<td>Email</td>";
+					update_html+="<td><input value=\"" + email + "\" type='text' name='email' class='form-control' required /></td>";
+				update_html+="</tr>";
 
-				update_product_html+="<tr>";
-					update_product_html+="<td>Mobile</td>";
-					update_product_html+="<td><input value=\"" + mobile + "\" type='text' name='mobile' class='form-control' required /></td>";
-				update_product_html+="</tr>";
+				update_html+="<tr>";
+					update_html+="<td>Mobile</td>";
+					update_html+="<td><input value=\"" + mobile + "\" type='text' name='mobile' class='form-control' required /></td>";
+				update_html+="</tr>";
 
-				update_product_html+="<tr>";
-					update_product_html+="<td>Account Status</td>";
-					update_product_html+="<td>" + status_options_html + "</td>";
-				update_product_html+="</tr>";
+				update_html+="<tr>";
+					update_html+="<td>Account Status</td>";
+					update_html+="<td>" + status_options_html + "</td>";
+				update_html+="</tr>";
 				
-		        update_product_html+="<tr>";
+		        update_html+="<tr>";
 		 
-		            update_product_html+="<td><input value=\"" + id + "\" name='id' type='hidden' /></td>";
+		            update_html+="<td><input value=\"" + id + "\" name='id' type='hidden' /></td>";
 		 
-		            update_product_html+="<td>";
-		                update_product_html+="<button type='submit' class='btn btn-info'>";
-		                    update_product_html+="<span class='glyphicon glyphicon-edit'></span> Update";
-		                update_product_html+="</button>";
-		            update_product_html+="</td>";
+		            update_html+="<td>";
+		                update_html+="<button type='submit' class='btn btn-info'>";
+		                    update_html+="<span class='glyphicon glyphicon-edit'></span> Update";
+		                update_html+="</button>";
+		            update_html+="</td>";
 		 
-		        update_product_html+="</tr>";
+		        update_html+="</tr>";
 		 
-		    update_product_html+="</table>";
-		update_product_html+="</form>";
+		    update_html+="</table>";
+		update_html+="</form>";
 
-		$("#page-content").html(update_product_html);
-		changePageTitle("Edit User");
+		$("#page-content").html(update_html);
+		changePageTitle("Edit User");   // Change Needed HERE
 				
 		});
 	     	     
@@ -118,7 +118,7 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/user/update.php",
+		    url: "http://shingarplastic.com/api/user/update.php",   // Change Needed HERE
 		    type : "POST",
 		    contentType : 'application/json',
 		    data : form_data,

@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 	var id = $(this).attr('data-id');
 	
-	$.getJSON("http://shingarplastic.com/api/roles/readOne.php?id=" + id, function(data){
+	$.getJSON("http://shingarplastic.com/api/roles/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
 		var read_one_html="";
 		
@@ -31,7 +31,7 @@ $(document).ready(function(){
 		
 		$("#page-content").html(read_one_html);
 		 
-		changePageTitle("Role Details");
+		changePageTitle("Role Details");   // Change Needed HERE
 	});
 
     });

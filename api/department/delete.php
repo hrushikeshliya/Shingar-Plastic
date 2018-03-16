@@ -9,13 +9,13 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
  
 // include database and object file
 include_once '../config/database.php';
-include_once '../objects/roles.php';
+include_once '../objects/department.php';
  
 
 $database = new Database();
 $db = $database->getConnection();
  
-$role = new Role($db);
+$role = new Department($db);
  
 $data = json_decode(file_get_contents("php://input"));
  

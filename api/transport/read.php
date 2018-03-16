@@ -5,37 +5,42 @@ header("Content-Type: application/json; charset=UTF-8");
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/roles.php';
+include_once '../objects/transport.php';
  
 // instantiate database and product object
 $database = new Database();
 $db = $database->getConnection();
  
-$role = new Role($db);
+$obj = new Transport($db);
  
-$stmt = $role->read();
+$stmt = $obj->read();
 $num = $stmt->rowCount();
  
 if($num>0){
  
     // products array
-    $role_arr=array();
-    $role_arr["roles"]=array();
+    $arr=array();
+    $arr["transport"]=array();
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
         extract($row);
  
-        $role_item=array(
+        $arr_item=array(
             "id" => $Id,
             "name" => $name,
+            "shortName" => $shortName,
+            "contactPerson" => $contactPerson,
+            "mobile" => $mobile,
+            "mobile2" => $mobile2,
+            "active" => $active,
 
         );
  
-        array_push($role_arr["roles"], $role_item);
+        array_push($arr["transport"], $arr_item);
     }
  
-    echo json_encode($role_arr);
+    echo json_encode($arr);
 }
  
 else{

@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 	var id = $(this).attr('data-id');
 	
-	$.getJSON("http://shingarplastic.com/api/roles/readOne.php?id=" + id, function(data){
+	$.getJSON("http://shingarplastic.com/api/department/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
 		var read_one_html="";
 		
@@ -22,16 +22,35 @@ $(document).ready(function(){
 		    read_one_html+="</tr>";
 		    
 		    read_one_html+="<tr>";
-		        read_one_html+="<td>Role Name</td>";
+		        read_one_html+="<td>Department Name</td>";
 		        read_one_html+="<td>" + data.name + "</td>";
 		    read_one_html+="</tr>";
-		    
+			
+			read_one_html+="<tr>";
+				read_one_html+="<td>Bill Name</td>";
+				read_one_html+="<td>" + data.billName + "</td>";
+			read_one_html+="</tr>";
+
+			read_one_html+="<tr>";
+				read_one_html+="<td>Bill Percent</td>";
+				read_one_html+="<td>" + data.billPercent + "</td>";
+			read_one_html+="</tr>";
+
+			read_one_html+="<tr>";
+				read_one_html+="<td>Status</td>";
+				if(data.active == 0){
+					read_one_html+="<td class='text-danger'>InActive</td>"; 
+				}else{
+					read_one_html+="<td class='text-success'>Active</td>"; 
+				} 
+			read_one_html+="</tr>";
+
 		read_one_html+="</table>";
 		
 		
 		$("#page-content").html(read_one_html);
 		 
-		changePageTitle("Role Details");
+		changePageTitle("Department Details");  // Change Needed HERE
 	});
 
     });
