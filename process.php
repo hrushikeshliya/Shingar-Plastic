@@ -37,6 +37,5 @@ session_start();
 <?php echo '<script src="app/process/create.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/process/delete.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/process/update.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/process/readOne.js' ."?ts=". time() . '"></script>'; ?>
 </body>
 </html>

@@ -5,12 +5,12 @@ header("Content-Type: application/json; charset=UTF-8");
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/accountType.php';
+include_once '../objects/query.php';
  
 $database = new Database();
 $db = $database->getConnection();
  
-$obj = new AccountType($db);
+$obj = new Query($db);
  
 $stmt = $obj->read();
 $num = $stmt->rowCount();
@@ -18,23 +18,24 @@ $num = $stmt->rowCount();
 if($num>0){
  
     $arr=array();
-    $arr["accountType"]=array();
+    $arr["records"]=array();
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
         extract($row);
  
         $arr_item=array(
-            "id" => $Id,
+            "id" => $id,
             "name" => $name,
-            "active" => $active,
+            "api" => $api,
+            "parameter" => $parameter,
 
         );
  
-        array_push($arr["accountType"], $arr_item);
+        array_push($arr["records"], $arr_item);
     }
-    
-    $arr["exportKey"] = "accountType";
+ 
+    $arr["exportKey"] = "records";
     echo json_encode($arr);
 }
  

@@ -37,6 +37,5 @@ session_start();
 <?php echo '<script src="app/itemGroup/create.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/itemGroup/delete.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/itemGroup/update.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/itemGroup/readOne.js' ."?ts=". time() . '"></script>'; ?>
 </body>
 </html>

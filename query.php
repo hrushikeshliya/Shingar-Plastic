@@ -32,10 +32,6 @@ session_start();
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/transport/read.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/transport/readOne.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/transport/create.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/transport/delete.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/transport/update.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/query/read.js' ."?ts=". time() . '"></script>'; ?>
 </body>
 </html>

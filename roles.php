@@ -37,6 +37,5 @@ session_start();
 <?php echo '<script src="app/roles/create.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/roles/delete.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/roles/update.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/roles/readOne.js' ."?ts=". time() . '"></script>'; ?>
 </body>
 </html>

@@ -10,7 +10,6 @@ var username = $.cookie('username');;
 			$.each(val.navGroup, function(key2, val2){
 				if (currentHeading != val2.heading) {
 					currentHeading = val2.heading;
-					console.log(currentHeading);
 					if (navList != ""){
 						navList += "	</ul>";
 						navList += "</li>";

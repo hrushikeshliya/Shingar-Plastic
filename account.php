@@ -32,11 +32,30 @@
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/user/read.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/user/readOne.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/user/create.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/user/delete.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/user/update.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/user/changePassword.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/account/read.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/account/readOne.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/account/create.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/account/delete.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/account/update.js' ."?ts=". time() . '"></script>'; ?>
+
+<script>
+    
+    function reloadCity() {
+        var selectedState = $("#state option:selected").val();
+        var selectedCity = $("#city option:selected").val();
+        $('#city')
+        .empty();
+
+        $.getJSON("http://shingarplastic.com/api/city/readByState.php?stateName=" + selectedState, function(data){ 
+            $.each(data.records, function(key, val) {
+                $('#city')
+                .append($("<option></option>")
+                .attr("value",val.cityName)
+                .text(val.cityName));
+                    });
+        });
+    }
+    
+</script>
 </body>
 </html>
