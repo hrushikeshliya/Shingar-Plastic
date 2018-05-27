@@ -1,55 +1,131 @@
 $(document).ready(function(){
- 
-    $(document).on('click', '.create-button', function(){
-	      
-	var create_html="";
-	 
-	create_html+="<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
-	    create_html+="<span class='glyphicon glyphicon-arrow-left'></span> Go Back";
-	create_html+="</div>";
-	
-	create_html+="<form id='create-form' action='#' method='post' border='0'>";
-	
-    create_html+="<table class='table table-hover table-responsive table-bordered'>";
- 
-        create_html+="<tr>";
-            create_html+="<td>Account Type</td>";
-            create_html+="<td><input type='text' name='name' class='form-control' required /></td>";
-        create_html+="</tr>";
- 
-        create_html+="<tr>";
-            create_html+="<td></td>";
-            create_html+="<td>";
-                create_html+="<button type='submit' class='btn btn-success'>";
-                    create_html+="Submit";
-                create_html+="</button>";
-            create_html+="</td>";
-        create_html+="</tr>";
- 
-    create_html+="</table>";
+    show();
+});
+
+function show(){
+
+var username = $.cookie('username');
+
+create_html="";
+
+create_html+="<div class='row'>";
+create_html+="<div class='col-md-5'>";
+
+create_html+="<datalist id='accountNameList'>";
+create_html+="</datalist>";
+create_html+="</div>";
+create_html+="<div class='col-md-3'>";
+create_html+="";
+create_html+="</div>";
+create_html+="<div class='col-md-4'>";
+create_html+="";
+create_html+="</div>";
+
+create_html+="</div>";
+
+create_html+="Payment Recieved / JAMA<HR>";
+
+create_html+="<form id='create-form' action='#' method='post'>";
+
+create_html+="<input type='hidden' name='username' value='"+username+"'>";
+create_html+="<input type='hidden' name='type' value='REC'>";
+create_html+="<input type='hidden' name='creditAccount' value='CASH A/C'>";
+
+//Date : <input type='date' name='date' id='date' required>
+create_html+="<table class='table' id='myTable' border='all'>";
+
+    create_html+="<tr>";
+		create_html+="<th class='text-align-center'>Date</th>";
+		create_html+="<th class='text-align-center'>Debit A/c</th>";
+        create_html+="<th class='text-align-center'>Balance</th>";
+        create_html+="<th class='text-align-center'>Amount</th>";
+    create_html+="</tr>";
+     
+    create_html+="<tr>";
+        create_html+="<td><input type='date' name='date' id='date'></td>";
+        create_html+="<td><input list='accountNameList' id='debitAcccount' name='debitAccount' class='form-control pull-left m-b-15px' required/></td>";
+		create_html+="<td><input type='number' id='currentDebitAmt' name='currentDebitAmt' class='form-control pull-left m-b-15px' required disabled></td>";
+        create_html+="<td><input type='number' id='amount' name='amount' class='form-control pull-left m-b-15px' required></td>";
+    create_html+="</tr>";
+
+    create_html+="<tr>";
+        create_html+="<td colspan='3'>Narration : <input id='narration' name='narration' class='form-control pull-left m-b-15px'/></th>";
+        create_html+="<td class='text-align-centre'><BR>";
+        create_html+="<button type='submit' class='btn btn-info'>";
+        create_html+="<span class='glyphicon glyphicon-edit'></span> Submit";
+    create_html+="</button></th>";
+    create_html+="</tr>";
+
+create_html+="</table>";
+create_html+="</form>";
+
+create_html+="Payment Made <HR>";
+
+create_html+="<form id='create-form' action='#' method='post'>";
+
+create_html+="<input type='hidden' name='username' value='"+username+"'>";
+create_html+="<input type='hidden' name='type' value='PAY'>";
+create_html+="<input type='hidden' name='debitAccount' value='CASH A/C'>";
+
+create_html+="<table class='table' id='myTable' border='all'>";
+
+    create_html+="<tr>";
+		create_html+="<th class='text-align-center'>Date</th>";
+		create_html+="<th class='text-align-center'>Credit A/c</th>";
+        create_html+="<th class='text-align-center'>Balance</th>";
+        create_html+="<th class='text-align-center'>Amount</th>";
+    create_html+="</tr>";
+     
+    create_html+="<tr>";
+        create_html+="<td><input type='date' name='date' id='date'></td>";
+		create_html+="<td><input list='accountNameList' id='creditAccount' name='creditAccount' class='form-control pull-left m-b-15px' required/></td>";
+        create_html+="<td><input type='number' id='currentCreditAmt' name='currentCreditAmt' class='form-control pull-left m-b-15px' required disabled></td>";
+        create_html+="<td><input type='number' id='amount' name='amount' class='form-control pull-left m-b-15px' required></td>";
+    create_html+="</tr>";
+
+    create_html+="<tr>";
+        create_html+="<td colspan='3'>Narration : <input id='narration' name='narration' class='form-control pull-left m-b-15px'/></th>";
+        create_html+="<td class='text-align-centre'><BR>";
+        create_html+="<button type='submit' class='btn btn-info'>";
+        create_html+="<span class='glyphicon glyphicon-edit'></span> Submit";
+    create_html+="</button></th>";
+    create_html+="</tr>";
+
+create_html+="</table>";
 create_html+="</form>";
 
 $("#page-content").html(create_html);
-changePageTitle("Create Account Type");  // Change Needed HERE
+changePageTitle("Day Book Entry");  // Change Needed HERE
+
+$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
+
+    var dataList = $("#accountNameList");
+    dataList.empty();
+
+	$.each(data.account, function(key, val){
+        var opt = $("<option></option>").attr("value", val.name);
+        dataList.append(opt);
+    });
 });
- 
+
+
 $(document).on('submit', '#create-form', function(){
-var form_data=JSON.stringify($(this).serializeObject());
-
-$.ajax({
-    url: "http://shingarplastic.com/api/accountType/create.php",  // Change Needed HERE
-    type : "POST",
-    contentType : 'application/json',
-    data : form_data,
-    success : function(result) {
-        show();
-    },
-    error: function(xhr, resp, text) {
-        console.log(xhr, resp, text);
-    }
+	
+    var form_data=JSON.stringify($(this).serializeObject());
+    
+    $.ajax({
+        url: "http://shingarplastic.com/api/transaction/create.php",   // Change Needed HERE
+        type : "POST",
+        contentType : 'application/json',
+        data : form_data,
+        success : function(result) {
+            show();
+        },
+        error: function(xhr, resp, text) {
+            console.log(xhr, resp, text);
+        }
+    });
+    return false;
 });
  
-return false;
-
-});
-});
+}

@@ -32,6 +32,7 @@ session_start();
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/dayBook/create.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/netOff/read.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/netOff/update.js' ."?ts=". time() . '"></script>'; ?>
 </body>
 </html>

@@ -20,7 +20,17 @@ $.getJSON("http://shingarplastic.com/api/query/read.php", function(data){  // Ch
  
 read_html="";
 
-read_html+="<div class='row'><div class='col-md-4'><input type='text' id='myInput' class='form-control' onkeyup='search()' placeholder='Search'></div></div><BR>";
+read_html+="<div class='row'>";
+read_html+="<div class='col-md-4'>";
+read_html+="<input class='form-control pull-left m-b-15px' id='myInput' onkeyup='search()' placeholder='Search'/>";
+read_html+="</div>";
+read_html+="<div class='col-md-4'>";
+read_html+="";
+read_html+="</div>";
+read_html+="<div class='col-md-4'>";
+read_html+="";
+read_html+="</div>";
+read_html+="</div>";
 
 read_html+="<table class='table table-striped table-hover' id='myTable'>";
     read_html+="<col width=*>";

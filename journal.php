@@ -21,6 +21,9 @@ session_start();
 <!-- our navBar will be injected here --> 
 <div id="nav"></div>
 
+<!-- our alerts will be injected here --> 
+<div id="alert"></div>
+
 <!-- our app will be injected here -->
 <div id="app"></div>
 
@@ -32,6 +35,6 @@ session_start();
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/dayBook/create.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/journal/create.js' ."?ts=". time() . '"></script>'; ?>
 </body>
 </html>

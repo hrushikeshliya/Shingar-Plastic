@@ -32,10 +32,10 @@ session_start();
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/accountType/read.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/accountType/readOne.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/accountType/create.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/accountType/delete.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/accountType/update.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/item/read.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/item/readOne.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/item/create.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/item/delete.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/item/update.js' ."?ts=". time() . '"></script>'; ?>
 </body>
 </html>

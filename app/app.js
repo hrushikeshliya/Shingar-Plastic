@@ -17,20 +17,22 @@ $(document).ready(function(){
     $("#app").html(app_html);
  
     app_nav="<p class='text-center'>Loading...<p>";
- 
+
     $("#nav").html(app_nav);
 });
  
-
 function changePageTitle(page_title){
- 
-    // change page title
     $('#page-title').text(page_title);
- 
-    // change title tag
     document.title=page_title;
 }
  
+function alert(status) {
+    alert_html='<div class="alert alert-'+status.toLowerCase();+'">';
+    alert_html+='<strong>'+status+'</strong>';
+    alert_html+='</div>';
+    $('#alert').text(alert_html);
+}
+
 // function To Export to csv
 function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
     

@@ -1,85 +1,131 @@
 $(document).ready(function(){
-    showSelections();
-    $(document).on('click', '.read-button', function(){
+    show();
 });
-
-});
-
-function showSelections(){
-    read_html = "";
-    read_html+="<form action='#'>";
-    read_html+="<div class='row'>";
-    read_html+="  <input type='date' name='from' class='form-control col-md-3'>";
-    read_html+="  <input type='date' name='to' class='form-control col-md-3'>";
-    read_html+="<button type='submit' class='btn btn-success col-md-3'>";
-    read_html+="Submit";
-    read_html+="</button>";
-    read_html+="</div>";
-    read_html+="</form>";
-    $("#page-content").html(read_html);
-    changePageTitle("Day Book Administration");  
-}
-
-function showContent(){
-
-}
 
 function show(){
+    $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=dayBook", function(data){  // Change Needed HERE
  
-$.getJSON("http://shingarplastic.com/api/accountType/read.php", function(data){  // Change Needed HERE
- 
- 
+   
 read_html="";
- 
-read_html+="<div id='create' class='btn btn-success pull-right m-b-15px create-button'>";
-read_html+="<span class='glyphicon glyphicon-plus'></span> Create Account Type";
+
+read_html+="<div class='row'>";
+
+    read_html+="<div class='col-md-2'>";
+    read_html+="From : ";
+    read_html+="<input type='date' id='dateFrom' name='dateFrom' class='form-control pull-left m-b-15px'/>";
+    read_html+="</div>";
+
+    read_html+="<div class='col-md-2'>";
+    read_html+="To : ";
+    read_html+="<input type='date' id='dateTo' name='dateTo' class='form-control pull-left m-b-15px'/>";
+    read_html+="</div>";
+
+    read_html+="<div class='col-md-8'><br>";
+    read_html+="<div id='search' class='btn btn-success pull-leftm-b-15px search-button'>";
+    read_html+="<span class='glyphicon glyphicon-search'></span> Search";
+    read_html+="</div>";
+    read_html+="</div>";
+    
 read_html+="</div>";
 
-read_html+="<table class='table table-bordered table-hover'>";
- 
-    read_html+="<tr>";
-        read_html+="<th class='text-align-center'>ID</th>";
-        read_html+="<th class='text-align-center'>Account Type</th>";
-        read_html+="<th class='text-align-center'>Status</th>";
-        read_html+="<th class='w-30-pct text-align-center'>Action</th>";
-    read_html+="</tr>";
-     
+read_html+="<HR>";
 
-$.each(data.accountType, function(key, val) {  // Change Needed HERE
+$.each(data.dayBook, function(key, val) {  // Change Needed HERE
  	
-    read_html+="<tr>";
- 
-        read_html+="<td>" + val.id + "</td>";
-        read_html+="<td>" + val.name + "</td>";
-        if(val.active == 0){
-        	read_html+="<td class='text-danger'>InActive</td>"; 
-        }else{
-        	read_html+="<td class='text-success'>Active</td>"; 
-        } 
+read_html+="<div class='row well'>";
 
+    read_html+="<div class='col-md-12'> Date : "+val.date+"</div>";
 
-        read_html+="<td>";
+    read_html+="<div class='col-md-6'>";
+        read_html+="<table class='table' frame = 'box'>";
+            read_html+="<thead>";
+                read_html+="<tr>";
+                read_html+="<th></th>";
+                read_html+="<th class='text-success'>Opening Balance</th>";
+                read_html+="<th class='text-success'>"+val.openingBalance+"</th>";
+                read_html+="</tr>";
+            read_html+="</thead>";
+            read_html+="<tbody>";
 
-            read_html+="<button style = 'width:90px;' class='btn btn-primary m-r-10px m-b-10px read-one-button' data-id='" + val.id + "'>";
-                read_html+="<span class='glyphicon glyphicon-eye-open'></span> Read";
-            read_html+="</button>";
- 
-            read_html+="<button style = 'width:90px;' class='btn btn-info m-r-10px  m-b-10px update-button' data-id='" + val.id + "'>";
-                read_html+="<span class='glyphicon glyphicon-edit'></span> Edit";
-            read_html+="</button>";
- 
-            read_html+="<button style = 'width:90px;' class='btn btn-danger m-b-10px  delete-button' data-id='" + val.id + "'>";
-                read_html+="<span class='glyphicon glyphicon-remove'></span> Delete";
-            read_html+="</button>";
-        read_html+="</td>";
- 
-    read_html+="</tr>";
- 
+            count = 0;
+            $.each(val.creditTransactions, function(key1, val1) {  // Change Needed HERE
+                count +=1;
+                read_html+="<tr>";
+                read_html+="<td>REC_"+val1.id+"</td>";
+                read_html+="<td><h5>"+val1.debitAccount+"<small> -"+val1.narration+"</small></h5></td>";
+                read_html+="<td>"+val1.amount+"</td>";
+                read_html+="</tr>";
+
+            });
+
+            if(count>0) {
+                // subTotal Row
+                read_html+="<tr>";
+                read_html+="<td></td>";
+                read_html+="<td>SubTotal</td>";
+                read_html+="<td  class='text-info'>"+val.creditTotal+"</td>";
+                read_html+="</tr>";
+            }
+                // Grand Total
+                read_html+="<tr>";
+                read_html+="<td></td>";
+                read_html+="<td></td>";
+                read_html+="<td  class='text-info'>"+(val.openingBalance+val.creditTotal)+"</td>";
+                read_html+="</tr>";
+
+            read_html+="</tbody>";
+        read_html+="</table>";
+    read_html+="</div>";
+
+    read_html+="<div class='col-md-6'>";
+                read_html+="<table class='table' frame='box'>";
+                read_html+="<tbody>";
+
+                count = 0;
+                $.each(val.debitTransactions, function(key1, val1) {  // Change Needed HERE
+                    count +=1;
+                    read_html+="<tr>";
+                    read_html+="<td>PAY_"+val1.id+"</td>";
+                    read_html+="<td><h5>"+val1.creditAccount+"<small> -"+val1.narration+"</small></h5></td>";
+                    read_html+="<td>"+val1.amount+"</td>";
+                    read_html+="</tr>";
+    
+                });
+
+                if(count>0) {
+                // subTotal Row
+                read_html+="<tr>";
+                read_html+="<td></td>";
+                read_html+="<td>SubTotal</td>";
+                read_html+="<td  class='text-info'>"+val.debitTotal+"</td>";
+                read_html+="</tr>";
+                }
+
+                // Closing Total
+                read_html+="<tr>";
+                read_html+="<td></td>";
+                read_html+="<td class='text-danger'>Closing Balance</td>";
+                read_html+="<td class='text-danger'>"+val.closingBalance+"</td>";
+                read_html+="</tr>";
+
+                // GrandTotal
+                read_html+="<tr>";
+                read_html+="<td></td>";
+                read_html+="<td></td>";
+                read_html+="<td  class='text-info'>"+(val.openingBalance+val.creditTotal)+"</td>";
+                read_html+="</tr>";
+
+                read_html+="</tbody>";
+        read_html+="</table>";
+    read_html+="</div>";
+
+    read_html+="<HR>";
+
+read_html+="</div>";
+
 });
-
-read_html+="</table>";
 $("#page-content").html(read_html);
-changePageTitle("Account Type Administration");  // Change Needed HERE
-});
- 
+changePageTitle("Day Book Register");  // Change Needed HERE
+
+}); 
 }
