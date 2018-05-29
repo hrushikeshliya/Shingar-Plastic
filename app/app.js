@@ -1,5 +1,5 @@
 $(document).ready(function(){
- 
+     
     // app html
     app_html="";
  
@@ -24,13 +24,6 @@ $(document).ready(function(){
 function changePageTitle(page_title){
     $('#page-title').text(page_title);
     document.title=page_title;
-}
- 
-function alert(status) {
-    alert_html='<div class="alert alert-'+status.toLowerCase();+'">';
-    alert_html+='<strong>'+status+'</strong>';
-    alert_html+='</div>';
-    $('#alert').text(alert_html);
 }
 
 // function To Export to csv

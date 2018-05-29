@@ -12,7 +12,14 @@ $db = $database->getConnection();
  
 $obj = new Account($db);
  
-$stmt = $obj->read();
+$type = isset($_GET['type']) ? $_GET['type'] : 'NULL';
+
+if($type == 'NULL') {
+    $stmt = $obj->read();
+} else {
+    $stmt = $obj->readByType($type);
+}
+
 $num = $stmt->rowCount();
  
 if($num>0){

@@ -28,8 +28,8 @@ read_html+="<table class='table table-bordered table-hover' id='myTable'>";
  
     read_html+="<tr>";
         read_html+="<th class='text-align-center'>ID</th>";
-        read_html+="<th class='text-align-center'>Alias Name</th>";
         read_html+="<th class='text-align-center'>Account Name</th>";
+        read_html+="<th class='text-align-center'>Alias Name</th>";
         read_html+="<th class='text-align-center'>Account Type</th>";
         read_html+="<th class='text-align-center'>Opg Bal.</th>";
         read_html+="<th class='text-align-center'>Cur Bal.</th>";

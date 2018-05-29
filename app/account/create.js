@@ -14,6 +14,7 @@ $(document).ready(function(){
         $.getJSON("http://shingarplastic.com/api/city/readCity.php", function(data){ 
             
             city_options_html+="<select name='city' class='form-control'>";
+            city_options_html+="<option value=''>---</option>";
             $.each(data.records, function(key, val){
                     city_options_html+="<option value='" + val.cityName + "'>" + val.cityName + "</option>";
             });
@@ -23,6 +24,7 @@ $(document).ready(function(){
         $.getJSON("http://shingarplastic.com/api/city/readState.php", function(data){ 
             
             state_options_html+="<select name='state' class='form-control'>";
+            state_options_html+="<option value=''>---</option>";
             $.each(data.records, function(key, val){
                     state_options_html+="<option value='" + val.stateName + "'>" + val.stateName + "</option>";
             });
@@ -33,7 +35,7 @@ $(document).ready(function(){
             
             accountType_options_html+="<select name='typeId' class='form-control'>";
             $.each(data.accountType, function(key, val){
-                    accountType_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
+                    accountType_options_html+="<option value='" + val.id + "'>" + val.aliasName + "</option>";
             });
             accountType_options_html+="</select>";  
         });          
@@ -41,6 +43,7 @@ $(document).ready(function(){
         $.getJSON("http://shingarplastic.com/api/transport/read.php", function(data){ 
             
             transport_options_html+="<select name='transportId' class='form-control'>";
+            transport_options_html+="<option value=''>---</option>";
             $.each(data.transport, function(key, val){
                     transport_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
             });
@@ -76,21 +79,21 @@ $(document).ready(function(){
         create_html+="<tr>";
             create_html+="<td>Opening Balance";
             create_html+="</td>";
-            create_html+="<td><input type='number' name='openingBalance' class='form-control' required />";
+            create_html+="<td><input type='text' VALUE='0' name='openingBalance' class='form-control' required />";
             create_html+="<select name='openingDirection' class='form-control'>";
             create_html+="<option value='-1'>Dr</option>";
             create_html+="<option value='1'>Cr</option>";
             create_html+="</select>";
             create_html+="</td>";
             create_html+="<td>GST No</td>";
-            create_html+="<td><input type='text' name='gstno' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='gstno' class='form-control' /></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Address Line 1</td>";
-            create_html+="<td><input type='text' name='address1' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='address1' class='form-control' /></td>";
             create_html+="<td>Address Line 2</td>";
-            create_html+="<td><input type='text' name='address2' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='address2' class='form-control' /></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
@@ -102,24 +105,24 @@ $(document).ready(function(){
 
         create_html+="<tr>";
             create_html+="<td>Pincode</td>";
-            create_html+="<td><input type='number' name='pincode' class='form-control' required /></td>";
+            create_html+="<td><input type='number' name='pincode' class='form-control'/></td>";
             create_html+="<td>Landline</td>";
-            create_html+="<td><input type='text' name='phone' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='phone' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Mobile</td>";
-            create_html+="<td><input type='text' name='mobile' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='mobile' class='form-control'/></td>";
             create_html+="<td>Mobile 2</td>";
-            create_html+="<td><input type='text' name='mobile2' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='mobile2' class='form-control'/></td>";
         create_html+="</tr>";
 
 
         create_html+="<tr>";
             create_html+="<td>Email</td>";
-            create_html+="<td><input type='text' name='email' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='email' class='form-control' /></td>";
             create_html+="<td>Bill Limit</td>";
-            create_html+="<td><input type='number' name='billLimit' class='form-control' min='0' max='100' required /></td>";
+            create_html+="<td><input type='text' value='25' name='billLimit' class='form-control' required /></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";

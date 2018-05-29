@@ -1,0 +1,6 @@
+[19-Nov-2017 10:01:04 Etc/GMT] PHP Parse error:  syntax error, unexpected '>' in /home/shing65j/public_html/api/objects/roles.php on line 29
+[19-Nov-2017 10:01:04 Etc/GMT] PHP Parse error:  syntax error, unexpected '>' in /home/shing65j/public_html/api/objects/roles.php on line 29
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
