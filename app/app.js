@@ -26,6 +26,13 @@ function changePageTitle(page_title){
     document.title=page_title;
 }
 
+function getJobCharge() {
+    var quantity = $('#quantity').val();
+    var jobRate = $('#rate').val();
+    var jobCharge = quantity * jobRate;
+    $('#jobCharge').val(jobCharge);
+    }
+
 // function To Export to csv
 function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
     

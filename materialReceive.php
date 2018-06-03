@@ -32,30 +32,62 @@
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/account/read.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/account/readOne.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/account/create.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/account/delete.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/account/update.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/materialReceive/create.js' ."?ts=". time() . '"></script>'; ?>
 
 <script>
     
-    function reloadCity() {
-        var selectedState = $("#state option:selected").val();
-        var selectedCity = $("#city option:selected").val();
-        $('#city')
-        .empty();
+    function getIssues() {
+        var jobberId = $("#jobberId option:selected").val();
 
-        $.getJSON("http://shingarplastic.com/api/city/readByState.php?stateName=" + selectedState, function(data){ 
-            $.each(data.records, function(key, val) {
-                $('#city')
+        $('#issueId')
+        .empty();
+        $('#selectedIssue').val("");
+        $('#issuedQuantity').val("");
+        $('#pendingQuantity').val("");
+        $('#quantity').val("");
+        $('#rate').val("");
+        $('#jobCharge').val("");
+
+        $.getJSON("http://shingarplastic.com/api/materialIssue/read.php?type=jobber&id=" + jobberId, function(data){ 
+
+            if(data.materialIssue != undefined) {
+                $('#issueId')
                 .append($("<option></option>")
-                .attr("value",val.cityName)
-                .text(val.cityName));
-                    });
+                .attr("value","")
+                .text("Id => Date |Issued Quantity (Psc) |Pending Quantity (Psc) | Item Name"));
+            } else {
+                $('#issueId')
+                .append($("<option></option>")
+                .attr("value","")
+                .text("No Material Issued To Selected Jobber"));
+            }
+            $.each(data.materialIssue, function(key, val) {
+                if(val.pendingQuantity != 0) {
+                    $('#issueId')
+                    .append($("<option></option>")
+                    .attr("value",val.id)
+                    .text(val.id+" => "+val.date+" | "+val.quantity+"(Psc) | "+val.pendingQuantity+"(Psc) | "+val.itemName));
+                }
+                });
+                
         });
     }
     
+    function getStats() {
+        var issueId =  $("#issueId option:selected").val();
+
+        $.getJSON("http://shingarplastic.com/api/materialIssue/readOne.php?id=" + issueId, function(data){ 
+            $('#selectedIssue').val(issueId);
+            $('#issuedQuantity').val(data.quantity);
+            $('#pendingQuantity').val(data.pendingQuantity);
+            $('#quantity')
+            .attr("max",data.pendingQuantity)
+            .val("");
+            $('#rate').val("0.0");
+            $('#jobCharge').val("");
+        });
+    }
 </script>
+
 </body>
 </html>

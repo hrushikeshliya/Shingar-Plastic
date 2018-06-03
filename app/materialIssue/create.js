@@ -9,6 +9,7 @@ $(document).ready(function(){
     $.getJSON("http://shingarplastic.com/api/item/read.php", function(data){ 
             
         item_options_html+="<select name='itemId' class='form-control'>";
+        item_options_html+="<option value=''></option>";
         $.each(data.item, function(key, val){
             item_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
         });
@@ -17,6 +18,7 @@ $(document).ready(function(){
         $.getJSON("http://shingarplastic.com/api/process/read.php", function(data){ 
             
             process_options_html+="<select name='processId' class='form-control'>";
+            process_options_html+="<option value=''></option>";
             $.each(data.process, function(key, val){
                 process_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
             });
@@ -24,7 +26,8 @@ $(document).ready(function(){
 
             $.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data){ 
             
-                jobber_options_html+="<select name='jobberId' class='form-control'>";
+                jobber_options_html+="<select id='jobberId' name='jobberId' onchange=getIssues() class='form-control'>";
+                jobber_options_html+="<option value=''></option>";
                 $.each(data.account, function(key, val){
                     jobber_options_html+="<option value='" + val.id + "'>" + val.aliasName + "</option>";
                 });
@@ -86,8 +89,18 @@ $(document).ready(function(){
     create_html+="</table>";
 create_html+="</form>";
 
+create_html += "<div><table  id='issuedMaterials' class='table table-hover table-responsive table-bordered' align='center'>";
+create_html += "<tr>";
+create_html += "<th>Issue Id</th>";
+create_html += "<th>Date</th>";
+create_html += "<th>Issued Quantity</th>";
+create_html += "<th>Pending Quantity</th>";
+create_html += "<th>Item Name</th>";
+create_html += "<tr></table></div>";
+
 $("#page-content").html(create_html);
 changePageTitle("Material issue"); // Change Needed HERE
+$("#issuedMaterials").hide();
     }
 
 });

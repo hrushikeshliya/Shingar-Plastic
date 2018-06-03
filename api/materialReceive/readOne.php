@@ -7,17 +7,18 @@ header('Content-Type: application/json');
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/materialIssue.php';
+include_once '../objects/materialReceive.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-$obj = new MaterialIssue($db); //Change ClassName
+$obj = new materialReceive($db); //Change ClassName
 
 // set ID property of User to be edited
-$obj->id = isset($_GET['id']) ? $_GET['id'] : die();
- 
+$id = isset($_GET["id"]) ? $_GET["id"] : die();
+
+$obj->id = $id;
 // query Object
 $stmt = $obj->readOne();
 
@@ -26,17 +27,21 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $response=array(
             "id" => $obj ->id,
             "date" =>  $row['date'],
+            "issueDate" =>  $row['issueDate'],
             "processId" =>  $row['processId'],
             "processName" =>  $row['processName'],
             "jobberId" =>  $row['jobberId'],
             "aliasName" =>  $row['aliasName'],
             "itemId" =>  $row['itemId'],
             "itemName" =>  $row['itemName'],
-            "quantity" =>  $row['quantity'],
-            "receivedQuantity" =>  $row['receivedQuantity'],
-            "pendingQuantity" =>  $row['pendingQuantity'],
+            "quantity" =>  floatval($row['quantity']),
+            "issuedQuantity" =>  floatval($row['issuedQuantity']),
+            "receivedQuantity" =>  floatval($row['receivedQuantity']),
+            "pendingQuantity" =>  floatval($row['pendingQuantity']),
             "narration" =>  $row['narration'],
-            "username" =>  $row['username']
+            "username" =>  $row['username'],
+            "rate" =>  floatval($row['rate']),
+            "jobCharge" =>  floatval($row['jobCharge'])
         );
   
 // make it json format

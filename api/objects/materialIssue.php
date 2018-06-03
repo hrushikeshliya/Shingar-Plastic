@@ -22,16 +22,27 @@ class MaterialIssue{
     	}
 
 	function read(){	
-        $query = "SELECT m.*,i.name itemName, a.aliasName, p.name processName FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
-        account a ON m.jobberId=a.id LEFT JOIN item i ON m.itemId=i.id where m.deleted = 0 order by m.id desc";	
+        $query = "SELECT m.*,i.name itemName, a.aliasName, p.name processName,COALESCE(mr.receivedQuantity,0) receivedQuantity, m.quantity-COALESCE(mr.receivedQuantity,0) pendingQuantity  FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
+        account a ON m.jobberId=a.id LEFT JOIN item i ON m.itemId=i.id LEFT JOIN (select issueId, SUM(quantity) receivedQuantity from materialReceive WHERE deleted = 0 group by issueId) mr ON m.id = mr.issueId
+        where m.deleted = 0 order by m.id desc";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
-    
+
+	function readByJobber($jobberId){
+        $query = "SELECT m.*,i.name itemName, a.aliasName, p.name processName,COALESCE(mr.receivedQuantity,0) receivedQuantity, m.quantity-COALESCE(mr.receivedQuantity,0) pendingQuantity  FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
+        account a ON m.jobberId=a.id LEFT JOIN item i ON m.itemId=i.id LEFT JOIN (select issueId, SUM(quantity) receivedQuantity from materialReceive WHERE deleted = 0 group by issueId) mr ON m.id = mr.issueId
+        where m.deleted = 0 AND m.jobberID=".$jobberId." order by m.id desc";	
+	    $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
     function readOne(){	
-	    $query = "SELECT m.*,i.name itemName, a.aliasName, p.name processName FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
-        account a ON m.jobberId=a.id LEFT JOIN item i ON m.itemId=i.id  where m.deleted = 0 AND m.id = ?";	
+	    $query = "SELECT m.*,i.name itemName, a.aliasName, p.name processName,COALESCE(mr.receivedQuantity,0) receivedQuantity, m.quantity-COALESCE(mr.receivedQuantity,0) pendingQuantity FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
+        account a ON m.jobberId=a.id LEFT JOIN item i ON m.itemId=i.id LEFT JOIN (select issueId, SUM(quantity) receivedQuantity from materialReceive WHERE deleted = 0 group by issueId) mr ON m.id = mr.issueId
+        where m.deleted = 0 AND m.id = ?";	
 	    $stmt = $this->conn->prepare($query);	
         $stmt->bindParam(1, $this->id);
         $stmt->execute();	 	

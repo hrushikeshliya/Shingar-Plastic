@@ -16,15 +16,23 @@ $db = $database->getConnection();
 $obj = new MaterialIssue($db); //Change ClassName
 
 // set ID property of User to be edited
-$obj->id = isset($_GET['id']) ? $_GET['id'] : die();
- 
+$id = isset($_GET['id']) ? $_GET['id'] : die();
+$type = isset($_GET['type']) ? $_GET['type'] : die();
+
 // query Object
+if($type == 'issued') {
+
+} else if ($type == 'pending') {
+
+}
+
 $stmt = $obj->readOne();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $response=array(
             "id" => $obj ->id,
+            "name" => $row['name'],
             "date" =>  $row['date'],
             "processId" =>  $row['processId'],
             "processName" =>  $row['processName'],
@@ -33,8 +41,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             "itemId" =>  $row['itemId'],
             "itemName" =>  $row['itemName'],
             "quantity" =>  $row['quantity'],
-            "receivedQuantity" =>  $row['receivedQuantity'],
-            "pendingQuantity" =>  $row['pendingQuantity'],
             "narration" =>  $row['narration'],
             "username" =>  $row['username']
         );

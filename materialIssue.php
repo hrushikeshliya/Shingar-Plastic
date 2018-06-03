@@ -32,7 +32,32 @@
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/materialIssue/create.js' ."?ts=". time() . '"></script>'; ?>>
+<?php echo '<script src="app/materialIssue/create.js' ."?ts=". time() . '"></script>'; ?>
+
+<script>
+
+function getIssues() {
+        var jobberId = $("#jobberId option:selected").val();
+
+        $.getJSON("http://shingarplastic.com/api/materialIssue/read.php?type=jobber&id=" + jobberId, function(data){ 
+
+            $("#issuedMaterials").hide();
+
+            if(data.materialIssue != undefined) {
+                $("#issuedMaterials tr td").remove();
+                $("#issuedMaterials").show();
+                $.each(data.materialIssue, function(key, val) {
+                var table = $("#issuedMaterials").addClass("CSSTableGenerator");
+                var rowClass = "class='danger'";
+                if(val.pendingQuantity != "0") {
+                    var row = $("<tr "+rowClass+"><td>"+val.id+"</td><td>"+val.date+"</td><td>"+val.quantity+"</td><td>"+val.pendingQuantity+"</td><td>"+val.itemName+"</td></tr>");
+                    table.append(row);
+            };
+                });
+            } 
+        });
+    }
+</script>
 
 </body>
 </html>

@@ -12,7 +12,18 @@ $db = $database->getConnection();
  
 $obj = new MaterialIssue($db);  //Change ClassName
  
-$stmt = $obj->read();
+
+$type = isset($_GET['type']) ? $_GET['type'] : 'NULL'; 
+
+if($type == 'NULL'){
+    $stmt = $obj->read();
+} else {
+    $id = isset($_GET['id']) ? $_GET['id'] : die(); 
+    if($type=='jobber') {
+        $stmt = $obj->readByJobber($id);
+    }
+}
+
 $num = $stmt->rowCount();
  
 if($num>0){
@@ -34,6 +45,8 @@ if($num>0){
             "itemId" =>  $itemId,
             "itemName" =>  $itemName,
             "quantity" =>  $quantity,
+            "receivedQuantity" =>  $receivedQuantity,
+            "pendingQuantity" =>  $pendingQuantity,
             "narration" =>  $narration,
             "username" =>  $username
         );
