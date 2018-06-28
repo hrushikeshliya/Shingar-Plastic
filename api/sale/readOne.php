@@ -7,13 +7,13 @@ header('Content-Type: application/json');
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/item.php';
+include_once '../objects/materialIssue.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-$obj = new Item($db); //Change ClassName
+$obj = new MaterialIssue($db); //Change ClassName
 
 // set ID property of User to be edited
 $obj->id = isset($_GET['id']) ? $_GET['id'] : die();
@@ -25,16 +25,18 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $response=array(
             "id" => $obj ->id,
-            "name" => $row['name'],
-            "itemGroupId" => $row['itemGroupId'],
-            "itemGroup" => $row['itemGroup'],
-            "purchaseRate" => floatval($row['purchaseRate']),
-            "saleRate" => floatval($row['saleRate']),
-            "jobRate" => floatval($row['jobRate']),
-            "itemWeight" => floatval($row['itemWeight']),
-            "hsnSac" => $row['hsnSac'],
-            "narration" => $row['narration'],
-            "active" => $row['active']
+            "date" =>  $row['date'],
+            "processId" =>  $row['processId'],
+            "processName" =>  $row['processName'],
+            "jobberId" =>  $row['jobberId'],
+            "aliasName" =>  $row['aliasName'],
+            "itemId" =>  $row['itemId'],
+            "itemName" =>  $row['itemName'],
+            "quantity" =>  $row['quantity'],
+            "receivedQuantity" =>  $row['receivedQuantity'],
+            "pendingQuantity" =>  $row['pendingQuantity'],
+            "narration" =>  $row['narration'],
+            "username" =>  $row['username']
         );
   
 // make it json format
