@@ -24,7 +24,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchase", f
         });
         item_options_html+="</select>";
 
-        $.getJSON("http://shingarplastic.com/api/department/read.php", function(data){ 
+        $.getJSON("http://shingarplastic.com/api/department/read.php?type=active", function(data){ 
                 
             department_options_html+="<select name='departmentId' class='form-control'>";
             $.each(data.department, function(key, val){

@@ -33,9 +33,9 @@ $(document).ready(function(){
 
         $.getJSON("http://shingarplastic.com/api/accountType/read.php", function(data){ 
             
-            accountType_options_html+="<select name='typeId' class='form-control'>";
+            accountType_options_html+="<select name='typeId' class='form-control' required>";
             $.each(data.accountType, function(key, val){
-                    accountType_options_html+="<option value='" + val.id + "'>" + val.aliasName + "</option>";
+                    accountType_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
             });
             accountType_options_html+="</select>";  
         });          

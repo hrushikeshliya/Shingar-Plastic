@@ -12,19 +12,18 @@ class Sale{
     public $departmentId;
     public $transportId;
     public $accountId;
-    public $discount;
     public $tax;
-    public $showDiscount;
     public $showName;
     public $isFake;
     public $narration;
     public $username;
     public $lrNo;
-    public $total;
-    public $discountAmount;
+
+    public $subTotal;
     public $taxableAmount;
     public $taxAmount;
-    public $totalAmount;
+    public $grandTotal;
+    public $billLimit;
     
     // constructor with $db as database connection
     public function __construct($db){
@@ -36,8 +35,22 @@ class Sale{
          LEFT JOIN department d ON s.departmentId = d.id 
          LEFT JOIN account a ON s.accountId = a.id 
          LEFT JOIN transport t ON s.transportId = t.id 
-         WHERE s.deleted = 0";	
+         WHERE s.deleted = 0 ORDER BY s.id DESC";	
 	    $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+	function readOne(){	
+        $query = "SELECT s.*,d.name departmentName,a.name accountName,a.aliasName,a.address1, a.address2, a.state, a.city, a.pincode, a.phone, a.email, a.mobile, a.mobile2 , a.gstNo,t.name transportName FROM ". $this->table_name . " s 
+         LEFT JOIN department d ON s.departmentId = d.id 
+         LEFT JOIN account a ON s.accountId = a.id 
+         LEFT JOIN transport t ON s.transportId = t.id 
+         WHERE s.deleted = 0
+         AND s.id = ?";	
+        $stmt = $this->conn->prepare($query);	
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $stmt->bindParam(1, $this->id);
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
@@ -55,14 +68,6 @@ class Sale{
 	    $query = "SELECT s.id FROM " . $this->table_name . " s where s.deleted = 0 AND s.accountId = ?";	
         $stmt = $this->conn->prepare($query);	
         $stmt->bindParam(1, $this->accountId);
-        $stmt->execute();	 	
-	    return $stmt;	
-    }
-
-    function readOne(){	
-	    $query = "SELECT i.*,ig.name as itemGroup FROM " . $this->table_name . " i LEFT JOIN itemGroup ig ON i.itemGroupId = ig.id  where i.deleted = 0 AND i.id = ?";	
-	    $stmt = $this->conn->prepare($query);	
-        $stmt->bindParam(1, $this->id);
         $stmt->execute();	 	
 	    return $stmt;	
     }
@@ -115,19 +120,17 @@ class Sale{
                    departmentId = :departmentId,
                    transportId = :transportId,
                    accountId = :accountId,
-                   discount = :discount,
                    tax = :tax,
-                   showDiscount = :showDiscount,
                    showName = :showName,
                    isFake = :isFake,
                    narration = :narration,
                    username = :username,
-                   
-                   total = :total,
-                   discountAmount = :discountAmount,
+                   subTotal = :subTotal,
                    taxableAmount = :taxableAmount,
                    taxAmount = :taxAmount,
-                   totalAmount = :totalAmount
+                   grandTotal = :grandTotal,
+                   billLimit = :billLimit,
+                   invoiceId = :invoiceId
                    
                        "
                        ;
@@ -144,16 +147,15 @@ class Sale{
         $stmt->bindParam(':departmentId', $this->departmentId);
         $stmt->bindParam(':transportId', $this->transportId);
         $stmt->bindParam(':accountId', $this->accountId);
-        $stmt->bindParam(':discount', $this->discount);
         $stmt->bindParam(':tax', $this->tax);
-        $stmt->bindParam(':showDiscount', $this->showDiscount);
         $stmt->bindParam(':showName', $this->showName);
         $stmt->bindParam(':isFake', $this->isFake);
-        $stmt->bindParam(':total', $this->total);
-        $stmt->bindParam(':discountAmount', $this->discountAmount);
+        $stmt->bindParam(':subTotal', $this->subTotal);
         $stmt->bindParam(':taxableAmount', $this->taxableAmount);
         $stmt->bindParam(':taxAmount', $this->taxAmount);
-        $stmt->bindParam(':totalAmount', $this->totalAmount);
+        $stmt->bindParam(':grandTotal', $this->grandTotal);
+        $stmt->bindParam(':billLimit', $this->billLimit);
+        $stmt->bindParam(':invoiceId', $this->invoiceId);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':narration', $this->narration);
         

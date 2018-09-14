@@ -7,22 +7,30 @@ header('Content-Type: application/json');
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/department.php';
+include_once '../objects/reports.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-$role = new Department($db); //Change ClassName
+$obj = new SingleValues($db); //Change ClassName
 
 // set ID property of User to be edited
-$role->id = isset($_GET['id']) ? $_GET['id'] : die();
- 
-// query Object
-$stmt = $role->readOne();
+$type = isset($_GET['type']) ? $_GET['type'] : die();
 
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-  
+if($type=='sale') {
+    $stmt = $obj->readSaleReport();
+} else if($type=='purchase') {
+    $stmt = $obj->readPurchaseReport();
+} 
+
+$arr=array();
+$arr["reports"]=array();
+
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+    extract($row);
+    array_push($arr["reports"], $row); 
+}
 // make it json format
-print_r(json_encode($row));
+print_r(json_encode($arr));
 ?>

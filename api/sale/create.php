@@ -22,18 +22,17 @@ $obj->date = $data->date;
 $obj->departmentId = $data->departmentId;
 $obj->transportId = $data->transportId;
 $obj->accountId = $data->accountId;
-$obj->discount = $data->discount;
 $obj->tax = $data->tax;
-$obj->showDiscount = $data->showDiscount == "on"?true:false;
 $obj->showName = $data->showName == "on"?true:false;
 $obj->isFake = $data->isFake == "on"?true:false;
 $obj->narration = $data->narration;
 $obj->username = $data->username;
-$obj->total = $data->total;
-$obj->discountAmount = $data->discountAmount;
+$obj->subTotal = $data->subTotal;
 $obj->taxableAmount = $data->taxableAmount;
 $obj->taxAmount = $data->taxAmount;
-$obj->totalAmount = $data->totalAmount;
+$obj->grandTotal = $data->grandTotal;
+$obj->billLimit = $data->billLimit;
+$obj->invoiceId = $data->salesInvoiceId;
 
 if($obj->create()){
     
@@ -44,6 +43,7 @@ if($obj->create()){
             $detail->type = "sale";
             $detail->itemId = $data->itemId[$x];
             $detail->itemName = $data->itemName[$x];
+            $detail->narration = $data->itemNarration[$x];
             $detail->quantity = $data->quantity[$x];
             $detail->rate = $data->rate[$x];
             $detail->amount = $data->amount[$x];

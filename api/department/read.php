@@ -11,8 +11,15 @@ $database = new Database();
 $db = $database->getConnection();
  
 $obj = new Department($db);  //Change ClassName
- 
-$stmt = $obj->read();
+
+if($_GET['type'] == 'active'){
+    $stmt = $obj->readActive();
+} else if(isset($_GET['id'])){
+    $obj->id = $_GET['id'];
+    $stmt = $obj->readOne();
+} else {
+    $stmt = $obj->read();
+}
 $num = $stmt->rowCount();
  
 if($num>0){
@@ -21,23 +28,11 @@ if($num>0){
     $arr["department"]=array(); // Change Array Name
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-        extract($row);
- 
-        $arr_item=array(
-            "id" => $Id,
-            "name" => $name,
-            "billName" => $billName,
-            "billPercent" => $billPercent,
-            "active" => $active,
-
-        );
- 
-        array_push($arr["department"], $arr_item); // Change Array Name
+        array_push($arr["department"], $row); // Change Array Name
     }
  
     echo json_encode($arr);
-}
+} 
  
 else{
     echo json_encode(

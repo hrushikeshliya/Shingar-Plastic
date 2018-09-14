@@ -15,6 +15,13 @@
  
     <link href="app/assets/css/style.css" rel="stylesheet" />
  
+    <style type="text/css" media="print">
+    @page 
+    {
+        size: auto;   /* auto is the initial value */
+        margin: 0mm;  /* this affects the margin in the printer settings */
+    }
+</style>
 </head>
 <body>
  
@@ -28,12 +35,15 @@
 <script src="app/assets/js/jquery.cookie.js"></script> 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="app/assets/js/bootbox.min.js"></script>
- 
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/sale/read.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/sale/readOne.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/sale/delete.js' ."?ts=". time() . '"></script>'; ?>
+
+<script src="jquery/jquery-printme.js"></script>
+
 
 </body>
 </html>

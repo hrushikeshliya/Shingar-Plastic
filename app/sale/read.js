@@ -1,5 +1,22 @@
 $(document).ready(function(){
     show(); 
+
+    $(document).on('click', '.read-button', function(){
+        show();
+    });
+
+    $(document).on('click', '.print-button', function(){
+        //$("#invoice").printMe();
+        $("#read").hide();
+        $("#print").hide();
+        $("#page-title").hide();
+        window.print();
+        $("#read").show();
+        $("#print").show();
+        $("#page-title").show();
+
+    });
+
 });
 
 function show(){
@@ -20,17 +37,24 @@ read_html+="<table class='table table-bordered table-hover'>";
         read_html+="<th class='text-align-center'>Date</th>";
         read_html+="<th class='text-align-center'>Account Name</th>";
         read_html+="<th class='text-align-center'>Invoice Details</th>";
-        read_html+="<th class='text-align-center'>Billed Amount</th>";
         read_html+="<th class='text-align-center'>Transport</th>";
         read_html+="<th class='text-align-center'>Action</th>";
     read_html+="</tr>";
      
 
 $.each(data.sale, function(key, val) {   // Change Needed HERE
- 	
+     
+    var d = new Date(val.date);
+    var n = d.getFullYear();
+
+    if(val.departmentName == "METAL"){
+        var company = "JE";
+    } else {
+        var company = "SP";
+    }
     read_html+="<tr>";
  
-        read_html+="<td>" + val.id + "</td>";
+        read_html+="<td>" + company + "/"+val.invoiceId+"/"+ n +"/"+(n+1)+"</td>";
         read_html+="<td>" + val.date + "</td>";
         read_html+="<td>" + val.accountName + "</td>";
         read_html+="<td>";
@@ -45,31 +69,41 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         read_html+="</tr>";
 
         count = 1;
+        quantityTotal = 0;
         $.each(val.invoiceDetail, function(key2, val2) {
 
             read_html+="<tr>";
             read_html+="<td>"+count+"</td>";
-            read_html+="<td>"+val2.itemName+"</td>";
-            read_html+="<td>"+val2.rate+"</td>";
-            read_html+="<td>"+val2.quantity+"</td>";
-            read_html+="<td>"+val2.amount+"</td>";
+            read_html+="<td>"+val2.itemName+"&nbsp;&nbsp<small>"+val2.narration+"</small></td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.rate).toFixed(2)+"</td>";
+            read_html+="<td class='text-center'>"+val2.quantity+"</td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.amount).toFixed(2)+"</td>";
             read_html+="</tr>";
             
+            quantityTotal += parseFloat(val2.quantity);
             count++;
         });
 
         read_html+="<tr>";
-        read_html+="<td></td>";
-        read_html+="<td></td>";
-        read_html+="<td>Total</td>";
-        read_html+="<td></td>";
-        read_html+="<td>"+val.total+"</td>";
+        read_html+="<td colspan=3 class='text-right'>Sub Total</td>";
+        read_html+="<td class='text-center'>"+quantityTotal+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.subTotal).toFixed(2)+"</td>";
         read_html+="</tr>";
+        read_html+="<tr>";
+        read_html+="<td colspan=3 class='text-right'>Tax @ "+parseFloat(val.tax).toFixed(2)+" %</td>";
+        read_html+="<td></td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.taxAmount).toFixed(2)+"</td>";
+        read_html+="</tr>";
+        read_html+="<tr>";
+        read_html+="<td colspan=3 class='text-right'>Grand Total</td>";
+        read_html+="<td></td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.grandTotal).toFixed(2)+"</td>";
+        read_html+="</tr>";
+
         read_html+="<tr class='text-info'><td colspan=5>Narration : "+val.narration+"</td></tr>";
+        read_html+="<tr class='text-info'><td colspan=5>Department : "+val.departmentName+"</td></tr>";
         read_html+="</table>";
-        read_html+="</td>";
-        read_html+="<td>" + val.totalAmount + "</td>";
-        read_html+="<td class='text-center'>";
+        read_html+="</td><td class='text-center'>";
 
         if(val.lrNo == null){
             read_html+="<form id='update-form' action='#' method='post'>";
@@ -84,9 +118,12 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         }
 
         read_html+=val.transportName + "</td>";
-
+        console.log(val.id);
         read_html+="<td align='center'>";   
-            read_html+="<button class='btn btn-info m-r-10px m-b-10px  print-button' data-id='" + val.id + "'>";
+            read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|challan'>";
+                read_html+="<span class='glyphicon glyphicon-envelope'></span>";
+            read_html+="</button>";
+            read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|invoice'>";
                 read_html+="<span class='glyphicon glyphicon-print'></span>";
             read_html+="</button>";
             read_html+="<button class='btn btn-danger m-b-10px  delete-button' data-id='" + val.id + "'>";

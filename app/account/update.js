@@ -93,9 +93,9 @@ $(document).ready(function(){
 				
 				update_html+="<tr>";
 					update_html+="<td>Address Line 1</td>";
-					update_html+="<td><input value=\"" + data.address1 + "\" type='text' name='address1' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + data.address1 + "\" type='text' name='address1' class='form-control'/></td>";
 					update_html+="<td>Address Line 2</td>";
-					update_html+="<td><input value=\"" + data.address2 + "\" type='text' name='address2' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + data.address2 + "\" type='text' name='address2' class='form-control'/></td>";
 				update_html+="</tr>";
 				
 				update_html+="<tr>";
@@ -113,7 +113,7 @@ $(document).ready(function(){
 				
 				update_html+="<tr>";
 					update_html+="<td>Pincode</td>";
-					update_html+="<td><input value=\"" + data.pincode + "\" type='number' name='pincode' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + data.pincode + "\" type='number' name='pincode' class='form-control'/></td>";
 					update_html+="<td>Landline</td>";
 					update_html+="<td><input value=\"" + data.phone + "\" type='text' name='phone' class='form-control'/></td>";
 				update_html+="</tr>";

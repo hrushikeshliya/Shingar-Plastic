@@ -11,6 +11,8 @@ class Department{
     public $name;
     public $billName;
     public $billPercent;
+    public $billSeriesSales;
+    public $billSeriesPurchase;
     public $active;
 
     // constructor with $db as database connection
@@ -20,6 +22,13 @@ class Department{
 
 	function read(){	
 	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 ";	
+	    $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+    function readActive(){	
+	    $query = "SELECT * FROM " . $this->table_name . " where active = 1 and deleted = 0 ";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -66,6 +75,53 @@ class Department{
         return false;
     }
 
+    function updateSeriesSales(){
+        $query = "UPDATE
+                    " . $this->table_name . "
+                SET
+                    billSeriesSales = billSeriesSales+1,                      
+                WHERE
+                    Id = :id";
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // sanitize
+        $this->id=htmlspecialchars(strip_tags($this->id));
+
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+
+        if($stmt->execute()){
+            return true;
+        }
+    
+        return false;
+    }
+
+
+    function updateSeriesPurchase(){
+        $query = "UPDATE
+                    " . $this->table_name . "
+                SET
+                    billSeriesPurchase = billSeriesPurchase+1,                      
+                WHERE
+                    Id = :id";
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // sanitize
+        $this->id=htmlspecialchars(strip_tags($this->id));
+
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+
+        if($stmt->execute()){
+            return true;
+        }
+    
+        return false;
+    }
+
     function delete(){
     
         $query = "UPDATE " . $this->table_name . " SET deleted = 1  WHERE Id = ?"; 
@@ -93,7 +149,8 @@ class Department{
                    SET
                        name=:name,
                        billName = :billName,
-                       billPercent = :billPercent";
+                       billPercent = :billPercent,
+                       billSeries = 1";
         
            $stmt = $this->conn->prepare($query);
         

@@ -12,6 +12,7 @@ class InvoiceDetail{
     public $type;
     public $itemId;
     public $itemName;
+    public $narration;
     public $quantity;
     public $rate;
     public $amount;
@@ -22,7 +23,7 @@ class InvoiceDetail{
     	}
     
     function readOne(){	
-	    $query = "SELECT * FROM " . $this->table_name . " WHERE invoiceId = :invoiceId AND type=:type AND deleted=0";	
+	    $query = "SELECT id.*,i.hsnSac FROM " . $this->table_name . " id LEFT JOIN item i ON id.itemId = i.id WHERE invoiceId = :invoiceId AND type=:type AND id.deleted=0";	
 	    $stmt = $this->conn->prepare($query);	
         $this->type=htmlspecialchars(strip_tags($this->type));
         $stmt->bindParam(":type", $this->type);
@@ -57,6 +58,7 @@ class InvoiceDetail{
                    type = :type,                   
                    itemId = :itemId,
                    itemName = :itemName,
+                   narration = :narration,
                    quantity = :quantity,
                    rate = :rate,
                    amount = :amount
@@ -72,6 +74,7 @@ class InvoiceDetail{
         $stmt->bindParam(':type', $this->type);
         $stmt->bindParam(':itemId', $this->itemId);
         $stmt->bindParam(':itemName', $this->itemName);
+        $stmt->bindParam(':narration', $this->narration);
         $stmt->bindParam(':quantity', $this->quantity);
         $stmt->bindParam(':rate', $this->rate);
         $stmt->bindParam(':amount', $this->amount);

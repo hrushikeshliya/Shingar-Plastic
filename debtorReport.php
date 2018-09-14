@@ -32,7 +32,7 @@ session_start();
       
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/reports/readLedger.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/reports/readDebtor.js' ."?ts=". time() . '"></script>'; ?>
 
 </body>
 </html>

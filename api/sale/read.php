@@ -17,7 +17,15 @@ $type = isset($_GET['type']) ? $_GET['type'] : "NULL";
 
 if($type=='NULL') {
 
-    $stmt = $sale->read();
+    $id= isset($_GET['id']) ? $_GET['id'] : "NULL";
+
+    if($id == "NULL") {
+        $stmt = $sale->read();
+    } else {
+        $sale->id = $id;
+        $stmt = $sale->readOne();
+    }
+
 
     $num = $stmt->rowCount();
      
@@ -34,7 +42,6 @@ if($type=='NULL') {
             $invoiceDetail->invoiceId = $id;
             $invoiceDetail->type = "sale";
             $arr2 = array();
-            $arr2=array();
             $stmt2 = $invoiceDetail->readOne();
     
             while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)){
