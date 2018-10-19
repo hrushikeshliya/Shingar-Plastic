@@ -8,19 +8,25 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/itemGroup.php';
+include_once '../objects/item.php';
  
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
-$obj = new ItemGroup($db);
+$obj = new Item($db);
  
 $data = json_decode(file_get_contents("php://input"));
- 
+
 $obj->id = $data->id; 
-$obj->name = $data->name;
-$obj->rawType = $data->rawType;
+$obj->name = $data->itemName;
+$obj->itemGroupId = $data->itemGroup;
+$obj->purchaseRate = $data->purchaseRate;
+$obj->saleRate = $data->saleRate;
+$obj->jobRate = $data->jobRate;
+$obj->itemWeight = $data->itemWeight;
+$obj->hsnSac = $data->hsnSac;
+$obj->narration = $data->narration;
 $obj->active = $data->active;
 
 if($obj->update()){

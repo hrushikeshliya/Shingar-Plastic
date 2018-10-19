@@ -10,6 +10,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once '../config/database.php';
 include_once '../objects/sale.php';
 include_once '../objects/invoiceDetail.php';
+include_once '../objects/department.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -47,6 +48,7 @@ if($obj->create()){
             $detail->quantity = $data->quantity[$x];
             $detail->rate = $data->rate[$x];
             $detail->amount = $data->amount[$x];
+            $detail->detailId = 0;
 
             $detail->create();
         }
@@ -59,9 +61,14 @@ if($obj->create()){
         $detail->quantity = $data->quantity;
         $detail->rate = $data->rate;
         $detail->amount = $data->amount;
+        $detail->detailId = 0;
         $detail->create();
     }
 
+    $department = new Department($db);
+    $department->id = $data->departmentId;
+    $department->updateSeriesSales();
+ 
     echo '{';
         echo '"message": "Success"';
     echo '}';

@@ -10,6 +10,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once '../config/database.php';
 include_once '../objects/purchase.php';
 include_once '../objects/invoiceDetail.php';
+include_once '../objects/department.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -21,16 +22,12 @@ $data = json_decode(file_get_contents("php://input"));
 $obj->date = $data->date;
 $obj->departmentId = $data->departmentId;
 $obj->accountId = $data->accountId;
-$obj->discount = $data->discount;
-$obj->tax = $data->tax;
 $obj->refNo = $data->refNo;
 $obj->narration = $data->narration;
 $obj->username = $data->username;
-$obj->total = $data->total;
-$obj->discountAmount = $data->discountAmount;
-$obj->taxableAmount = $data->taxableAmount;
-$obj->taxAmount = $data->taxAmount;
-$obj->totalAmount = $data->totalAmount;
+$obj->grandTotal = $data->grandTotal;
+$obj->billLimit = $data->billLimit;
+$obj->invoiceId = $data->purchaseInvoiceId;
 
 if($obj->create()){
     
@@ -44,6 +41,7 @@ if($obj->create()){
             $detail->quantity = $data->quantity[$x];
             $detail->rate = $data->rate[$x];
             $detail->amount = $data->amount[$x];
+            $detail->detailId = 0;
 
             $detail->create();
         }
@@ -56,10 +54,15 @@ if($obj->create()){
         $detail->quantity = $data->quantity;
         $detail->rate = $data->rate;
         $detail->amount = $data->amount;
+        $detail->detailId = 0;
 
         $detail->create();
     }
 
+    $department = new Department($db);
+    $department->id = $data->departmentId;
+    $department->updateSeriesPurchase();
+ 
     echo '{';
         echo '"message": "Success"';
     echo '}';

@@ -32,8 +32,8 @@ $(document).ready(function(){
 			read_one_html+="</tr>";
 
 			read_one_html+="<tr>";
-				read_one_html+="<td>Bill Percent</td>";
-				read_one_html+="<td>" + data.billPercent + "</td>";
+				read_one_html+="<td>Challan Limit</td>";
+				read_one_html+="<td>" + data.challanLimit + "</td>";
 			read_one_html+="</tr>";
 
 			read_one_html+="<tr>";

@@ -6,10 +6,10 @@ $(document).ready(function(){
         
         $.getJSON("http://shingarplastic.com/api/department/readOne.php?id=" + id, function(data){  // Change Needed HERE
  
-		 var id = data.id;
+		 var id = data.Id;
 		 var name = data.name;
 		 var billName = data.billName;
-		 var billPercent = data.billPercent;
+		 var challanLimit = data.challanLimit;
 		 var active = data.active;
 
 		 var status_options_html = "";
@@ -44,8 +44,8 @@ $(document).ready(function(){
 				update_html+="</tr>";
 
 				update_html+="<tr>";
-					update_html+="<td>Bill Percent</td>";
-					update_html+="<td><input value=\"" + billPercent + "\" type='text' name='billPercent' class='form-control' required /></td>";
+					update_html+="<td>Challan Limit</td>";
+					update_html+="<td><input value=\"" + challanLimit + "\" type='text' name='challanLimit' class='form-control' required /></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";

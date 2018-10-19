@@ -11,6 +11,21 @@ $(document).ready(function(){
 		 var rawType = data.rawType;
 		 var active = data.active;
 
+		 var itemGroup_options_html = "";
+
+		 $.getJSON("http://shingarplastic.com/api/itemGroup/read.php", function(data2){ 
+				 
+			 itemGroup_options_html+="<select name='itemGroup' class='form-control'>";
+			 $.each(data2.itemGroup, function(key2, val2){
+				 if(val2.name == data.itemGroup) {
+				 	itemGroup_options_html+="<option value='" + val2.id + "' selected>" + val2.name + "</option>";
+				 } else {
+					itemGroup_options_html+="<option value='" + val2.id + "'>" + val2.name + "</option>";
+				 }
+			 });
+			 itemGroup_options_html+="</select>";
+		 
+
 		 var status_options_html = "";
 		 status_options_html+="<select name='active' class='form-control'>";
 		 if (active == 0) {	
@@ -23,15 +38,6 @@ $(document).ready(function(){
  
 		 status_options_html+="</select>";
 
-		 var raw_options_html = "";
-		 raw_options_html+="<select name='rawType' class='form-control'>";
-		 		 raw_options_html+="<option value='"+rawType+"'>"+rawType+"</option>";
-				 raw_options_html+="<option value=''></option>";
-				 raw_options_html+="<option value='RAW_MAT'>RAW_MAT</option>";
-				 raw_options_html+="<option value='SEMI_FINISHED'>SEMI_FINISHED</option>";
-				 raw_options_html+="<option value='FINISHED'>FINISHED</option>";                      
-		 raw_options_html+="</select>";
-
 		var update_html="";
 		 
 		update_html+="<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
@@ -39,22 +45,44 @@ $(document).ready(function(){
 		update_html+="</div>";
 		
 		update_html+="<form id='update-form' action='#' method='post' border='0'>";
-		    update_html+="<table class='table table-hover table-responsive table-bordered'>";
 
-				update_html+="<tr>";
-					update_html+="<td>Item Group Name</td>";
-					update_html+="<td><input value=\"" + name + "\" type='text' name='name' class='form-control' required /></td>";
-				update_html+="</tr>";
+		update_html+="<table class='table table-bordered table-responsive table-hover'>";
+		 
 
-				update_html+="<tr>";
-					update_html+="<td>Raw Type</td>";
-					update_html+="<td>"+raw_options_html+"</td>";
-				update_html+="</tr>";
+		update_html+="<tr>";
+			update_html+="<td>Id</td>";
+			update_html+="<td>" + data.id + "</td>";
+			update_html+="<td>Item Name</td>";
+			update_html+="<td><input type='text' class='form-control' name='itemName' value='" + data.name + "' required></td>";
+		update_html+="</tr>";
 
-				update_html+="<tr>";
-					update_html+="<td>Status</td>";
-					update_html+="<td>"+status_options_html+"</td>";
-				update_html+="</tr>";				
+		update_html+="<tr>";
+			update_html+="<td>Item Group</td>";
+			update_html+="<td>" + itemGroup_options_html + "</td>";
+			update_html+="<td>Item Weight</td>";
+			update_html+="<td><input type='number' class='form-control' name = 'itemWeight' value='" + data.itemWeight+ "' min=0></td>";
+		update_html+="</tr>";			
+
+		update_html+="<tr>";
+			update_html+="<td>Purchase Rate</td>";
+			update_html+="<td><input type='number' class='form-control' name = 'purchaseRate' value='" + data.purchaseRate+ "' min=0></td>";
+			update_html+="<td>Sale Rate</td>";
+			update_html+="<td><input type='number' class='form-control' name = 'saleRate' value='" + data.saleRate+ "' min=0></td>";
+		update_html+="</tr>";			
+
+		update_html+="<tr>";
+			update_html+="<td>Job Rate</td>";
+			update_html+="<td><input type='number' class='form-control' name = 'jobRate' value='" + data.jobRate+ "' min=0></td>";
+			update_html+="<td>HSN / SAC</td>";
+			update_html+="<td><input type='text' class='form-control' name='hsnSac' value='" + data.hsnSac + "' required></td>";
+		update_html+="</tr>";			
+
+		update_html+="<tr>";
+		update_html+="<td>Narration</td>";
+		update_html+="<td><input type='text' class='form-control' name='narration' value='" + data.narration + "'></td>";
+		update_html+="<td>Status</td>";
+		update_html+="<td>"+status_options_html+"</td>"; 
+		update_html+="</tr>";
 
 		        update_html+="<tr>";
 		 
@@ -70,10 +98,10 @@ $(document).ready(function(){
 		 
 		    update_html+="</table>";
 		update_html+="</form>";
-
+	 
 		$("#page-content").html(update_html);
 		changePageTitle("Edit Item");  // Change Needed HERE
-				
+	});			
 		});
 	     	     
 	});

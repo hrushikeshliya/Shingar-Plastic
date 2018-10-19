@@ -31,7 +31,7 @@ class Sale{
     	}
 
 	function read(){	
-        $query = "SELECT s.*,d.name departmentName,a.name accountName,a.aliasName,t.name transportName FROM ". $this->table_name . " s 
+        $query = "SELECT s.*,d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.challanLimit, d.others, a.name accountName,a.aliasName,t.name transportName FROM ". $this->table_name . " s 
          LEFT JOIN department d ON s.departmentId = d.id 
          LEFT JOIN account a ON s.accountId = a.id 
          LEFT JOIN transport t ON s.transportId = t.id 
@@ -42,7 +42,7 @@ class Sale{
     }
 
 	function readOne(){	
-        $query = "SELECT s.*,d.name departmentName,a.name accountName,a.aliasName,a.address1, a.address2, a.state, a.city, a.pincode, a.phone, a.email, a.mobile, a.mobile2 , a.gstNo,t.name transportName FROM ". $this->table_name . " s 
+        $query = "SELECT s.*,d.id departmentId,d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.challanLimit, d.others, a.name accountName,a.aliasName,a.address1, a.address2, a.state, a.city, a.pincode, a.phone, a.email, a.mobile, a.mobile2 , a.gstNo,t.name transportName FROM ". $this->table_name . " s 
          LEFT JOIN department d ON s.departmentId = d.id 
          LEFT JOIN account a ON s.accountId = a.id 
          LEFT JOIN transport t ON s.transportId = t.id 
@@ -65,7 +65,9 @@ class Sale{
     }
     
     function readInvoiceIdByAccount(){	
-	    $query = "SELECT s.id FROM " . $this->table_name . " s where s.deleted = 0 AND s.accountId = ?";	
+        $query = "SELECT s.id,s.invoiceId,s.date,d.id departmentId, d.billCode,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn FROM " . $this->table_name . " s 
+        LEFT JOIN department d ON s.departmentId = d.id
+        where s.deleted = 0 AND s.accountId = ?";	
         $stmt = $this->conn->prepare($query);	
         $stmt->bindParam(1, $this->accountId);
         $stmt->execute();	 	

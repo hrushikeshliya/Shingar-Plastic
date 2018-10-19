@@ -58,7 +58,6 @@ session_start();
         var id = $("#departmentId option:selected").val();
                 $.getJSON("http://shingarplastic.com/api/department/read.php?id=" + id, function(data){  
                     $("#salesInvoiceId").val(data.department[0].billSeriesSales);
-                    console.log(parseInt(data.department[0].billSeriesSales));
                 });
     }
 
@@ -67,7 +66,6 @@ session_start();
                 $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){  
                     $("#billLimit").val(data.billLimit);
                 });
-                console.log("Getting Bill Limit");
     }
 
     function addItem() {    
@@ -92,19 +90,19 @@ session_start();
                             var markup = "<tr id='"+items+"'>";
                             
                             markup += "<td><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='itemNarration' value='"+itemNarration+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='quantity' value='"+quantity+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='rate' value='"+rate+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='amount' value='"+amount+"' class='form-control amount' readOnly></td>";
-                            markup += "<td class='text-danger'>"+taxable+"</td>";
-                            markup += "<td><a onclick=deleteItem("+items+","+data.id+","+amount+",'"+taxable+"') class='btn btn-danger'>Remove</a></td>";
+                            markup += "<td><input name='itemNarration' value='"+itemNarration+"' class='form-control'></td>";
+                            markup += "<td><input name='quantity' class='listQuantity' value='"+quantity+"' class='form-control' onkeyup=getBillAmount()></td>";
+                            markup += "<td><input name='rate' class='listRate' value='"+rate+"' class='form-control' onkeyup=getBillAmount()></td>";
+                            markup += "<td><input name='amount' class='listAmount' value='"+amount+"' class='form-control amount' readOnly></td>";
+                            markup += "<td class='text-danger'><input type='hidden' class='listTaxable' value='"+taxable+"'>"+taxable+"</td>";
+                            markup += "<td><a onclick=deleteItem("+items+") class='btn btn-danger'>Remove</a></td>";
                             markup += "</tr>";
                             $("#itemNameList").append(markup);
                             items++;
 
                             getBillAmount();
                     });  
-                    $("#itemIdList option[value=" + id + "]").attr('disabled','disabled');
+                    
                     $("#itemIdList").prop("selectedIndex", 0);
                     $("#quantity").val(1);
                     $("#itemsNarration").val("");
@@ -119,19 +117,27 @@ session_start();
             } 
     }
         
-    function deleteItem(id,itemId,amount,taxable) {  
-        $("#itemIdList option[value=" + itemId + "]").removeAttr('disabled');  
+    function deleteItem(id) {  
         $("#"+id).remove();
-        subTotal -= amount;
-        if(taxable == "*") {
-            taxableAmount -= amount;
-        }
-        items--;
         getBillAmount();
     }
     
     
     function getBillAmount() {
+        var listLength = $(".listQuantity").length;
+        subTotal = 0;
+        taxableAmount = 0;
+
+        for (i = 0; i < listLength; i++) { 
+            var amount = $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
+            $(".listAmount").eq(i).val(amount);
+            subTotal += amount;
+
+            if($(".listTaxable").eq(i).val() == '*') {
+                taxableAmount += $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
+            }
+        }
+
               var tax = $("#tax option:selected").val();
               tax = tax=0? 0: tax/100;
 

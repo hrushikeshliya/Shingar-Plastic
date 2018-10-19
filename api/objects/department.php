@@ -10,7 +10,7 @@ class Department{
     public $id;
     public $name;
     public $billName;
-    public $billPercent;
+    public $challanLimit;
     public $billSeriesSales;
     public $billSeriesPurchase;
     public $active;
@@ -48,7 +48,7 @@ class Department{
                 SET
                     name = :name,
                     billName = :billName,
-                    billPercent = :billPercent,
+                    challanLimit = :challanLimit,
                     active = :active                          
                 WHERE
                     Id = :id";
@@ -58,13 +58,13 @@ class Department{
         // sanitize
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->billName=htmlspecialchars(strip_tags($this->billName));
-        $this->billPercent=htmlspecialchars(strip_tags($this->billPercent));
+        $this->challanLimit=htmlspecialchars(strip_tags($this->challanLimit));
         $this->id=htmlspecialchars(strip_tags($this->id));
 
         // bind new values
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':billName', $this->billName);
-        $stmt->bindParam(':billPercent', $this->billPercent);
+        $stmt->bindParam(':challanLimit', $this->challanLimit);
         $stmt->bindParam(':active', $this->active);
         $stmt->bindParam(':id', $this->id);
 
@@ -79,9 +79,9 @@ class Department{
         $query = "UPDATE
                     " . $this->table_name . "
                 SET
-                    billSeriesSales = billSeriesSales+1,                      
+                    billSeriesSales = billSeriesSales+1                   
                 WHERE
-                    Id = :id";
+                    Id = :id ";
     
         $stmt = $this->conn->prepare($query);
     
@@ -98,12 +98,34 @@ class Department{
         return false;
     }
 
+    function updateSeriesSalesReturn(){
+        $query = "UPDATE
+                    " . $this->table_name . "
+                SET
+                    billSeriesSalesReturn = billSeriesSalesReturn+1                   
+                WHERE
+                    Id = :id ";
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // sanitize
+        $this->id=htmlspecialchars(strip_tags($this->id));
+
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+
+        if($stmt->execute()){
+            return true;
+        }
+    
+        return false;
+    }
 
     function updateSeriesPurchase(){
         $query = "UPDATE
                     " . $this->table_name . "
                 SET
-                    billSeriesPurchase = billSeriesPurchase+1,                      
+                    billSeriesPurchase = billSeriesPurchase+1                     
                 WHERE
                     Id = :id";
     
@@ -149,7 +171,7 @@ class Department{
                    SET
                        name=:name,
                        billName = :billName,
-                       billPercent = :billPercent,
+                       challanLimit = :challanLimit,
                        billSeries = 1";
         
            $stmt = $this->conn->prepare($query);
@@ -157,12 +179,12 @@ class Department{
         // sanitize
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->billName=htmlspecialchars(strip_tags($this->billName));
-        $this->billPercent=htmlspecialchars(strip_tags($this->billPercent));
+        $this->challanLimit=htmlspecialchars(strip_tags($this->challanLimit));
 
         // bind new values
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':billName', $this->billName);
-        $stmt->bindParam(':billPercent', $this->billPercent);
+        $stmt->bindParam(':challanLimit', $this->challanLimit);
         
            if($stmt->execute()){
                return true;

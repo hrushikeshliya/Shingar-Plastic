@@ -53,11 +53,16 @@ session_start();
 
         $.getJSON("http://shingarplastic.com/api/sale/read.php?type=distinctInvoiceId&id=" + accountId, function(data){ 
             $.each(data.sale, function(key, val) {
+ 
+                var d = new Date(val.date);
+                var n = d.getFullYear();
+
                 $('#invoiceId')
                 .append($("<option></option>")
                 .attr("value",val.id)
-                .text(val.id));
+                .text(val.billCode + "/"+val.invoiceId+"/"+ n +"/"+(n+1)));
                     });
+                
         });
     }
     
@@ -65,29 +70,29 @@ session_start();
         var invoiceId = $("#invoiceId option:selected").val();
         $('#itemIdList')
         .empty()
-        .append($("<option>Select Return Item</option>")
+        .append($("<option>Select Return Item [Returnable Quantity] </option>")
         .attr("value",""));
+
 
         $.getJSON("http://shingarplastic.com/api/invoiceDetail/read.php?type=sale&id=" + invoiceId, function(data){ 
             $.each(data.invoiceDetail, function(key, val) {
                 $('#itemIdList')
                 .append($("<option></option>")
-                .attr("value",val.itemId)
-                .text(val.itemName+" ["+val.quantity+" Pcs]"));
+                .attr("value",val.id+"|"+val.itemId+"|"+(val.quantity-val.returnQuantity)+"|"+val.rate)
+                .text(val.itemName+" ["+(val.quantity-val.returnQuantity)+" Pcs]"));
+
+                $("#returnId").val(val.billSeriesSalesReturn);
+                $("#departmentId").val(val.departmentId);
+
                     });
         });
     }
 
     function setQuantityLimit() {
-        var itemId = $("#itemIdList option:selected").val();
-        var invoiceId = $("#invoiceId option:selected").val();
-
-        $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=totalQuantity&table=sale&invoiceId=" + invoiceId +"&itemId="+itemId, function(data){ 
-            $('#quantity')
-                .attr("value",data.singleValues[0].quantity);
-                currentMaxLimit = data.singleValues[0].quantity;
-                console.log("Setting Max Limit : " +currentMaxLimit);
-        });
+        var quantity = $("#itemIdList option:selected").val().split("|")[2];
+         $('#quantity')
+                .attr("value",quantity);
+                currentMaxLimit = quantity;
     }
 
     function validateQuantity() {
@@ -102,29 +107,33 @@ session_start();
     function addItem() {    
 
             var selectedIndex = $("#itemIdList").prop("selectedIndex");
-            
+            var maxQuantity = $("#itemIdList option:selected").val().split("|")[2];
+
             var quantity = $("#quantity").val();
 
             if(quantity !=0 && selectedIndex != 0) {
-                var id = $("#itemIdList option:selected").val();
+                var detailId = $("#itemIdList option:selected").val().split("|")[0];
+                var id = $("#itemIdList option:selected").val().split("|")[1];
+                var rate = $("#itemIdList option:selected").val().split("|")[3];
+
                 $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
-                            var rate = data.saleRate;
-                            var amount = (rate * quantity)
+                            var amount = (rate * quantity) 
                             total += amount;
                             var markup = "<tr id='"+items+"'>";
-                            markup += "<td><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='quantity' value='"+quantity+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='rate' value='"+rate+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='amount' value='"+amount+"' class='form-control amount' readOnly></td>";
-                            markup += "<td><a onclick=deleteItem("+items+","+data.id+","+amount+") class='btn btn-danger'>Remove</a></td>";
+                            markup += "<td><input name='detailId' value='"+detailId+"' class='form-control' type='hidden'><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' readOnly></td>";
+                            markup += "<td><input name='quantity' class='listQuantity form-control' onkeyup=getBillAmount() value='"+quantity+"' type='number' min='1' max='"+maxQuantity+"'></td>";
+                            markup += "<td><input name='rate' class='listRate form-control' value='"+rate+"' readOnly></td>";
+                            markup += "<td><input name='amount' value='"+amount+"' class='form-control listAmount' readOnly></td>";
+                            markup += "<td><a onclick=deleteItem("+items+","+selectedIndex+") class='btn btn-danger'>Remove</a></td>";
                             markup += "</tr>";
                             $("#itemNameList").append(markup);
                             items++;
 
                             getBillAmount();
                     });  
-                    $("#itemIdList option[value=" + id + "]").attr('disabled','disabled');
+
+                    $("#itemIdList option:selected").attr('disabled','disabled');
                     $("#itemIdList").prop("selectedIndex", 0);
                     $("#quantity").val(1);
                
@@ -137,17 +146,30 @@ session_start();
             } 
     }
         
-    function deleteItem(id,itemId,amount) {  
-        $("#itemIdList option[value=" + itemId + "]").removeAttr('disabled');  
+    function deleteItem(id,index) {  
+        $("#itemIdList").prop("selectedIndex", index);
+        $("#itemIdList option:selected").removeAttr('disabled'); 
         $("#"+id).remove();
-        total -= amount;
-        items--;
         getBillAmount();
     }
     
-    function getBillAmount() {
+    function getBillAmount2() {
               var totalAmount = total;
               $("#totalAmount").val(totalAmount);
+    }
+
+    function getBillAmount() {
+        var listLength = $(".listQuantity").length;
+        subTotal = 0;
+
+        for (i = 0; i < listLength; i++) { 
+            var amount = $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
+            $(".listAmount").eq(i).val(amount);
+            subTotal += amount;
+
+        }
+
+              $("#totalAmount").val(subTotal);
     }
 </script>
     

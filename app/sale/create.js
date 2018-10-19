@@ -56,7 +56,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
                     tax_options_html+="<option value='0'>Tax Free</option>";
                     tax_options_html+="<option value='3'>GST (3 %)</option>";
                     tax_options_html+="<option value='5'>GST (5 %)</option>";
-                    tax_options_html+="</select>";; 
+                    tax_options_html+="</select>";
 	
 	create_html+="<form id='createForm' action='#' method='post' border='0'>";
 	
@@ -121,12 +121,8 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
         create_html+="<tr>";
         
         create_html+="<tr>";
-        create_html+="<td colspan=6></td>";
+        create_html+="<td colspan=4></td>";
             create_html+="<td>Taxable Amount</td><td> <input id='taxableAmount' name='taxableAmount' class='form-control pull-right' value='0' readOnly></td>";
-        create_html+="</tr>";
-
-        create_html+="<tr>";
-        create_html+="<td colspan=6></td>";
             create_html+="<td>Total Tax</td><td> <input id='taxAmount' name='taxAmount' class='form-control pull-right' value='0' readOnly></td>";
         create_html+="</tr>";
 

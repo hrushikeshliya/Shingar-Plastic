@@ -21,7 +21,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON("http://shingarplastic.com/api/sale/read.php", function(data){    // Change Needed HERE
+$.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale", function(data){    // Change Needed HERE
  
  
 read_html="";
@@ -40,21 +40,16 @@ read_html+="<table class='table table-bordered table-hover'>";
         read_html+="<th class='text-align-center'>Transport</th>";
         read_html+="<th class='text-align-center'>Action</th>";
     read_html+="</tr>";
-     
+     console.log(data);
 
 $.each(data.sale, function(key, val) {   // Change Needed HERE
      
     var d = new Date(val.date);
     var n = d.getFullYear();
 
-    if(val.departmentName == "METAL"){
-        var company = "JE";
-    } else {
-        var company = "SP";
-    }
     read_html+="<tr>";
  
-        read_html+="<td>" + company + "/"+val.invoiceId+"/"+ n +"/"+(n+1)+"</td>";
+        read_html+="<td>"+ val.billCode + "/"+val.invoiceId+"/"+ n +"/"+(n+1)+"</td>";
         read_html+="<td>" + val.date + "</td>";
         read_html+="<td>" + val.accountName + "</td>";
         read_html+="<td>";
@@ -71,13 +66,13 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         count = 1;
         quantityTotal = 0;
         $.each(val.invoiceDetail, function(key2, val2) {
-
+            
             read_html+="<tr>";
             read_html+="<td>"+count+"</td>";
             read_html+="<td>"+val2.itemName+"&nbsp;&nbsp<small>"+val2.narration+"</small></td>";
-            read_html+="<td class='text-right'>"+parseFloat(val2.rate).toFixed(2)+"</td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.rate/val.challanLimit).toFixed(2)+"</td>";
             read_html+="<td class='text-center'>"+val2.quantity+"</td>";
-            read_html+="<td class='text-right'>"+parseFloat(val2.amount).toFixed(2)+"</td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.amount/val.challanLimit).toFixed(2)+"</td>";
             read_html+="</tr>";
             
             quantityTotal += parseFloat(val2.quantity);
@@ -87,17 +82,17 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Sub Total</td>";
         read_html+="<td class='text-center'>"+quantityTotal+"</td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.subTotal).toFixed(2)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.subTotal/val.challanLimit).toFixed(2)+"</td>";
         read_html+="</tr>";
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Tax @ "+parseFloat(val.tax).toFixed(2)+" %</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.taxAmount).toFixed(2)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(((val.billLimit/100)*val.taxAmount)/val.challanLimit).toFixed(2)+"</td>";
         read_html+="</tr>";
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Grand Total</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.grandTotal).toFixed(2)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat((val.grandTotal-val.taxAmount+((val.billLimit/100)*val.taxAmount))/val.challanLimit).toFixed(2)+"</td>";
         read_html+="</tr>";
 
         read_html+="<tr class='text-info'><td colspan=5>Narration : "+val.narration+"</td></tr>";
@@ -118,14 +113,17 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         }
 
         read_html+=val.transportName + "</td>";
-        console.log(val.id);
+ 
         read_html+="<td align='center'>";   
             read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|challan'>";
                 read_html+="<span class='glyphicon glyphicon-envelope'></span>";
             read_html+="</button>";
-            read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|invoice'>";
-                read_html+="<span class='glyphicon glyphicon-print'></span>";
-            read_html+="</button>";
+
+            if(val.departmentName != "MUMBAI"){
+                read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|invoice'>";
+                    read_html+="<span class='glyphicon glyphicon-print'></span>";
+                read_html+="</button>";
+            }
             read_html+="<button class='btn btn-danger m-b-10px  delete-button' data-id='" + val.id + "'>";
                 read_html+="<span class='glyphicon glyphicon-remove'></span>";
             read_html+="</button>";

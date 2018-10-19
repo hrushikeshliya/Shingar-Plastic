@@ -23,8 +23,8 @@ $(document).ready(function(){
         create_html+="</tr>";
         
         create_html+="<tr>";
-            create_html+="<td>Bill Percent</td>";
-            create_html+="<td><input type='text' name='billPercent' class='form-control' required /></td>";
+            create_html+="<td>Challan Limit</td>";
+            create_html+="<td><input type='text' name='challanLimit' class='form-control' required /></td>";
         create_html+="</tr>";
  
         create_html+="<tr>";

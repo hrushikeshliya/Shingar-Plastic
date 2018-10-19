@@ -23,7 +23,7 @@ read_html+="<table class='table table-bordered table-hover'>";
         read_html+="<th class='text-align-center'>ID</th>";
         read_html+="<th class='text-align-center'>Department Name</th>";
         read_html+="<th class='text-align-center'>Bill Name</th>";
-        read_html+="<th class='text-align-center'>Bill Percent</th>";
+        read_html+="<th class='text-align-center'>Challan Limit</th>";
         read_html+="<th class='text-align-center'>Status</th>";
         read_html+="<th class='w-30-pct text-align-center'>Action</th>";
     read_html+="</tr>";
@@ -33,10 +33,10 @@ $.each(data.department, function(key, val) {   // Change Needed HERE
  	
     read_html+="<tr>";
  
-        read_html+="<td>" + val.id + "</td>";
+        read_html+="<td>" + val.Id + "</td>";
         read_html+="<td>" + val.name + "</td>";
         read_html+="<td>" + val.billName + "</td>";
-        read_html+="<td>" + val.billPercent + "</td>";
+        read_html+="<td>" + val.challanLimit + "</td>";
         if(val.active == 0){
         	read_html+="<td class='text-danger'>InActive</td>"; 
         }else{
@@ -46,15 +46,15 @@ $.each(data.department, function(key, val) {   // Change Needed HERE
 
         read_html+="<td>";
 
-            read_html+="<button style = 'width:90px;' class='btn btn-primary m-r-10px m-b-10px read-one-button' data-id='" + val.id + "'>";
+            read_html+="<button style = 'width:90px;' class='btn btn-primary m-r-10px m-b-10px read-one-button' data-id='" + val.Id + "'>";
                 read_html+="<span class='glyphicon glyphicon-eye-open'></span> Read";
             read_html+="</button>";
  
-            read_html+="<button style = 'width:90px;' class='btn btn-info m-r-10px  m-b-10px update-button' data-id='" + val.id + "'>";
+            read_html+="<button style = 'width:90px;' class='btn btn-info m-r-10px  m-b-10px update-button' data-id='" + val.Id + "'>";
                 read_html+="<span class='glyphicon glyphicon-edit'></span> Edit";
             read_html+="</button>";
  
-            read_html+="<button style = 'width:90px;' class='btn btn-danger m-b-10px  delete-button' data-id='" + val.id + "'>";
+            read_html+="<button style = 'width:90px;' class='btn btn-danger m-b-10px  delete-button' data-id='" + val.Id + "'>";
                 read_html+="<span class='glyphicon glyphicon-remove'></span> Delete";
             read_html+="</button>";
         read_html+="</td>";

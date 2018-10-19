@@ -29,7 +29,10 @@ class Purchase{
     	}
 
 	function read(){	
-	    $query = "SELECT p.*,d.name departmentName,a.name accountName,a.aliasName FROM " . $this->table_name . " p LEFT JOIN department d ON p.departmentId = d.id LEFT JOIN account a ON p.accountId = a.id WHERE p.deleted = 0";	
+        $query = "SELECT p.*,d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.challanLimit, d.others, a.name accountName,a.aliasName FROM " . $this->table_name . " p 
+        LEFT JOIN department d ON p.departmentId = d.id 
+        LEFT JOIN account a ON p.accountId = a.id 
+        WHERE p.deleted = 0 ORDER BY p.id DESC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -59,16 +62,12 @@ class Purchase{
                    date = :date,
                    departmentId = :departmentId,
                    accountId = :accountId,
-                   discount = :discount,
-                   tax = :tax,
                    refNo = :refNo,
                    narration = :narration,
                    username = :username,
-                   total = :total,
-                   discountAmount = :discountAmount,
-                   taxableAmount = :taxableAmount,
-                   taxAmount = :taxAmount,
-                   totalAmount = :totalAmount
+                   grandTotal = :grandTotal,
+                   billLimit = :billLimit,
+                   invoiceId = :invoiceId
                        ";
         
            $stmt = $this->conn->prepare($query);
@@ -82,14 +81,10 @@ class Purchase{
         $stmt->bindParam(':date', $this->date);
         $stmt->bindParam(':departmentId', $this->departmentId);
         $stmt->bindParam(':accountId', $this->accountId);
-        $stmt->bindParam(':discount', $this->discount);
-        $stmt->bindParam(':tax', $this->tax);
         $stmt->bindParam(':refNo', $this->refNo);
-        $stmt->bindParam(':total', $this->total);
-        $stmt->bindParam(':discountAmount', $this->discountAmount);
-        $stmt->bindParam(':taxableAmount', $this->taxableAmount);
-        $stmt->bindParam(':taxAmount', $this->taxAmount);
-        $stmt->bindParam(':totalAmount', $this->totalAmount);
+        $stmt->bindParam(':grandTotal', $this->grandTotal);
+        $stmt->bindParam(':billLimit', $this->billLimit);
+        $stmt->bindParam(':invoiceId', $this->invoiceId);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':narration', $this->narration);
         

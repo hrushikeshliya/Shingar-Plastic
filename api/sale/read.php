@@ -15,7 +15,7 @@ $sale = new Sale($db);  //Change ClassName
 
 $type = isset($_GET['type']) ? $_GET['type'] : "NULL";
 
-if($type=='NULL') {
+if($type=='sale' || $type=='saleReturn') {
 
     $id= isset($_GET['id']) ? $_GET['id'] : "NULL";
 
@@ -40,9 +40,14 @@ if($type=='NULL') {
     
             $invoiceDetail = new InvoiceDetail($db);  //Change ClassName
             $invoiceDetail->invoiceId = $id;
-            $invoiceDetail->type = "sale";
+            $invoiceDetail->type = $type;
             $arr2 = array();
-            $stmt2 = $invoiceDetail->readOne();
+
+            if($type == "sale"){
+                $stmt2 = $invoiceDetail->readOneSale();
+            } else {
+                $stmt2 = $invoiceDetail->readOneSaleReturn();
+            }
     
             while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)){
                 array_push($arr2, $row2);
@@ -67,7 +72,7 @@ if($type=='NULL') {
     $stmt = $sale->readInvoiceIdByAccount();
 } 
 
-if($type!='NULL') {
+if($type=='distinctAccount' || $type=='distinctInvoiceId') {
 
 $num = $stmt->rowCount();
      

@@ -10,6 +10,7 @@ class SaleReturn{
     public $id;
     public $date;
     public $invoiceId;
+    public $returnId;
     public $accountId;
     public $narration;
     public $username;
@@ -21,9 +22,11 @@ class SaleReturn{
     	}
 
 	function read(){	
-        $query = "SELECT s.*,a.name accountName,a.aliasName FROM ". $this->table_name . " s 
-         LEFT JOIN account a ON s.accountId = a.id  
-         WHERE s.deleted = 0 ORDER BY date desc, id desc";	
+        $query = "SELECT sr.*,s.invoiceId saleInvoiceId,d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " sr
+         LEFT JOIN sale s ON s.id = sr.invoiceId
+         LEFT JOIN department d ON s.departmentId = d.id
+         LEFT JOIN account a ON sr.accountId = a.id  
+         WHERE sr.deleted = 0 ORDER BY date desc, id desc";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -52,6 +55,7 @@ class SaleReturn{
 
                    date = :date,
                    invoiceId = :invoiceId,
+                   returnId = :returnId,
                    accountId = :accountId,
                    narration = :narration,
                    username = :username,
@@ -71,6 +75,7 @@ class SaleReturn{
         $stmt->bindParam(':date', $this->date);
         $stmt->bindParam(':accountId', $this->accountId);
         $stmt->bindParam(':invoiceId', $this->invoiceId);
+        $stmt->bindParam(':returnId', $this->returnId);
         $stmt->bindParam(':totalAmount', $this->totalAmount);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':narration', $this->narration);

@@ -24,17 +24,19 @@ read_html+="<table class='table table-bordered table-hover'>";
         read_html+="<th class='text-align-center'>Date</th>";
         read_html+="<th class='text-align-center'>Account Name</th>";
         read_html+="<th class='text-align-center'>Invoice Details</th>";
-        read_html+="<th class='text-align-center'>Billed Amount</th>";
         read_html+="<th class='text-align-center'>Ref No</th>";
         read_html+="<th class='text-align-center'>Action</th>";
     read_html+="</tr>";
      
 
 $.each(data.purchase, function(key, val) {   // Change Needed HERE
- 	
+ 	     
+    var d = new Date(val.date);
+    var n = d.getFullYear();
+
     read_html+="<tr>";
  
-        read_html+="<td>" + val.id + "</td>";
+        read_html+="<td>"+ val.billCode + "/"+val.invoiceId+"/"+ n +"/"+(n+1)+"</td>";
         read_html+="<td>" + val.date + "</td>";
         read_html+="<td>" + val.accountName + "</td>";
         read_html+="<td>";
@@ -67,12 +69,11 @@ $.each(data.purchase, function(key, val) {   // Change Needed HERE
         read_html+="<td></td>";
         read_html+="<td>Total</td>";
         read_html+="<td></td>";
-        read_html+="<td>"+val.total+"</td>";
+        read_html+="<td>"+val.grandTotal+"</td>";
         read_html+="</tr>";
 
         read_html+="</table>";
         read_html+="</td>";
-        read_html+="<td>" + val.totalAmount + "</td>";
         read_html+="<td>" + val.refNo + "</td>";
 
         read_html+="<td align='center'>";

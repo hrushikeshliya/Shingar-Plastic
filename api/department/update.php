@@ -21,7 +21,7 @@ $data = json_decode(file_get_contents("php://input"));
 $obj->id = $data->id; 
 $obj->name = $data->name;
 $obj->billName = $data->billName;
-$obj->billPercent = $data->billPercent;
+$obj->challanLimit = $data->challanLimit;
 $obj->active = $data->active;
 
 if($obj->update()){

@@ -40,39 +40,66 @@ session_start();
 <script>
 
     var items = 1;
-    var total = 0;
-    var discountAmount = 0;
-    var taxableAmount = 0;
-    var tax = 0;
-    var totalAmount = 0;
+    var subTotal = 0;
+    var grandTotal = 0;
+
+    function getRate() {
+        var id = $("#itemIdList option:selected").val();
+                $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){  
+                    var rate = data.purchaseRate;
+                    $("#itemRate").val(rate);
+                });
+                $("#quantity").val(1);
+    }
+
+    function getInvoiceId() {
+        var id = $("#departmentId option:selected").val();
+                $.getJSON("http://shingarplastic.com/api/department/read.php?id=" + id, function(data){  
+                    $("#salesInvoiceId").val(data.department[0].billSeriesPurchase);
+                });
+    }
+
+    function getBillLimit() {
+        var id = $("#accountId").val();
+                $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){  
+                    //$("#billLimit").val(data.billLimit);
+                });
+    }
 
     function addItem() {    
+
         var selectedIndex = $("#itemIdList").prop("selectedIndex");    
-            var quantity = $("#quantity").val();
+        var quantity = $("#quantity").val();
+        var itemNarration = $("#itemsNarration").val();
+        var rate = $("#itemRate").val();
 
             if(quantity !=0 && selectedIndex != 0) {
                 var id = $("#itemIdList option:selected").val();
                 $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
-                            
-                            var rate = data.purchaseRate;
+                            var taxable = '';
                             var amount = (rate * quantity)
-                            total += amount;
+                            subTotal += amount;
+
                             var markup = "<tr id='"+items+"'>";
                             markup += "<td><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='quantity' value='"+quantity+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='rate' value='"+rate+"' class='form-control' readOnly></td>";
-                            markup += "<td><input name='amount' value='"+amount+"' class='form-control amount' readOnly></td>";
-                            markup += "<td><a onclick=deleteItem("+items+","+data.id+","+amount+") class='btn btn-danger'>Remove</a></td>";
+                            markup += "<td><input name='itemNarration' value='"+itemNarration+"' class='form-control'></td>";
+                            markup += "<td><input name='quantity' class='listQuantity' value='"+quantity+"' class='form-control' onkeyup=getBillAmount()></td>";
+                            markup += "<td><input name='rate' class='listRate' value='"+rate+"' class='form-control' onkeyup=getBillAmount()></td>";
+                            markup += "<td><input name='amount' class='listAmount' value='"+amount+"' class='form-control amount' readOnly></td>";
+                            markup += "<td class='text-danger'><input type='hidden' class='listTaxable' value='"+taxable+"'>"+taxable+"</td>";
+                            markup += "<td><a onclick=deleteItem("+items+") class='btn btn-danger'>Remove</a></td>";
                             markup += "</tr>";
                             $("#itemNameList").append(markup);
                             items++;
 
                             getBillAmount();
                     });  
-                    $("#itemIdList option[value=" + id + "]").attr('disabled','disabled');
+                    
                     $("#itemIdList").prop("selectedIndex", 0);
                     $("#quantity").val(1);
+                    $("#itemsNarration").val("");
+                    $("#itemRate").val("");
             } else {
                 if(selectedIndex == 0) {
                     $("#itemIdList").focus();
@@ -82,28 +109,25 @@ session_start();
             } 
     }
         
-    function deleteItem(id,itemId,amount) {  
-        $("#itemIdList option[value=" + itemId + "]").removeAttr('disabled');  
+    function deleteItem(id) {  
         $("#"+id).remove();
-        total -= amount;
-        items--;
         getBillAmount();
     }
     
     function getBillAmount() {
-              var discount = $("#discount").val();
-              var tax = $("#tax option:selected").val();
-              tax = tax=0? 0: tax/100;
-              var discountAmount = total*(discount/100);
-              var taxableAmount = total - discountAmount;
-              var taxAmount = taxableAmount * tax;
-              var totalAmount = taxableAmount + taxAmount;
 
-              $("#total").val(total);
-              $("#discountAmount").val(discountAmount);
-              $("#taxableAmount").val(taxableAmount);
-              $("#taxAmount").val(taxAmount);
-              $("#totalAmount").val(totalAmount);
+        var listLength = $(".listQuantity").length;
+        subTotal = 0;
+
+        for (i = 0; i < listLength; i++) { 
+            var amount = $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
+            $(".listAmount").eq(i).val(amount);
+            subTotal += amount;
+        }
+
+              grandTotal = subTotal;
+
+              $("#grandTotal").val(grandTotal);
     }
 </script>
     

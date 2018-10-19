@@ -31,7 +31,7 @@ if($num>0){
         $invoiceDetail->type = "purchase";
         $arr2 = array();
         $arr2=array();
-        $stmt2 = $invoiceDetail->readOne();
+        $stmt2 = $invoiceDetail->readOnePurchase();
 
         while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)){
             array_push($arr2, $row2);

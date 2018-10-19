@@ -16,8 +16,17 @@ $id = isset($_GET['id']) ? $_GET['id'] : die();
 $obj = new InvoiceDetail($db);  //Change ClassName
 $obj->invoiceId = $id;
 $obj->type = $type;
-
-$stmt = $obj->readOne();     
+if($type == "sale") {
+    $stmt = $obj->readOneSale();     
+} else if($type == "saleReturn") {
+    $stmt = $obj->readOneSaleReturn();     
+} else if($type == "purchase") {
+    $stmt = $obj->readOnePurchase();     
+} else if($type == "purchaseReturn") {
+    $stmt = $obj->readOnePurchaseReturn();     
+} else {
+    $stmt = $obj->readOne();  
+}
 $num = $stmt->rowCount();
      
 if($num>0){
