@@ -13,12 +13,17 @@ $(document).ready(function(){
 		read_one_html+="</div>";
 		
 
-		read_one_html+="<table class='table table-bordered table-hover'>";
+		read_one_html+="<table class='table table-bordered'>";
 		 
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Username</td>";
 		        read_one_html+="<td>" + data.username + "</td>";
-		    read_one_html+="</tr>";
+			read_one_html+="</tr>";
+
+			read_one_html+="<tr>";
+				read_one_html+="<td>Password</td>";
+				read_one_html+="<td>" + data.password+ "</td>";
+			read_one_html+="</tr>";
 		    
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Role</td>";

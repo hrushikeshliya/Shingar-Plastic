@@ -44,7 +44,7 @@ $.each(data.item, function(key, val) {  // Change Needed HERE
         read_html+="<td>" + val.itemGroup + "</td>";
         read_html+="<td>" + val.saleRate + "</td>";
         read_html+="<td>" + val.purchaseRate + "</td>";
-        read_html+="<td>" + (((val.saleRate - val.purchaseRate) / val.purchaseRate)*100) + " % </td>";
+        read_html+="<td>" + ((((val.saleRate - val.purchaseRate) / val.purchaseRate)*100)).toFixed(2) + " % </td>";
 
 
  

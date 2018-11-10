@@ -35,7 +35,7 @@ $(document).ready(function(){
             
             accountType_options_html+="<select name='typeId' class='form-control' required>";
             $.each(data.accountType, function(key, val){
-                    accountType_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
+                    accountType_options_html+="<option value='" + val.Id + "'>" + val.name + "&nbsp&nbsp&nbsp"+val.description+"</option>";
             });
             accountType_options_html+="</select>";  
         });          
@@ -79,10 +79,10 @@ $(document).ready(function(){
         create_html+="<tr>";
             create_html+="<td>Opening Balance";
             create_html+="</td>";
-            create_html+="<td><input type='text' VALUE='0' name='openingBalance' class='form-control' required />";
+            create_html+="<td><input type='number' min=0 step='0.01' name='openingBalance' class='form-control' required />";
             create_html+="<select name='openingDirection' class='form-control'>";
-            create_html+="<option value='-1'>Dr</option>";
-            create_html+="<option value='1'>Cr</option>";
+            create_html+="<option value='-1'>(Credit With Us) / (Money To Be Given)</option>";
+            create_html+="<option value='1'>(Debit With Us) / (Money To Be Taken)</option>";
             create_html+="</select>";
             create_html+="</td>";
             create_html+="<td>GST No</td>";

@@ -11,14 +11,19 @@ $database = new Database();
 $db = $database->getConnection();
  
 $obj = new MaterialReceive($db);  //Change ClassName
+$type = isset($_GET['type']) ? $_GET['type'] : "NULL";
 
 $issueId = isset($_GET['issueId']) ? $_GET['issueId'] : 'NULL'; 
 
-if($issueId == 'NULL'){
-    $stmt = $obj->read();
-} else {
-    $obj->issueId = $issueId; 
-    $stmt = $obj->readByIssueId();
+if($type== 'NULL'){
+    if($issueId == 'NULL'){
+        $stmt = $obj->read();
+    } else {
+        $obj->issueId = $issueId; 
+        $stmt = $obj->readByIssueId();
+    }
+} else if($type=='jobberReport') {
+    $stmt = $obj->readJobberReport();
 }
 
 $num = $stmt->rowCount();
@@ -30,31 +35,8 @@ if($num>0){
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-        extract($row);
- 
-        $arr_item=array(
-            "id" => intval($id),
-            "issueId" => intval($issueId),
-            "issueDate" =>  $issueDate,
-            "date" =>  $date,
-            "processId" =>  intval($processId),
-            "processName" =>  $processName,
-            "jobberId" =>  intval($jobberId),
-            "aliasName" =>  $aliasName,
-            "itemId" =>  intval($itemId),
-            "itemName" =>  $itemName,
-            "issuedQuantity" =>  floatval($issuedQuantity),
-            "receivedQuantity" =>  floatval($receivedQuantity),
-            "pendingQuantity" =>  floatval($pendingQuantity),
-            "quantity" =>  floatval($quantity),
-            "rate" => floatval($rate),
-            "jobCharge" => floatval($jobCharge),
-            "narration" =>  $narration,
-            "issueNarration" =>  $issueNarration,
-            "username" =>  $username
-        );
- 
-        array_push($arr["materialReceive"], $arr_item); // Change Array Name
+        extract($row); 
+        array_push($arr["materialReceive"], $row); // Change Array Name
     }
  
     echo json_encode($arr);

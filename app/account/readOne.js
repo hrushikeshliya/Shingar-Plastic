@@ -5,21 +5,6 @@ $(document).ready(function(){
 	var id = $(this).attr('data-id');
 	
 	$.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){    // Change Needed HERE
-
-		var openingDirection = "";
-		var currentDirection = "";
-
-		if(data.openingBalance >= 0) {
-			openingDirection = "Cr";
-		} else {
-			openingDirection = "Dr";
-		}
-
-		if(data.currentBalance >= 0) {
-			currentDirection = "Cr";
-		} else {
-			currentDirection = "Dr";
-		}
 		
 		var read_one_html="";
 		
@@ -47,9 +32,9 @@ $(document).ready(function(){
 									
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Opening Balance</td>";
-		        read_one_html+="<td>" + Math.abs(data.openingBalance) + " "+openingDirection+"</td>";
+				read_one_html+="<td>" + data.openingBalance + "</td>";
 		        read_one_html+="<td>Current Balance</td>";
-		        read_one_html+="<td>" + Math.abs(data.currentBalance) + " "+currentDirection+"</td>";
+				read_one_html+="<td>" + data.currentBalance + "</td>";
 		    read_one_html+="</tr>";
 			
 		    read_one_html+="<tr>";

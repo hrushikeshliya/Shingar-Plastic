@@ -1,8 +1,9 @@
 $(document).ready(function(){
     show(); 
+    
     $(document).on('click', '.read-button', function(){
     show();
-});
+    });
 
 });
 
@@ -28,45 +29,33 @@ read_html+="<table class='table table-bordered table-hover' id='myTable'>";
  
     read_html+="<tr>";
         read_html+="<th class='text-align-center'>ID</th>";
-        read_html+="<th class='text-align-center'>Account Name</th>";
         read_html+="<th class='text-align-center'>Alias Name</th>";
+        read_html+="<th class='text-align-center'>Account Name</th>";
         read_html+="<th class='text-align-center'>Account Type</th>";
         read_html+="<th class='text-align-center'>Opg Bal.</th>";
         read_html+="<th class='text-align-center'>Cur Bal.</th>";
         read_html+="<th class='text-align-center'>Ledger</th>";
-        read_html+="<th class='text-align-center'>Action</th>";
+        read_html+="<th class='text-align-center'></th>";
     read_html+="</tr>";
      
 
 $.each(data.account, function(key, val) {  // Change Needed HERE
     
-    if(val.openingBalance >= 0) {
-        openingDirection = "Cr";
-    } else {
-        openingDirection = "Dr";
-    }
-    
-    if(val.currentBalance >= 0) {
-        currentDirection = "Cr";
-    } else {
-        currentDirection = "Dr";
-    }
-
     read_html+="<tr>";
  
         read_html+="<td>" + val.id + "</td>";
-        read_html+="<td>" + val.name + "</td>";
         read_html+="<td>" + val.aliasName + "</td>";
+        read_html+="<td>" + val.name + "</td>";
         read_html+="<td>" + val.accountType + "</td>";
-        read_html+="<td>" + Math.abs(val.openingBalance) + " "+openingDirection+"</td>";
-        read_html+="<td>" + Math.abs(val.currentBalance) + " "+currentDirection+"</td>";
+        read_html+="<td>" + val.openingBalance + "</td>";
+        read_html+="<td>" + val.currentBalance + "</td>";
         read_html+="<td align='center'>";
-        read_html+="<button class='btn btn-warning m-b-10px  ledger-button' data-id='" + val.id + "'>";
+        read_html+="<a class='btn btn-warning m-b-10px  ledger-button' href='../ledger.php?id=" + val.id + "'>";
         read_html+="<span class='glyphicon glyphicon-list'></span>";
-        read_html+="</button>";
+        read_html+="</a>";
         read_html+="</td>";
 
-        read_html+="<td align='center'>";
+        read_html+="<td class='text-center'>";
 
             read_html+="<button class='btn btn-primary m-r-10px m-b-10px read-one-button' data-id='" + val.id + "'>";
                 read_html+="<span class='glyphicon glyphicon-eye-open'></span>";

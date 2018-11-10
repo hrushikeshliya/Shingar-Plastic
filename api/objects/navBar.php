@@ -20,8 +20,13 @@ class NavBar{
 
 
 	function read(){	
-	    $query = "SELECT ng.name heading, n.* FROM navBar n LEFT JOIN navGroup ng ON n.groupId = ng.Id WHERE n.Id IN (select navId from rolesAccess where roleId = 			
- 			(select roleId from user where username = :username)) AND n.deleted=0";	
+	    $query = "
+        SELECT ng.name heading, n.* FROM navBar n 
+        LEFT JOIN navGroup ng ON n.groupId = ng.Id 
+        WHERE 
+        n.Id IN (select navId from rolesAccess where roleId = (select roleId from user where username = :username)) 
+        AND n.deleted=0
+        ORDER BY n.groupId asc, n.Id asc";	
 	    $stmt = $this->conn->prepare($query);	
 	    
 	    $this->username=htmlspecialchars(strip_tags($this->username));

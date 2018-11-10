@@ -26,7 +26,7 @@ class InvoiceDetail{
     function readOneSale(){	
         $query = "
         SELECT id.*,s.billLimit,COALESCE(ir.returnQuantity,0) returnQuantity,
-        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac,d.challanLimit 
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
         FROM invoiceDetail id 
         LEFT JOIN sale s ON id.invoiceId = s.id 
         LEFT JOIN department d ON s.departmentId = d.id 
@@ -48,7 +48,7 @@ class InvoiceDetail{
     function readOnePurchase(){	
         $query = "
         SELECT id.*,p.billLimit,COALESCE(ir.returnQuantity,0) returnQuantity,
-        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac,d.challanLimit 
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
         FROM invoiceDetail id 
         LEFT JOIN purchase p ON id.invoiceId = p.id 
         LEFT JOIN department d ON p.departmentId = d.id 
@@ -70,7 +70,7 @@ class InvoiceDetail{
     function readOneSaleReturn(){	
         $query = "
         SELECT idd.narration saleNarration,id.*,s.billLimit,
-        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac,d.challanLimit 
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
         FROM invoiceDetail id 
         LEFT JOIN invoiceDetail idd ON idd.id = id.detailId
 		LEFT JOIN saleReturn sr ON id.invoiceId = sr.id
@@ -86,7 +86,28 @@ class InvoiceDetail{
 
         $stmt->execute();	 	
 	    return $stmt;	
-    }    
+    }  
+    
+    function readOnePurchaseReturn(){	
+        $query = "
+        SELECT idd.narration purchaseNarration,id.*,p.billLimit,
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
+        FROM invoiceDetail id 
+        LEFT JOIN invoiceDetail idd ON idd.id = id.detailId
+		LEFT JOIN purchaseReturn pr ON id.invoiceId = pr.id
+        LEFT JOIN purchase p ON pr.invoiceId = p.id 
+        LEFT JOIN department d ON p.departmentId = d.id 
+        LEFT JOIN item i ON id.itemId = i.id 
+        WHERE 
+        id.invoiceId = :invoiceId
+        AND id.type='purchaseReturn' AND id.deleted=0
+        ";	
+	    $stmt = $this->conn->prepare($query);	
+        $stmt->bindParam(":invoiceId", $this->invoiceId);
+
+        $stmt->execute();	 	
+	    return $stmt;	
+    }  
 
     function delete(){
     

@@ -19,7 +19,7 @@ $(document).ready(function(){
 
 	$.getJSON("http://shingarplastic.com/api/accountType/read.php", function(data){ 
 		$.each(data.accountType, function(key, val){
-				accountType_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
+				accountType_options_html+="<option value='" + val.Id + "'>" + val.name + "</option>";
 		});
 	});          
 
@@ -35,27 +35,17 @@ $(document).ready(function(){
 		var update_html="";
 		var openingDirection_options_html = "";
 		var status_options_html = "";
-		var openingDirection = "";
-		var currentDirection = "";
 
         $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){   // Change Needed HERE
 	 
-		
-		if(data.currentBalance >= 0) {
-			currentDirection = "Cr";
-		} else {
-			currentDirection = "Dr";
-		}
 
 		openingDirection_options_html+="<select name='openingDirection' class='form-control'>";
 		if(data.openingBalance >= 0) {
-			openingDirection = "Cr";
-			openingDirection_options_html+="<option value='-1'>Dr</option>";
-			openingDirection_options_html+="<option value='1' selected>Cr</option>";
+			openingDirection_options_html+="<option value='-1'>(Credit With Us) / (Money To Be Given)</option>";
+			openingDirection_options_html+="<option value='1' selected>(Debit With Us) / (Money To Be Taken)</option>";
 		} else {
-			openingDirection = "Dr";
-			openingDirection_options_html+="<option value='-1' selected>Dr</option>";
-			openingDirection_options_html+="<option value='1'>Cr</option>";
+			openingDirection_options_html+="<option value='-1' selected>(Credit With Us) / (Money To Be Given)</option>";
+			openingDirection_options_html+="<option value='1'>(Debit With Us) / (Money To Be Taken)</option>";
 		}
 		openingDirection_options_html+="</select>";
 
@@ -86,9 +76,9 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Opening Balance</td>";
-					update_html+="<td><input value=\"" + Math.abs(data.openingBalance) + "\" type='number' name='openingBalance' class='form-control col-md-6' min='0' required />"+openingDirection_options_html+"</td>";
+					update_html+="<td><input value=\"" + data.openingBalance + "\" type='number' step='0.01' name='openingBalance' class='form-control col-md-6' min='0' required />"+openingDirection_options_html+"</td>";
 					update_html+="<td>Current Balance</td>";
-					update_html+="<td><input value=\"" + Math.abs(data.currentBalance) + "\" type='number' name='currentBalance' class='form-control' disabled/> "+currentDirection+"</td>";
+					update_html+="<td><input value=\"" + data.currentBalance + "\" type='number' step='0.01' name='currentBalance' class='form-control' disabled/></td>";
 				update_html+="</tr>";
 				
 				update_html+="<tr>";
@@ -120,7 +110,7 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Mobile </td>";
-					update_html+="<td><input value=\"" + data.mobile + "\" type='text' name='mobile' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + data.mobile + "\" type='text' name='mobile' class='form-control'/></td>";
 					update_html+="<td>Mobile 2</td>";
 					update_html+="<td><input value=\"" + data.mobile2 + "\" type='text' name='mobile2' class='form-control'/></td>";
 				update_html+="</tr>";
@@ -129,7 +119,7 @@ $(document).ready(function(){
 					update_html+="<td>Email</td>";
 					update_html+="<td><input value=\"" + data.email + "\" type='email' name='email' class='form-control'/></td>";
 					update_html+="<td>GST No</td>";
-					update_html+="<td><input value=\"" + data.gstno + "\" type='text' name='gstno' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + data.gstno + "\" type='text' name='gstno' class='form-control'/></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
@@ -140,7 +130,7 @@ $(document).ready(function(){
 					update_html+=transport_options_html+"</select></td>";
 					update_html+="</td>";
 					update_html+="<td>billLimit</td>";
-					update_html+="<td><input value=\"" + data.billLimit + "\" type='number' name='billLimit' class='form-control' min = '0' max = '100' required /></td>";
+					update_html+="<td><input value=\"" + data.billLimit + "\" type='number' name='billLimit' step='0.01' class='form-control' min = '0' max = '100' required /></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";

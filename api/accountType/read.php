@@ -21,21 +21,12 @@ if($num>0){
     $arr["accountType"]=array();
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-        extract($row);
- 
-        $arr_item=array(
-            "id" => $Id,
-            "name" => $name,
-            "active" => $active,
-
-        );
- 
-        array_push($arr["accountType"], $arr_item);
+        array_push($arr["accountType"], $row); // Change Array Name
     }
-    
+
     $arr["exportKey"] = "accountType";
     echo json_encode($arr);
+
 }
  
 else{

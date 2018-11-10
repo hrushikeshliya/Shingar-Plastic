@@ -9,6 +9,7 @@ class AccountType{
     // object properties
     public $id;
     public $name;
+    public $description;
     public $active;
 
     // constructor with $db as database connection
@@ -17,7 +18,7 @@ class AccountType{
     	}
 
 	function read(){	
-	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 ";	
+	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 ORDER BY name ASC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -36,6 +37,7 @@ class AccountType{
                     " . $this->table_name . "
                 SET
                     name = :name,
+                    description = :description,
                     active = :active                          
                 WHERE
                     Id = :id";
@@ -44,10 +46,12 @@ class AccountType{
     
         // sanitize
         $this->name=htmlspecialchars(strip_tags($this->name));
+        $this->description=htmlspecialchars(strip_tags($this->description));
         $this->id=htmlspecialchars(strip_tags($this->id));
 
         // bind new values
         $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':active', $this->active);
         $stmt->bindParam(':id', $this->id);
 
@@ -83,16 +87,17 @@ class AccountType{
             $query = "INSERT INTO
                        " . $this->table_name . "
                    SET
-                       name=:name";
+                       name=:name,
+                       description = :description";
         
            $stmt = $this->conn->prepare($query);
         
            // sanitize
            $this->name=htmlspecialchars(strip_tags($this->name));
-                
+           $this->description=htmlspecialchars(strip_tags($this->description));     
            // bind values
            $stmt->bindParam(":name", $this->name);
-        
+           $stmt->bindParam(':description', $this->description);
            if($stmt->execute()){
                return true;
            }else{

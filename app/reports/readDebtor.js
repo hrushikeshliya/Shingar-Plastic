@@ -13,20 +13,20 @@ read_html+="<table class='table table-striped table-bordered'>";
 read_html+="    <thead>";
 read_html+="      <tr>";
 read_html+="        <th>Account Name</th>";
-read_html+="        <th>Closing</th>";
-read_html+="        <th>Oct</th>";
-read_html+="        <th>Sep</th>";
-read_html+="        <th>Aug</th>";
-read_html+="        <th>Jul</th>";
-read_html+="        <th>Jun</th>";
-read_html+="        <th>May</th>";
-read_html+="        <th>Apr</th>";
-read_html+="        <th>Mar</th>";
-read_html+="        <th>Feb</th>";
-read_html+="        <th>Jan</th>";
-read_html+="        <th>Dec</th>";
-read_html+="        <th>Nov</th>";
 read_html+="        <th>Opening</th>";
+read_html+="        <th>Nov</th>";
+read_html+="        <th>Dec</th>";
+read_html+="        <th>Jan</th>";
+read_html+="        <th>Feb</th>";
+read_html+="        <th>Mar</th>";
+read_html+="        <th>Apr</th>";
+read_html+="        <th>May</th>";
+read_html+="        <th>Jun</th>";
+read_html+="        <th>Jul</th>";
+read_html+="        <th>Aug</th>";
+read_html+="        <th>Sep</th>";
+read_html+="        <th>Oct</th>";
+read_html+="        <th>Closing</th>";
 read_html+="     </tr>";
 read_html+="   </thead>";
 
@@ -34,23 +34,23 @@ read_html+="   <tbody>";
 
 $.each(data.reports, function(key, val) { 
 
-payment = val.payment;
-openingBalance = val.openingBalance;
-november = val.november;
-december = val.december;
-january = val.january;
-february = val.february;
-march = val.march;
-april = val.april;
-may = val.may;
-june = val.june;
-july = val.july;
-august = val.august;
-september = val.september;
-october = val.october;
+    payment = parseFloat(val.payment);
+    openingBalance = parseFloat(val.openingBalance);
+    november = parseFloat(val.november);
+    december = parseFloat(val.december);
+    january = parseFloat(val.january);
+    february = parseFloat(val.february);
+    march = parseFloat(val.march);
+    april = parseFloat(val.april);
+    may = parseFloat(val.may);
+    june = parseFloat(val.june);
+    july = parseFloat(val.july);
+    august = parseFloat(val.august);
+    september = parseFloat(val.september);
+    october = parseFloat(val.october);
 
 
-if(openingBalance>0 && payment>openingBalance && payment!=0) {
+if(openingBalance>0 && payment>=openingBalance && payment!=0) {
     payment -= openingBalance;
     openingBalance = 0;
 } else if (openingBalance>0 && payment<openingBalance && payment!=0) {
@@ -156,20 +156,20 @@ if(october>0 && payment>october && payment!=0) {
 
 read_html+="     <tr>";
 read_html+="        <td>"+val.name+"</td>";
-read_html+="        <td>"+val.closingBalance+"</td>";
-read_html+="        <td>"+october+"</td>";
-read_html+="        <td>"+september+"</td>";
-read_html+="        <td>"+august+"</td>";
-read_html+="        <td>"+july+"</td>";
-read_html+="        <td>"+june+"</td>";
-read_html+="        <td>"+may+"</td>";
-read_html+="        <td>"+april+"</td>";
-read_html+="        <td>"+march+"</td>";
-read_html+="        <td>"+february+"</td>";
-read_html+="        <td>"+january+"</td>";
-read_html+="        <td>"+december+"</td>";
-read_html+="        <td>"+november+"</td>";
 read_html+="        <td>"+openingBalance+"</td>";
+read_html+="        <td>"+november+"</td>";
+read_html+="        <td>"+december+"</td>";
+read_html+="        <td>"+january+"</td>";
+read_html+="        <td>"+february+"</td>";
+read_html+="        <td>"+march+"</td>";
+read_html+="        <td>"+april+"</td>";
+read_html+="        <td>"+may+"</td>";
+read_html+="        <td>"+june+"</td>";
+read_html+="        <td>"+july+"</td>";
+read_html+="        <td>"+august+"</td>";
+read_html+="        <td>"+september+"</td>";
+read_html+="        <td>"+october+"</td>";
+read_html+="        <td>"+val.closingBalance+"</td>";
 read_html+="     </tr>";
 
 });
@@ -180,7 +180,7 @@ read_html+="</table>";
 read_html+="</div>";
 
 $("#page-content").html(read_html);
-changePageTitle("Sale Report");  // Change Needed HERE
+changePageTitle("Buyer's Report");  // Change Needed HERE
 
 }); 
 }

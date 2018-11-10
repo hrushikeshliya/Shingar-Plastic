@@ -17,21 +17,21 @@ class City{
     	}
 
     function readCity(){	
-	    $query = "SELECT DISTINCT cityName FROM cities";	
+	    $query = "SELECT DISTINCT cityName FROM cities order by cityName";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
     
     function readState(){	
-	    $query = "SELECT DISTINCT stateName FROM cities";	
+	    $query = "SELECT DISTINCT stateName FROM cities order by stateName";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
 
     function readByState(){	
-	    $query = "SELECT DISTINCT cityName FROM cities where stateName = :stateName";		
+	    $query = "SELECT DISTINCT cityName FROM cities where stateName = :stateName ORDER BY cityName";		
         $stmt = $this->conn->prepare($query);	
         
         $this->stateName=htmlspecialchars(strip_tags($this->stateName));

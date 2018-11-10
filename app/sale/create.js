@@ -43,7 +43,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
                 });
                 transport_options_html+="</select>";
 
-                $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){ 
+                $.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){ 
                 
                     account_options_html+="<select id='accountId' name='accountId' class='form-control' onchange=getBillLimit() required>";
                     account_options_html+="<option value=''></option>";
@@ -56,11 +56,12 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
                     tax_options_html+="<option value='0'>Tax Free</option>";
                     tax_options_html+="<option value='3'>GST (3 %)</option>";
                     tax_options_html+="<option value='5'>GST (5 %)</option>";
+                    tax_options_html+="<option value='18'>GST (18 %)</option>";
                     tax_options_html+="</select>";
 	
 	create_html+="<form id='createForm' action='#' method='post' border='0'>";
 	
-    create_html+="<table class='table table-responsive table-bordered'>";
+    create_html+="<table class='table table-responsive table-bordered' cellpadding=0>";
 
     create_html+="<tr>";
         create_html+="<td  class='text-right'>Invoice No</td>";

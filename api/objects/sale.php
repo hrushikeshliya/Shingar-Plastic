@@ -31,7 +31,7 @@ class Sale{
     	}
 
 	function read(){	
-        $query = "SELECT s.*,d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.challanLimit, d.others, a.name accountName,a.aliasName,t.name transportName FROM ". $this->table_name . " s 
+        $query = "SELECT s.*,d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.others, a.name accountName,a.aliasName,t.name transportName FROM ". $this->table_name . " s 
          LEFT JOIN department d ON s.departmentId = d.id 
          LEFT JOIN account a ON s.accountId = a.id 
          LEFT JOIN transport t ON s.transportId = t.id 
@@ -41,8 +41,29 @@ class Sale{
 	    return $stmt;	
     }
 
+    function readAmountTillDate(){	
+        $query = "
+        select COALESCE(SUM(grandTotal),0) amount 
+        from sale
+        where 
+        deleted = 0 
+        AND date <= :date
+        AND accountId = :id
+        ";	
+        $stmt = $this->conn->prepare($query);	
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':date', $this->date);
+
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
 	function readOne(){	
-        $query = "SELECT s.*,d.id departmentId,d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.challanLimit, d.others, a.name accountName,a.aliasName,a.address1, a.address2, a.state, a.city, a.pincode, a.phone, a.email, a.mobile, a.mobile2 , a.gstNo,t.name transportName FROM ". $this->table_name . " s 
+        $query = "SELECT s.*,d.id departmentId,d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.others, a.name accountName,a.aliasName,a.address1, a.address2, a.state, a.city, a.pincode, a.phone, a.email, a.mobile, a.mobile2 , a.gstNo,t.name transportName FROM ". $this->table_name . " s 
          LEFT JOIN department d ON s.departmentId = d.id 
          LEFT JOIN account a ON s.accountId = a.id 
          LEFT JOIN transport t ON s.transportId = t.id 
@@ -53,6 +74,19 @@ class Sale{
         $stmt->bindParam(1, $this->id);
 	    $stmt->execute();	 	
 	    return $stmt;	
+    }
+
+    function readSaleReport(){
+        $query = "
+        select s.date, i.itemName, (i.quantity-COALESCE(ir.quantity,0)) quantity , i.rate, (i.amount-COALESCE(ir.amount,0)) amount from sale s
+        LEFT JOIN invoiceDetail i ON s.id = i.invoiceId AND i.type = 'sale'
+        LEFT JOIN invoiceDetail ir ON i.id = ir.detailId
+        WHERE s.deleted = 0
+        ORDER BY i.itemName, s.date DESC, i.rate
+        ";
+        $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;
     }
 
     function readDistinctAccount(){	

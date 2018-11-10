@@ -10,7 +10,7 @@ $(document).ready(function(){
 	
 	create_html+="<form id='create-form' action='#' method='post' border='0'>";
 	
-    create_html+="<table class='table table-hover table-responsive table-bordered'>";
+    create_html+="<table class='table table-responsive table-bordered'>";
  
         create_html+="<tr>";
             create_html+="<td>Role Name</td>";

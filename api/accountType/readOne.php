@@ -27,6 +27,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $response=array(
             "id" => $obj ->id,
             "name" => $row['name'],
+            "description" => $row['description'],
             "active" => $row['active']
         );
   

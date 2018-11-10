@@ -13,7 +13,7 @@ $(document).ready(function(){
 		read_one_html+="</div>";
 		
 
-		read_one_html+="<table class='table table-bordered table-hover'>";
+		read_one_html+="<table class='table table-bordered'>";
 		 
 
 		    read_one_html+="<tr>";

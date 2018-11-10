@@ -34,21 +34,21 @@ class Account{
     	}
 
 	function read(){	
-	    $query = "SELECT a.*, t.name transportName, at.name accountType FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 order by at.id, a.name";	
+	    $query = "SELECT a.*, t.name transportName, at.name accountType, at.description FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 order by a.aliasName";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
     
 	function readByType($type){	
-	    $query = "SELECT a.*, t.name transportName, at.name accountType FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 AND at.name LIKE '%".$type."%' order by at.id, a.name";	
+	    $query = "SELECT a.*, t.name transportName, at.name accountType, at.description FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 AND at.name LIKE '%".$type."%' order by at.id, a.name";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
 
     function readOne(){	
-        $query = "SELECT a.*, t.name transportName, at.name accountType FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 AND a.id = ?";		
+        $query = "SELECT a.*, t.name transportName, at.name accountType, at.description FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 AND a.id = ?";		
 	    $stmt = $this->conn->prepare($query);	
         $stmt->bindParam(1, $this->id);
         $stmt->execute();	 	

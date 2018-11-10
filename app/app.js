@@ -21,7 +21,22 @@ $(document).ready(function(){
 
     $("#nav").html(app_nav);
 });
- 
+
+function $_GET(param) {
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace( 
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
+
+	if ( param ) {
+		return vars[param] ? vars[param] : null;	
+	}
+	return vars;
+}
+
 function changePageTitle(page_title){
     $('#page-title').text(page_title);
     document.title=page_title;
@@ -134,6 +149,13 @@ function search() {
             }   
     }
   }
+
+$(document).on('keyup', "input[type=text]", function () {
+    $(this).val(function (_, val) {
+        return val.toUpperCase();
+    });
+});
+
 
 // function to make form values to json format
 $.fn.serializeObject = function()

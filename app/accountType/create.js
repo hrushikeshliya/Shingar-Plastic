@@ -16,7 +16,12 @@ $(document).ready(function(){
             create_html+="<td>Account Type</td>";
             create_html+="<td><input type='text' name='name' class='form-control' required /></td>";
         create_html+="</tr>";
- 
+
+        create_html+="<tr>";
+            create_html+="<td>Description</td>";
+            create_html+="<td><input type='text' name='description' class='form-control' /></td>";
+        create_html+="</tr>";
+    
         create_html+="<tr>";
             create_html+="<td></td>";
             create_html+="<td>";

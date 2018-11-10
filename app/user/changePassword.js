@@ -45,7 +45,7 @@ $.ajax({
     contentType : 'application/json',
     data : form_data,
     success : function(result) {
-        console.log("Hell yea!!")
+        location.href = "http://shingarplastic.com"
     },
     error: function(xhr, resp, text) {
         console.log(xhr, resp, text);

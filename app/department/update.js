@@ -44,8 +44,18 @@ $(document).ready(function(){
 				update_html+="</tr>";
 
 				update_html+="<tr>";
-					update_html+="<td>Challan Limit</td>";
-					update_html+="<td><input value=\"" + challanLimit + "\" type='text' name='challanLimit' class='form-control' required /></td>";
+					update_html+="<td>Bill Code</td>";
+					update_html+="<td><input value=\"" + data.billCode + "\" type='text' name='billCode' class='form-control' required /></td>";
+				update_html+="</tr>";
+
+				update_html+="<tr>";
+					update_html+="<td>Bill Bank Details</td>";
+					update_html+="<td><input value=\"" + data.bankDetails + "\" type='text' name='bankDetails' class='form-control' required /></td>";
+				update_html+="</tr>";
+
+				update_html+="<tr>";
+					update_html+="<td>Bill Contact Details</td>";
+					update_html+="<td><input value=\"" + data.contactDetails + "\" type='text' name='contactDetails' class='form-control' required /></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";

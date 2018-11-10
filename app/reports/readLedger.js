@@ -3,41 +3,137 @@ $(document).ready(function(){
 });
 
 function show(){
-    $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=dayBook", function(data){  // Change Needed HERE
+    $.getJSON("http://shingarplastic.com/api/reports/read.php?type=ledger&id="+$_GET('id'), function(data){  // Change Needed HERE
  
-   
+
+debitSubTotal = 0;
+creditSubTotal = 0;
+
 read_html="";
 
-read_html+="<div class='row'>";
+read_html+=`<div class='row'>
 
-read_html+="<table class='table table-striped table-bordered'>";
-read_html+="    <thead>";
-read_html+="      <tr>";
-read_html+="        <th>Account Name</th>";
-read_html+="        <th>Closing</th>";
-read_html+="        <th>Oct</th>";
-read_html+="        <th>Sep</th>";
-read_html+="        <th>Aug</th>";
-read_html+="        <th>Jul</th>";
-read_html+="        <th>Jun</th>";
-read_html+="        <th>May</th>";
-read_html+="        <th>Apr</th>";
-read_html+="        <th>Mar</th>";
-read_html+="        <th>Feb</th>";
-read_html+="        <th>Jan</th>";
-read_html+="        <th>Dec</th>";
-read_html+="        <th>Nov</th>";
-read_html+="        <th>Opening</th>";
-read_html+="     </tr>";
-read_html+="   </thead>";
-read_html+="   <tbody>";
-read_html+="   </tbody>";
-read_html+="</table>";
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#ledger">Ledger</a></li>
+  <li><a data-toggle="tab" href="#fullledger">Full Transaction Ledger</a></li>
+</ul>
 
-read_html+="</div>";
+<div class="tab-content">
+
+<div id="ledger" class="tab-pane fade  in active">
+<div class='col-md-6 well'>
+<h4 class='text-center'>Debit</h4>
+</div>
+<div class='col-md-6 well'>
+<h4 class='text-center'>Credit</h4>
+</div>
+</div>
+
+
+  <div id="fullledger" class="tab-pane fade">
+    <div class='col-md-6 well'>
+    <h4 class='text-center'>Debit</h4>
+
+    <table class='table'>
+    <col width='100px'>
+    <col width='100px'>
+    <col width='*'>
+    <col width='100px'>
+    <tr>
+    <td></td>
+    <td></td>
+    <td class='text-success'>Opening Balance</td>
+    <td class='text-right text-success'>`+data.openingBalance+`</td>
+    </tr>`;
+    
+    $.each(data.debitTransactions, function(key, val) { 
+    
+      debitSubTotal+=parseFloat(val.amount);
+
+      read_html+="<tr>";
+      read_html+="<td>"+val.id+"</td>";
+      read_html+="<td>"+val.date+"</td>";
+      read_html+="<td>"+val.account+"&nbsp&nbsp&nbsp<small>"+val.narration+"</small></td>";
+      read_html+="<td class='text-right'>"+val.amount+"</td>";
+      read_html+="</tr>";
+
+    });
+
+    read_html+=`
+
+    <tr>
+    <td></td>
+    <td></td>
+    <td class='text-info text-right'>Sub Total</td>
+    <td class='text-right text-info'>`+debitSubTotal+`</td>
+    </tr>
+
+    <tr>
+    <td></td>
+    <td></td>
+    <td class='text-info text-right'>Ledger Tally</td>
+    <td class='text-right text-info'>`+(parseFloat(data.openingBalance)+parseFloat(debitSubTotal))+`</td>
+    </tr>
+
+    </table>
+
+    </div>
+    <div class='col-md-6 well'>
+    <h4 class='text-center'>Credit</h4>
+
+    <table class='table'>
+    <col width='100px'>
+    <col width='100px'>
+    <col width='*'>
+    <col width='100px'>
+    `;
+    
+    $.each(data.creditTransactions, function(key, val) { 
+    
+      creditSubTotal+=parseFloat(val.amount);
+
+      read_html+="<tr>";
+      read_html+="<td>"+val.id+"</td>";
+      read_html+="<td>"+val.date+"</td>";
+      read_html+="<td>"+val.account+"&nbsp&nbsp&nbsp<small>"+val.narration+"</small></td>";
+      read_html+="<td class='text-right'>"+val.amount+"</td>";
+      read_html+="</tr>";
+
+    });
+
+    read_html+=`
+    <tr>
+    <td></td>
+    <td></td>
+    <td class='text-info text-right'>Sub Total</td>
+    <td class='text-right text-info'>`+creditSubTotal+`</td>
+    </tr>
+
+    <tr>
+    <td></td>
+    <td></td>
+    <td class='text-danger'>Closing Balance</td>
+    <td class='text-right text-danger'>`+data.closingBalance+`</td>
+    </tr>
+
+    <tr>
+    <td></td>
+    <td></td>
+    <td class='text-info text-right'>Ledger Tally</td>
+    <td class='text-right text-info'>`+(parseFloat(data.closingBalance)+parseFloat(creditSubTotal))+`</td>
+    </tr>
+
+    </table>
+
+    </div>
+  </div>
+
+</div>
+
+</div>`;
 
 $("#page-content").html(read_html);
-changePageTitle("Credit Report");  // Change Needed HERE
+changePageTitle("User Ledger");  // Change Needed HERE
 
 }); 
 }

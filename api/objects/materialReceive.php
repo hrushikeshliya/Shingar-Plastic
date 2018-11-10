@@ -98,6 +98,20 @@ class MaterialReceive{
 	    return $stmt;	
     }
     
+	function readJobberReport(){	
+        $query = "
+        SELECT mr.date, i.name, mr.quantity, mr.rate FROM materialReceive mr
+        LEFT JOIN materialIssue mi ON mr.issueId = mi.id AND mi.deleted = 0
+        LEFT JOIN item i ON i.id = mi.itemId
+        WHERE mr.deleted = 0
+        ORDER BY i.name, mr.date DESC, mr.rate
+        ";	
+	    $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;		
+    }
+
+
     function delete(){
     
         $query = "UPDATE " . $this->table_name . " SET deleted = 1  WHERE Id = ?"; 

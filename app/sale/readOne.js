@@ -5,19 +5,20 @@ $(document).ready(function(){
 	var billType = $(this).attr('data-id').split("|")[1];
 	var id = $(this).attr('data-id').split("|")[0];
 	console.log(billType);
-	$.getJSON("http://shingarplastic.com/api/sale/read.php?id=" + id, function(data){   // Change Needed HERE
+
+	$.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
 
 
 		var read_one_html = "";
 		var cartoons = 0;
 		var deductions = 0;
-		var billLimit = billType=="invoice"? (0+data.sale[0].billLimit)/100 : (0+data.sale[0].challanLimit)/100;
+		var billLimit = billType=="invoice"? (0+data.sale[0].billLimit)/10 : 1;
 
 		read_one_html+="<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
 		    read_one_html+="<span class='glyphicon glyphicon-arrow-left'></span> Go Back";
 		read_one_html+="</div>";
 		
-		read_one_html+="<table id='invoice' class='table table-bordered'>";
+		read_one_html+="<table id='invoice' class='table table-bordered table-condensed'>";
 		
 		read_one_html+="<col width='5%'>";
 		read_one_html+="<col width='40%'>";
@@ -28,9 +29,9 @@ $(document).ready(function(){
 
 		if(billType == "challan") {
 			read_one_html+="<tr><td colspan=6><h2 class='text-danger text-center'>S.P.</h2>";
-			taxAmount = parseFloat(((0+data.sale[0].billLimit)/100 * data.sale[0].taxAmount/10)).toFixed(2);
+			taxAmount = parseFloat(((0+data.sale[0].billLimit)/10 * data.sale[0].taxAmount)).toFixed(2);
 		} else {
-			taxAmount = parseFloat((0+data.sale[0].billLimit)/100 * data.sale[0].taxAmount).toFixed(2);
+			taxAmount = parseFloat((0+data.sale[0].billLimit)/10 * data.sale[0].taxAmount).toFixed(2);
 			read_one_html+="<tr><td colspan=6><h4 class='text-danger text-center'>TAX INVOICE</h4>";
 			read_one_html+="<h2 class='text-danger text-center'>"+data.sale[0].billName+"</h2>";
 			read_one_html+="<h5 class='text-center'>"+data.sale[0].billAddress+"</h5>";
@@ -44,9 +45,9 @@ $(document).ready(function(){
 		var n = d.getFullYear();
 
 		read_one_html+="<tr>";
-			read_one_html+="<td rowspan=3 colspan=3>"+data.sale[0].accountName+"<BR>"+data.sale[0].address1+"<BR>"+data.sale[0].address2+"<BR>City : "+data.sale[0].city+" - "+data.sale[0].pincode+"<BR>State: "+data.sale[0].state+"<BR><BR> GST : "+data.sale[0].gstNo+"</td>";
+			read_one_html+="<td rowspan=3 colspan=3><b>Consignor :</b><br><b>"+data.sale[0].accountName+"</b><BR>"+data.sale[0].address1+"<BR>"+data.sale[0].address2+"<BR>City : "+data.sale[0].city+" - "+data.sale[0].pincode+"<BR>State: "+data.sale[0].state+"<BR><BR> GST : "+data.sale[0].gstNo+"</td>";
 			read_one_html+="<td>Invoice No</td>";
-			read_one_html+="<td colspan=2>"+data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+n+"/"+(n+1)+"</td>";
+			read_one_html+="<td colspan=2>"+data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+n+"-"+(n+1)+"</td>";
 		read_one_html+="</tr>";
 		
 		read_one_html+="<tr>";
@@ -84,7 +85,7 @@ $(document).ready(function(){
 						if(data.sale[0].showName == "0") {
 							read_one_html+="<td>Bangles &nbsp;&nbsp<small>"+val.narration+"</small></td>";
 						} else {
-							read_one_html+="<td>"+val.itemName+"&nbsp;&nbsp<small>"+val.narration+"</small></td>";
+							read_one_html+="<td>"+val.itemName+"</td>";
 						}
 						read_one_html+="<td class='text-center'>"+val.hsnSac+"</td>";
 						read_one_html+="<td class='text-center'>"+val.quantity+"</td>";
@@ -120,7 +121,7 @@ $(document).ready(function(){
 
 			if(billType == "invoice") {
 				read_one_html+="<tr><td colspan = 6>";
-				while(srNo < 14){
+				while(srNo < 10){
 					read_one_html+="<br>";
 					srNo++;
 				}

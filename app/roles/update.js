@@ -16,7 +16,7 @@ $(document).ready(function(){
 		update_html+="</div>";
 		
 		update_html+="<form id='update-form' action='#' method='post' border='0'>";
-		    update_html+="<table class='table table-hover table-responsive table-bordered'>";
+		    update_html+="<table class='table table-responsive table-bordered'>";
 
 				update_html+="<tr>";
 					update_html+="<td>Role Name</td>";

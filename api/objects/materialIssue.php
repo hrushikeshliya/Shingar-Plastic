@@ -13,6 +13,7 @@ class MaterialIssue{
     public $jobberId;
     public $itemId;
     public $quantity;
+    public $rate;
     public $narration;
     public $username;
 
@@ -73,6 +74,7 @@ class MaterialIssue{
                 jobberId = :jobberId,
                 itemId = :itemId,
                 quantity = :quantity,
+                rate = :rate,
                 narration = :narration,
                 username = :username                         
                 WHERE
@@ -91,6 +93,7 @@ class MaterialIssue{
         $stmt->bindParam(':jobberId', $this->jobberId);
         $stmt->bindParam(':itemId', $this->itemId);
         $stmt->bindParam(':quantity', $this->quantity);
+        $stmt->bindParam(':rate', $this->rate);
         $stmt->bindParam(':narration', $this->narration);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':id', $this->id);
@@ -112,6 +115,7 @@ class MaterialIssue{
                        jobberId = :jobberId,
                        itemId = :itemId,
                        quantity = :quantity,
+                       rate = :rate,
                        narration = :narration,
                        username = :username
                        "
@@ -129,6 +133,7 @@ class MaterialIssue{
         $stmt->bindParam(':jobberId', $this->jobberId);
         $stmt->bindParam(':itemId', $this->itemId);
         $stmt->bindParam(':quantity', $this->quantity);
+        $stmt->bindParam(':rate', $this->rate);
         $stmt->bindParam(':narration', $this->narration);
         $stmt->bindParam(':username', $this->username);
 

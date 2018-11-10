@@ -73,8 +73,8 @@ function create() {
         create_html+="</tr>";
 
         create_html+="<tr>";
-            create_html+="<td colspan=4><input type='hidden' name='returnInvoiceId' value='"+returnInvoiceId+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
-            create_html+="<td>Total :</td><td><input id='totalAmount' name='totalAmount' class='form-control pull-right' value='0' required readOnly></td>";
+            create_html+="<td colspan=4><input type='hidden' id='departmentId' name='departmentId' class='form-control' required /><input type='hidden' id='returnId' name='returnId' class='form-control' required /><input type='hidden' name='returnInvoiceId' value='"+returnInvoiceId+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
+            create_html+="<td>Total </td><td><input id='totalAmount' name='totalAmount' class='form-control pull-right' value='0' required readOnly></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";

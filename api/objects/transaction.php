@@ -16,6 +16,8 @@ class Transaction{
     public $narration;
     public $username;
     public $deleted;
+
+    public $accountId;
     
     // constructor with $db as database connection
     public function __construct($db){
@@ -32,6 +34,56 @@ class Transaction{
 	function readDayBook(){	
 	    $query = "SELECT * FROM " . $this->table_name . " t LEFT JOIN openingBalance o ON t.date = o.date where deleted = 0 AND (type = 'REC' OR type = 'PAY') ORDER BY t.date asc";	
         $stmt = $this->conn->prepare($query);	
+        $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+
+    function readAmountTillDate(){	
+        $query = "
+        select 
+        SUM(t.amount) amount
+        from transaction t
+        LEFT JOIN account a ON (t.debitAccount= a.name OR t.creditAccount = a.name) 
+        where a.id = :id AND  t.date <= :date
+        ";	
+
+        $stmt = $this->conn->prepare($query);	
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':date', $this->date);
+
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+    function readCreditTransaction(){	
+        $query = "    
+        select CONCAT(t.type,'_',t.id) id, t.date, t.debitAccount account,  t.narration, t.amount from transaction t
+        LEFT JOIN account a ON a.name = t.debitAccount
+        WHERE type = 'REC'
+        AND a.id = :accountId
+        AND t.deleted = 0
+        ORDER BY t.date asc";	
+        $stmt = $this->conn->prepare($query);	
+        $stmt->bindParam(':accountId', $this->accountId);
+        $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+    function readDebitTransaction(){	
+        $query = "    
+        select CONCAT(t.type,'_',t.id) id, t.date, t.creditAccount account, t.narration, t.amount from transaction t
+        LEFT JOIN account a ON a.name = t.creditAccount
+        WHERE type = 'PAY'
+        AND a.id = :accountId
+        AND t.deleted = 0
+        ORDER BY t.date asc";	
+        $stmt = $this->conn->prepare($query);	
+        $stmt->bindParam(':accountId', $this->accountId);
         $stmt->execute();	 	
 	    return $stmt;	
     }

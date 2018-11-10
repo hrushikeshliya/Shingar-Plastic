@@ -18,6 +18,7 @@ $obj = new AccountType($db);
 $data = json_decode(file_get_contents("php://input"));
  
 $obj->name = $data->name;
+$obj->description = $data->description;
  
 if($obj->create()){
     echo '{';

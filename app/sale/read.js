@@ -30,7 +30,7 @@ read_html+="<a class='btn btn-success pull-right m-b-15px' href='./sale.php'>";
 read_html+="<span class='glyphicon glyphicon-th'></span> Sale Entry"; // Change Needed HERE
 read_html+="</a>";
 
-read_html+="<table class='table table-bordered table-hover'>";
+read_html+="<table class='table table-bordered'>";
  
     read_html+="<tr>";
         read_html+="<th class='text-align-center'>Invoice ID</th>";
@@ -38,7 +38,7 @@ read_html+="<table class='table table-bordered table-hover'>";
         read_html+="<th class='text-align-center'>Account Name</th>";
         read_html+="<th class='text-align-center'>Invoice Details</th>";
         read_html+="<th class='text-align-center'>Transport</th>";
-        read_html+="<th class='text-align-center'>Action</th>";
+        read_html+="<th class='text-align-center'></th>";
     read_html+="</tr>";
      console.log(data);
 
@@ -49,7 +49,7 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
 
     read_html+="<tr>";
  
-        read_html+="<td>"+ val.billCode + "/"+val.invoiceId+"/"+ n +"/"+(n+1)+"</td>";
+        read_html+="<td>"+ val.billCode + "/"+val.invoiceId+"/"+ n +"-"+(n+1)+"</td>";
         read_html+="<td>" + val.date + "</td>";
         read_html+="<td>" + val.accountName + "</td>";
         read_html+="<td>";
@@ -70,9 +70,9 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
             read_html+="<tr>";
             read_html+="<td>"+count+"</td>";
             read_html+="<td>"+val2.itemName+"&nbsp;&nbsp<small>"+val2.narration+"</small></td>";
-            read_html+="<td class='text-right'>"+parseFloat(val2.rate/val.challanLimit).toFixed(2)+"</td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.rate).toFixed(2)+"</td>";
             read_html+="<td class='text-center'>"+val2.quantity+"</td>";
-            read_html+="<td class='text-right'>"+parseFloat(val2.amount/val.challanLimit).toFixed(2)+"</td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.amount).toFixed(2)+"</td>";
             read_html+="</tr>";
             
             quantityTotal += parseFloat(val2.quantity);
@@ -82,17 +82,17 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Sub Total</td>";
         read_html+="<td class='text-center'>"+quantityTotal+"</td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.subTotal/val.challanLimit).toFixed(2)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.subTotal).toFixed(2)+"</td>";
         read_html+="</tr>";
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Tax @ "+parseFloat(val.tax).toFixed(2)+" %</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat(((val.billLimit/100)*val.taxAmount)/val.challanLimit).toFixed(2)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat((val.billLimit/10)*val.taxAmount).toFixed(2)+"</td>";
         read_html+="</tr>";
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Grand Total</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat((val.grandTotal-val.taxAmount+((val.billLimit/100)*val.taxAmount))/val.challanLimit).toFixed(2)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.grandTotal-val.taxAmount+((val.billLimit/10)*val.taxAmount)).toFixed(2)+"</td>";
         read_html+="</tr>";
 
         read_html+="<tr class='text-info'><td colspan=5>Narration : "+val.narration+"</td></tr>";
@@ -114,7 +114,7 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
 
         read_html+=val.transportName + "</td>";
  
-        read_html+="<td align='center'>";   
+        read_html+="<td class='text-right'>";   
             read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|challan'>";
                 read_html+="<span class='glyphicon glyphicon-envelope'></span>";
             read_html+="</button>";

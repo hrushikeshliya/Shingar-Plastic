@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php", function(data){    // Change Needed HERE
+$.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php?type=purchaseReturn", function(data){    // Change Needed HERE
  
  
 read_html="";
@@ -21,17 +21,20 @@ read_html+="<table class='table table-bordered table-hover'>";
         read_html+="<th class='text-align-center'>Date</th>";
         read_html+="<th class='text-align-center'>Account Name</th>";
         read_html+="<th class='text-align-center'>Invoice Details</th>";
-        read_html+="<th class='text-align-center'>Billed Amount</th>";
         read_html+="<th class='text-align-center'>Action</th>";
     read_html+="</tr>";
      
 
 $.each(data.purchaseReturn, function(key, val) {   // Change Needed HERE
- 	
+     
+    var d = new Date(val.date);
+    var n = d.getFullYear();
+
+    challanLimit = 0;
     read_html+="<tr>";
  
-        read_html+="<td>" + val.id + "</td>";
-        read_html+="<td>" + val.invoiceId + "</td>";
+        read_html+="<td>" + val.billCode + "/"+val.returnId+"/"+ n +"/"+(n+1) + "</td>";
+        read_html+="<td>" + val.billCode + "/"+val.purchaseInvoiceId+"/"+ n +"/"+(n+1) + "</td>";
         read_html+="<td>" + val.date + "</td>";
         read_html+="<td>" + val.accountName + "</td>";
         read_html+="<td>";
@@ -48,9 +51,11 @@ $.each(data.purchaseReturn, function(key, val) {   // Change Needed HERE
         count = 1;
         $.each(val.invoiceDetail, function(key2, val2) {
 
+            narration = val2.saleNarration == null ? "" : val2.saleNarration;
+            challanLimit = val2.challanLimit;
             read_html+="<tr>";
             read_html+="<td>"+count+"</td>";
-            read_html+="<td>"+val2.itemName+"</td>";
+            read_html+="<td>"+val2.itemName+"   "+narration+"</td>";
             read_html+="<td>"+val2.rate+"</td>";
             read_html+="<td>"+val2.quantity+"</td>";
             read_html+="<td>"+val2.amount+"</td>";
@@ -69,7 +74,6 @@ $.each(data.purchaseReturn, function(key, val) {   // Change Needed HERE
         read_html+="<tr class='text-info'><td colspan=5>Narration : "+val.narration+"</td></tr>";
         read_html+="</table>";
         read_html+="</td>";
-        read_html+="<td>" + val.totalAmount + "</td>";
 
         read_html+="<td align='center'>";   
             read_html+="<button class='btn btn-danger m-b-10px  delete-button' data-id='" + val.id + "'>";

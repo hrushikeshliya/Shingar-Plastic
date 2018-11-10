@@ -19,6 +19,8 @@ if($obj->type == 'JOU') {
     $stmt = $obj->readJournal();
 } else if ($obj->type == 'dayBook') {
     $stmt = $obj->readDayBook();
+} else if ($obj->type == 'ledger') {
+    $stmt = $obj->readLedger();
 }
 
 $num = $stmt->rowCount();
@@ -35,11 +37,11 @@ if($num>0){
 
     if($obj->type == 'JOU') {
         $arr["transaction"]=array();
-    } else {
+    } else if ($obj->type == 'dayBook'){
         $arr["dayBook"] = array();
         $debitTransactions = array();
         $creditTransactions = array();
-    }
+    } 
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
@@ -71,6 +73,8 @@ if($num>0){
             $closingBalance = 0;
 
         } 
+
+        
             $currentDate = $date;
             $currentOpeningBalance = $openingBalance;
             $arr_item=array(
@@ -92,10 +96,10 @@ if($num>0){
                 array_push($creditTransactions, $arr_item);
             } else if($type == 'JOU'){
                 array_push($arr["transaction"],$arr_item);
-            } 
-        
+            }        
 
-    }
+    } // end of while
+
 
     $closingBalance = $currentOpeningBalance - $debitTotal + $creditTotal;
 
@@ -112,10 +116,9 @@ if($num>0){
     array_push($arr["dayBook"],$dayBook);
 
     echo json_encode($arr);
-}
- 
+    
 
-else{
+} else {
     echo json_encode(
         array("message" => "No Records found.")
     );

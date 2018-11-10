@@ -1,45 +1,41 @@
 $(document).ready(function(){
+show();
+});
 
-    var username = $.cookie('username');
+    function show() {
 
-    var item_options_html = "";
-    var process_options_html = "";
-    var jobber_options_html = "";
+        var username = $.cookie('username');
 
-    $.getJSON("http://shingarplastic.com/api/item/read.php", function(data){ 
-            
-        item_options_html+="<select name='itemId' class='form-control'>";
-        item_options_html+="<option value=''></option>";
-        $.each(data.item, function(key, val){
-            item_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
-        });
-        item_options_html+="</select>";
-
-        $.getJSON("http://shingarplastic.com/api/process/read.php", function(data){ 
-            
-            process_options_html+="<select name='processId' class='form-control'>";
-            process_options_html+="<option value=''></option>";
-            $.each(data.process, function(key, val){
-                process_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
+        var item_options_html = "";
+        var process_options_html = "";
+        var jobber_options_html = "";
+    
+        $.getJSON("http://shingarplastic.com/api/item/read.php", function(data){ 
+                
+            item_options_html+="<select name='itemId' id='itemId' onchange=getRate() class='form-control'>";
+            item_options_html+="<option value=''></option>";
+            $.each(data.item, function(key, val){
+                item_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
             });
-            process_options_html+="</select>";
-
-            $.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data){ 
-            
-                jobber_options_html+="<select id='jobberId' name='jobberId' onchange=getIssues() class='form-control'>";
-                jobber_options_html+="<option value=''></option>";
-                $.each(data.account, function(key, val){
-                    jobber_options_html+="<option value='" + val.id + "'>" + val.aliasName + "</option>";
+            item_options_html+="</select>";
+    
+            $.getJSON("http://shingarplastic.com/api/process/read.php", function(data){ 
+                
+                process_options_html+="<select name='processId' class='form-control'>";
+                process_options_html+="<option value=''></option>";
+                $.each(data.process, function(key, val){
+                    process_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
                 });
-                jobber_options_html+="</select>";
-
-                create();
-            });
-
-        });
-    }); 
-
-    function create() {
+                process_options_html+="</select>";
+    
+                $.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data){ 
+                
+                    jobber_options_html+="<select id='jobberId' name='jobberId' onchange=getIssues() class='form-control'>";
+                    jobber_options_html+="<option value=''></option>";
+                    $.each(data.account, function(key, val){
+                        jobber_options_html+="<option value='" + val.id + "'>" + val.aliasName + "</option>";
+                    });
+                    jobber_options_html+="</select>";
 
 	var create_html="";
 	 
@@ -68,8 +64,8 @@ $(document).ready(function(){
         create_html+="<tr>";
             create_html+="<td>Quantity (Psc)</td>";
             create_html+="<td><input type='number' name='quantity' min = '1' class='form-control' required /></td>";
-            create_html+="<td>Weight</td>";
-            create_html+="<td><input type='number' name='itemWeight' min = '0' value='0' class='form-control' required /></td>";
+            create_html+="<td>Job Rate</td>";
+            create_html+="<td><input type='number' name='jobRate' id='jobRate' min = '1' class='form-control' required /></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
@@ -94,16 +90,20 @@ create_html += "<tr>";
 create_html += "<th>Issue Id</th>";
 create_html += "<th>Date</th>";
 create_html += "<th>Issued Quantity</th>";
+create_html += "<th>Rate</th>";
 create_html += "<th>Pending Quantity</th>";
 create_html += "<th>Item Name</th>";
 create_html += "<tr></table></div>";
 
+
 $("#page-content").html(create_html);
 changePageTitle("Material issue"); // Change Needed HERE
 $("#issuedMaterials").hide();
-    }
-
 });
+    
+});
+}); 
+    }
 
 $(document).on('submit', '#createForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());

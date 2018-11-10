@@ -32,6 +32,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             "email" => html_entity_decode($row['email']),
             "mobile" => $row['mobile'],
             "username" => $row['username'],
+            "password" => $row['password'],
             "roleId" => $row['roleId'],
             "deleted" => $row['deleted'],
             "active" => $row['active'],

@@ -59,8 +59,10 @@ $(document).ready(function(){
 		    read_one_html+="</tr>";			
 
 			read_one_html+="<tr>";
+			read_one_html+="<td>Rate</td>";
+			read_one_html+="<td>" + data.rate + "</td>";
 			read_one_html+="<td>Narration</td>";
-			read_one_html+="<td colspan='3'>" + data.narration + "</td>";
+			read_one_html+="<td>" + data.narration + "</td>";
 			read_one_html+="</tr>";
 
 		read_one_html+="</table>";

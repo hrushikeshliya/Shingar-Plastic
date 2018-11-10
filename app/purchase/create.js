@@ -8,8 +8,8 @@ function create() {
     var item_options_html = "";
     var department_options_html = "";
     var account_options_html = "";
-    var tax_options_html = "";
     var create_html="";
+    var invoiceId = "";
 
 $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchase", function(data){ 
 
@@ -33,7 +33,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchase", f
             });
             department_options_html+="</select>";
         
-                $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){ 
+                $.getJSON("http://shingarplastic.com/api/account/read.php?type=CREDITORS", function(data){ 
                 
                     account_options_html+="<select id='accountId' name='accountId' class='form-control' onchange=getBillLimit() required>";
                     account_options_html+="<option value=''></option>";
@@ -48,7 +48,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchase", f
 
         create_html+="<tr>";   
             create_html+="<td  class='text-right'>Invoice No</td>";
-            create_html+="<td  class='text-danger text-center'>"+invoiceId+" <input type='hidden' id='salesInvoiceId' name='purchaseInvoiceId' class='form-control' required />  <input type='hidden' name='invoiceId' value='"+invoiceId+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
+            create_html+="<td  class='text-danger text-center'>"+invoiceId+" <input type='hidden' id='purchaseInvoiceId' name='purchaseInvoiceId' class='form-control' required />  <input type='hidden' name='invoiceId' value='"+invoiceId+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
             create_html+="<td  class='text-right'>Date</td>";
             create_html+="<td><input type='date' name='date' class='form-control' required /></td>";
             create_html+="<td  class='text-right'>Account Name</td>";
@@ -63,7 +63,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchase", f
             create_html+="<td class='text-right'>Ref No</td>";
             create_html+="<td><input type='text' name='refNo' class='form-control'></td>";
             create_html+="<td class='text-right'>Narration</td>";
-            create_html+="<td colspan=3><input type='text' name='narration' class='form-control' required /></td>";
+            create_html+="<td colspan=3><input type='text' name='narration' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr><td colspan=8 style = 'border:none'></td></tr><tr><td colspan=8 style = 'border:none'></td></tr><tr><td colspan=8 style = 'border:none'></td></tr><tr class='info'>";

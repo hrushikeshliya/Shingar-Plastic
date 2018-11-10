@@ -19,7 +19,6 @@ $data = json_decode(file_get_contents("php://input"));
  
 $obj->name = $data->name;
 $obj->billName = $data->billName;
-$obj->challanLimit = $data->challanLimit;
 
 if($obj->create()){
     echo '{';

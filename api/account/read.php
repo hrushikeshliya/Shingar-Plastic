@@ -27,25 +27,9 @@ if($num>0){
     $arr=array();
     $arr["account"]=array();
  
+  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-        extract($row);
- 
-        $arr_item=array(
-            "id" => $id,
-            "name" => $name,
-            "aliasName" => $aliasName,
-            "accountType" => $accountType,
-            "typeId" => $typeId,
-            "transportName" => $transportName,
-            "transportId" => $transportId,
-            "openingBalance" => $openingBalance,
-            "currentBalance" => $currentBalance,
-            "active" => $active,
-
-        );
- 
-        array_push($arr["account"], $arr_item);
+        array_push($arr["account"], $row); // Change Array Name
     }
  
     echo json_encode($arr);

@@ -26,7 +26,6 @@ if($type=='sale' || $type=='saleReturn') {
         $stmt = $sale->readOne();
     }
 
-
     $num = $stmt->rowCount();
      
     if($num>0){
@@ -70,14 +69,15 @@ if($type=='sale' || $type=='saleReturn') {
     $accountId = isset($_GET['id']) ? $_GET['id'] : die();
     $sale->accountId = $accountId;
     $stmt = $sale->readInvoiceIdByAccount();
-} 
+} else if($type=='saleReport') {
+    $stmt = $sale->readSaleReport();
+}
 
-if($type=='distinctAccount' || $type=='distinctInvoiceId') {
+if($type=='distinctAccount' || $type=='distinctInvoiceId' || $type=='saleReport') {
 
 $num = $stmt->rowCount();
      
 if($num>0){
- 
     $arr=array();
     $arr["sale"]=array();
  

@@ -22,6 +22,7 @@ $obj->processId = $data->processId;
 $obj->jobberId = $data->jobberId;
 $obj->itemId = $data->itemId;
 $obj->quantity = $data->quantity;
+$obj->rate = $data->jobRate;
 $obj->narration = $data->narration;
 $obj->username = $data->username;
 

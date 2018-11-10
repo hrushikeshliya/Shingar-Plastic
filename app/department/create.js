@@ -21,12 +21,24 @@ $(document).ready(function(){
             create_html+="<td>Bill Name</td>";
             create_html+="<td><input type='text' name='billName' class='form-control' required /></td>";
         create_html+="</tr>";
-        
-        create_html+="<tr>";
-            create_html+="<td>Challan Limit</td>";
-            create_html+="<td><input type='text' name='challanLimit' class='form-control' required /></td>";
-        create_html+="</tr>";
  
+        create_html+="<tr>";
+            create_html+="<td>Bill Code</td>";
+            create_html+="<td><input type='text' name='billCode' class='form-control' required /></td>";
+        create_html+="</tr>";
+
+
+        create_html+="<tr>";
+            create_html+="<td>Bill Bank Details</td>";
+            create_html+="<td><input type='text' name='bankDetails' class='form-control' required /></td>";
+        create_html+="</tr>";
+
+
+        create_html+="<tr>";
+            create_html+="<td>Bill Contact Details</td>";
+            create_html+="<td><input type='text' name='contactDetails' class='form-control' required /></td>";
+        create_html+="</tr>";
+
         create_html+="<tr>";
             create_html+="<td></td>";
             create_html+="<td>";

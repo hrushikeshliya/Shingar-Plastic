@@ -39,23 +39,23 @@ $(document).ready(function(){
  
         create_html+="<tr>";
             create_html+="<td>Purchase Rate</td>";
-            create_html+="<td><input type='number' name='purchaseRate' class='form-control' required /></td>";
+            create_html+="<td><input type='number' step='0.01' name='purchaseRate' class='form-control'/></td>";
             create_html+="<td>Sale Rate</td>";
-            create_html+="<td><input type='number' name='saleRate' class='form-control' required /></td>";
+            create_html+="<td><input type='number' step='0.01'name='saleRate' class='form-control' required /></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Job Rate</td>";
-            create_html+="<td><input type='number' name='jobRate' class='form-control' required /></td>";
+            create_html+="<td><input type='number' step='0.01'name='jobRate' class='form-control'/></td>";
             create_html+="<td>Item Weight</td>";
-            create_html+="<td><input type='number' name='itemWeight' class='form-control' required /></td>";
+            create_html+="<td><input type='number' name='itemWeight' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>HSN / SAC</td>";
             create_html+="<td><input type='number' name='hsnSac' class='form-control' required /></td>";
             create_html+="<td>Narration</td>";
-            create_html+="<td><input type='text' name='narration' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='narration' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";

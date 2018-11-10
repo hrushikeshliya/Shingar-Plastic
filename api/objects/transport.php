@@ -20,7 +20,7 @@ class Transport{
     	}
 
 	function read(){	
-	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 ";	
+	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 ORDER BY name ASC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	

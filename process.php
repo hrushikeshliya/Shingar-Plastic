@@ -24,7 +24,7 @@ session_start();
 <!-- our app will be injected here -->
 <div id="app"></div>
 
-<script src="app/assets/js/jquery.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script> 
 <script src="app/assets/js/jquery.cookie.js"></script> 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="app/assets/js/bootbox.min.js"></script>

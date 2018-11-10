@@ -59,7 +59,7 @@ $(document).ready(function(){
 				update_html+="<tr>";
 					update_html+="<td>Id</td>";
 					update_html+="<td>"+id+"</td>";
-					update_html+="<td>date</td>";
+					update_html+="<td>Date</td>";
 					update_html+="<td><input type='date' value='"+data.date+"' name='date' class='form-control' required /></td>";
 				update_html+="</tr>";
 
@@ -78,8 +78,10 @@ $(document).ready(function(){
 				update_html+="</tr>";				
 
 				update_html+="<tr>";
+					update_html+="<td>Rate</td>";
+					update_html+="<td><input type='number' name='rate' value='"+data.rate+"' min = '1' class='form-control' required /></td>";
 					update_html+="<td>Narration</td>";
-					update_html+="<td colspan = '3'><input type='text' value='"+data.narration+"' name='narration' class='form-control' required /></td>";
+					update_html+="<td><input type='text' value='"+data.narration+"' name='narration' class='form-control' required /></td>";
 				update_html+="</tr>";
 
 		        update_html+="<tr>";

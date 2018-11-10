@@ -18,7 +18,7 @@ $(document).ready(function(){
 
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Id</td>";
-		        read_one_html+="<td>" + data.id + "</td>";
+		        read_one_html+="<td>" + data.Id + "</td>";
 		    read_one_html+="</tr>";
 		    
 		    read_one_html+="<tr>";
@@ -32,9 +32,40 @@ $(document).ready(function(){
 			read_one_html+="</tr>";
 
 			read_one_html+="<tr>";
-				read_one_html+="<td>Challan Limit</td>";
-				read_one_html+="<td>" + data.challanLimit + "</td>";
+				read_one_html+="<td>Bill Code</td>";
+				read_one_html+="<td>" + data.billCode + "</td>";
 			read_one_html+="</tr>";
+
+			read_one_html+="<tr>";
+				read_one_html+="<td>Bank Details</td>";
+				read_one_html+="<td>" + data.bankDetails + "</td>";
+			read_one_html+="</tr>";
+
+		read_one_html+="<tr>";
+			read_one_html+="<td>Contact Details</td>";
+			read_one_html+="<td>" + data.contactDetails+ "</td>";
+		read_one_html+="</tr>";
+
+		read_one_html+="<tr>";
+			read_one_html+="<td>Next Sale Invoice</td>";
+			read_one_html+="<td>" + data.billSeriesSales+ "</td>";
+		read_one_html+="</tr>";
+
+		read_one_html+="<tr>";
+			read_one_html+="<td>Next Sale Return Invoice</td>";
+			read_one_html+="<td>" + data.billSeriesSalesReturn+ "</td>";
+		read_one_html+="</tr>";
+
+		read_one_html+="<tr>";
+			read_one_html+="<td>Next Purchase Invoice</td>";
+			read_one_html+="<td>" + data.billSeriesPurchase+ "</td>";
+		read_one_html+="</tr>";
+
+		
+		read_one_html+="<tr>";
+			read_one_html+="<td>Next Purchase Return Invoice</td>";
+			read_one_html+="<td>" + data.billSeriesPurchaseReturn+ "</td>";
+		read_one_html+="</tr>";
 
 			read_one_html+="<tr>";
 				read_one_html+="<td>Status</td>";

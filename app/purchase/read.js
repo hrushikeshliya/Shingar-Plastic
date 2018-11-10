@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON("http://shingarplastic.com/api/purchase/read.php", function(data){    // Change Needed HERE
+$.getJSON("http://shingarplastic.com/api/purchase/read.php?type=purchase", function(data){    // Change Needed HERE
  
  
 read_html="";

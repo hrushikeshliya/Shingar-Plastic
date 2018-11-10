@@ -35,23 +35,7 @@ if($num>0){
 
         extract($row);
  
-        $arr_item=array(
-            "id" => $id,
-            "date" =>  $date,
-            "processId" =>  $processId,
-            "processName" =>  $processName,
-            "jobberId" =>  $jobberId,
-            "aliasName" =>  $aliasName,
-            "itemId" =>  $itemId,
-            "itemName" =>  $itemName,
-            "quantity" =>  $quantity,
-            "receivedQuantity" =>  $receivedQuantity,
-            "pendingQuantity" =>  $pendingQuantity,
-            "narration" =>  $narration,
-            "username" =>  $username
-        );
- 
-        array_push($arr["materialIssue"], $arr_item); // Change Array Name
+        array_push($arr["materialIssue"], $row); 
     }
  
     echo json_encode($arr);

@@ -24,7 +24,7 @@
 <!-- our app will be injected here -->
 <div id="app"></div>
  
-<script src="app/assets/js/jquery.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script> 
 <script src="app/assets/js/jquery.cookie.js"></script> 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="app/assets/js/bootbox.min.js"></script>
@@ -35,6 +35,15 @@
 <?php echo '<script src="app/materialIssue/create.js' ."?ts=". time() . '"></script>'; ?>
 
 <script>
+
+
+    function getRate() {
+        var id = $("#itemId option:selected").val();
+                $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){  
+                    var rate = data.jobRate;
+                    $("#jobRate").val(rate);
+                });
+    }
 
 function getIssues() {
         var jobberId = $("#jobberId option:selected").val();
@@ -50,7 +59,7 @@ function getIssues() {
                 var table = $("#issuedMaterials").addClass("CSSTableGenerator");
                 var rowClass = "class='danger'";
                 if(val.pendingQuantity != "0") {
-                    var row = $("<tr "+rowClass+"><td>"+val.id+"</td><td>"+val.date+"</td><td>"+val.quantity+"</td><td>"+val.pendingQuantity+"</td><td>"+val.itemName+"</td></tr>");
+                    var row = $("<tr "+rowClass+"><td>"+val.id+"</td><td>"+val.date+"</td><td>"+val.quantity+"</td><td>"+val.rate+"</td><td>"+val.pendingQuantity+"</td><td>"+val.itemName+"</td></tr>");
                     table.append(row);
             };
                 });

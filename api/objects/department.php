@@ -10,7 +10,9 @@ class Department{
     public $id;
     public $name;
     public $billName;
-    public $challanLimit;
+    public $billCode;
+    public $bankDetails;
+    public $contactDetails;
     public $billSeriesSales;
     public $billSeriesPurchase;
     public $active;
@@ -48,7 +50,9 @@ class Department{
                 SET
                     name = :name,
                     billName = :billName,
-                    challanLimit = :challanLimit,
+                    billCode = :billCode,
+                    bankDetails = :bankDetails,
+                    contactDetails = :contactDetails,
                     active = :active                          
                 WHERE
                     Id = :id";
@@ -58,13 +62,17 @@ class Department{
         // sanitize
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->billName=htmlspecialchars(strip_tags($this->billName));
-        $this->challanLimit=htmlspecialchars(strip_tags($this->challanLimit));
+        $this->billCode=htmlspecialchars(strip_tags($this->billCode));
+        $this->bankDetails=htmlspecialchars(strip_tags($this->bankDetails));
+        $this->contactDetails=htmlspecialchars(strip_tags($this->contactDetails));
         $this->id=htmlspecialchars(strip_tags($this->id));
 
         // bind new values
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':billName', $this->billName);
-        $stmt->bindParam(':challanLimit', $this->challanLimit);
+        $stmt->bindParam(':billCode', $this->billCode);
+        $stmt->bindParam(':bankDetails', $this->bankDetails);
+        $stmt->bindParam(':contactDetails', $this->contactDetails);
         $stmt->bindParam(':active', $this->active);
         $stmt->bindParam(':id', $this->id);
 
@@ -144,6 +152,30 @@ class Department{
         return false;
     }
 
+    function updateSeriesPurchaseReturn(){
+        $query = "UPDATE
+                    " . $this->table_name . "
+                SET
+                    billSeriesPurchaseReturn = billSeriesPurchaseReturn+1                     
+                WHERE
+                    Id = :id";
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // sanitize
+        $this->id=htmlspecialchars(strip_tags($this->id));
+
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+
+        if($stmt->execute()){
+            return true;
+        }
+    
+        return false;
+    }
+
+
     function delete(){
     
         $query = "UPDATE " . $this->table_name . " SET deleted = 1  WHERE Id = ?"; 
@@ -171,7 +203,9 @@ class Department{
                    SET
                        name=:name,
                        billName = :billName,
-                       challanLimit = :challanLimit,
+                       billCode = :billCode,
+                       bankDetails = :bankDetails,
+                       contactDetails = :contactDetails,
                        billSeries = 1";
         
            $stmt = $this->conn->prepare($query);
@@ -179,13 +213,17 @@ class Department{
         // sanitize
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->billName=htmlspecialchars(strip_tags($this->billName));
-        $this->challanLimit=htmlspecialchars(strip_tags($this->challanLimit));
+        $this->billCode=htmlspecialchars(strip_tags($this->billCode));
+        $this->bankDetails=htmlspecialchars(strip_tags($this->bankDetails));
+        $this->contactDetails=htmlspecialchars(strip_tags($this->contactDetails));
 
         // bind new values
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':billName', $this->billName);
-        $stmt->bindParam(':challanLimit', $this->challanLimit);
-        
+        $stmt->bindParam(':billCode', $this->billCode);
+        $stmt->bindParam(':bankDetails', $this->bankDetails);
+        $stmt->bindParam(':contactDetails', $this->contactDetails);
+
            if($stmt->execute()){
                return true;
            }else{

@@ -10,6 +10,7 @@ class PurchaseReturn{
     public $id;
     public $date;
     public $invoiceId;
+    public $returnId;
     public $accountId;
     public $narration;
     public $username;
@@ -21,10 +22,36 @@ class PurchaseReturn{
     	}
 
 	function read(){	
-        $query = "SELECT s.*,a.name accountName,a.aliasName FROM ". $this->table_name . " s 
-         LEFT JOIN account a ON s.accountId = a.id  
-         WHERE s.deleted = 0 ORDER BY date desc, id desc";	
+        $query = "SELECT pr.*,p.invoiceId purchaseInvoiceId,d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " pr
+        LEFT JOIN purchase p ON p.id = pr.invoiceId
+        LEFT JOIN department d ON p.departmentId = d.id
+        LEFT JOIN account a ON pr.accountId = a.id  
+        WHERE pr.deleted = 0 ORDER BY pr.date desc, pr.id desc";	
 	    $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+
+    function readAmountTillDate(){	
+        $query = "
+        select 
+        COALESCE(SUM(totalAmount),0) amount 
+        from purchaseReturn
+        where 
+        deleted = 0 
+        AND date <= :date 
+        AND accountId = :id
+        ";	
+
+        $stmt = $this->conn->prepare($query);	
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':date', $this->date);
+
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
@@ -52,6 +79,7 @@ class PurchaseReturn{
 
                    date = :date,
                    invoiceId = :invoiceId,
+                   returnId = :returnId,
                    accountId = :accountId,
                    narration = :narration,
                    username = :username,
@@ -72,6 +100,7 @@ class PurchaseReturn{
         $stmt->bindParam(':accountId', $this->accountId);
         $stmt->bindParam(':invoiceId', $this->invoiceId);
         $stmt->bindParam(':totalAmount', $this->totalAmount);
+        $stmt->bindParam(':returnId', $this->returnId);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':narration', $this->narration);
         

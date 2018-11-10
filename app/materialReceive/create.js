@@ -52,12 +52,12 @@ $(document).ready(function(){
             create_html+="<td>Issue Id</td>";
             create_html+="<td><input type='text' id = 'selectedIssue' name='selectedIssueId'  class='form-control' disabled /></td>";
             create_html+="<td>Received Quantity (Psc)</td>";
-            create_html+="<td><input type='number' id='quantity' name='quantity' min = '1' class='form-control' onchange=getJobCharge() required/></td>";
+            create_html+="<td><input type='number' id='quantity' name='quantity' min = '1' class='form-control' onkeyup=getJobCharge() required/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Rate</td>";
-            create_html+="<td><input type='text' id='rate' value='0.0' name='rate'  class='form-control' onchange=getJobCharge() required/></td>";
+            create_html+="<td><input type='text' id='rate' min = 1 name='rate'  class='form-control' readonly required/></td>";
             create_html+="<td>Job Charge</td>";
             create_html+="<td><input type='text' id='jobCharge' name='jobCharge' class='form-control' required readOnly/></td>";
         create_html+="</tr>";

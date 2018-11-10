@@ -32,6 +32,29 @@ class SaleReturn{
 	    return $stmt;	
     }
 
+    function readAmountTillDate(){	
+        $query = "
+        select 
+        COALESCE(SUM(totalAmount),0) amount 
+        from saleReturn
+        where 
+        deleted = 0 
+        AND date <= :date 
+        AND accountId = :id
+        ";	
+
+        $stmt = $this->conn->prepare($query);	
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':date', $this->date);
+
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
     function delete(){
     
         $query = "UPDATE " . $this->table_name . " SET deleted = 1  WHERE Id = ?"; 

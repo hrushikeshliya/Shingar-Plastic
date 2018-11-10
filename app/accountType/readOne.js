@@ -24,7 +24,12 @@ $(document).ready(function(){
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Account Type</td>";
 		        read_one_html+="<td>" + data.name + "</td>";
-		    read_one_html+="</tr>";
+			read_one_html+="</tr>";
+			
+			read_one_html+="<tr>";
+			read_one_html+="<td>DESCRIPTION</td>";
+			read_one_html+="<td>" + data.description + "</td>";
+		read_one_html+="</tr>";
 			
 			read_one_html+="<tr>";
 			read_one_html+="<td>Status</td>";

@@ -8,6 +8,7 @@ $(document).ready(function(){
  
 		 var id = data.id;
 		 var name = data.name;
+		 var description = data.description;
 		 var active = data.active;
 
 		 var status_options_html = "";
@@ -35,6 +36,11 @@ $(document).ready(function(){
 					update_html+="<td>Account Type</td>";
 					update_html+="<td><input value=\"" + name + "\" type='text' name='name' class='form-control' required /></td>";
 				update_html+="</tr>";
+
+				update_html+="<tr>";
+				update_html+="<td>Description</td>";
+				update_html+="<td><input value=\"" + description + "\" type='text' name='description' class='form-control'/></td>";
+			update_html+="</tr>";
 
 				update_html+="<tr>";
 					update_html+="<td>Status</td>";
