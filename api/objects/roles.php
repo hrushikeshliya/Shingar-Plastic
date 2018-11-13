@@ -30,6 +30,28 @@ class Role{
 	    return $stmt;	
     }
     
+    function create(){
+ 
+        $query = "INSERT INTO
+                   " . $this->table_name . "
+               SET
+                   name=:name";
+
+       $stmt = $this->conn->prepare($query);
+    
+       // sanitize
+       $this->name=htmlspecialchars(strip_tags($this->name));
+            
+       // bind values
+       $stmt->bindParam(":name", $this->name);
+    
+       if($stmt->execute()){
+           return true;
+       }else{
+           return false;
+       }
+   }
+
     function update(){
         $query = "UPDATE
                     " . $this->table_name . "

@@ -21,6 +21,16 @@ if($obj->type == 'JOU') {
     $stmt = $obj->readDayBook();
 } else if ($obj->type == 'ledger') {
     $stmt = $obj->readLedger();
+} else if($obj->type=='amountTillDate') {
+    $obj->id = isset($_GET['id']) ? $_GET['id'] : die();
+
+    if(isset($_GET['date'])) {
+        $obj->date = $_GET['date'];
+    } else {
+        $obj->date = "GETDATE()";
+    }
+
+    $stmt = $obj->readAmountTillDate();
 }
 
 $num = $stmt->rowCount();
@@ -34,19 +44,23 @@ $closingBalance = 0;
 if($num>0){
 
     $arr = array();
-
+ 
     if($obj->type == 'JOU') {
         $arr["transaction"]=array();
     } else if ($obj->type == 'dayBook'){
         $arr["dayBook"] = array();
         $debitTransactions = array();
         $creditTransactions = array();
-    } 
+    } else if ($obj->type=='amountTillDate') {
+        $arr["payment"]=array();
+    }
 
+    if($obj->type!='amountTillDate') {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
         extract($row);
 
+        
         if($currentDate != $date && $currentDate != ""){
 
                 $closingBalance = $currentOpeningBalance - $debitTotal + $creditTotal;
@@ -116,7 +130,14 @@ if($num>0){
     array_push($arr["dayBook"],$dayBook);
 
     echo json_encode($arr);
-    
+} else {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        extract($row);
+        array_push($arr["payment"], $row); 
+    }
+ 
+    echo json_encode($arr);
+}
 
 } else {
     echo json_encode(

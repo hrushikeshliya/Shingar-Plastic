@@ -62,12 +62,12 @@ $(document).ready(function(){
 
 		        update_html+="<tr>";
 		            update_html+="<td>Middle Name</td>";
-		            update_html+="<td><input value=\"" + middleName + "\" type='text' name='middleName' class='form-control' required /></td>";
+		            update_html+="<td><input value=\"" + middleName + "\" type='text' name='middleName' class='form-control'/></td>";
 		        update_html+="</tr>";
 		        
 		        update_html+="<tr>";
 		            update_html+="<td>Last Name</td>";
-		            update_html+="<td><input value=\"" + lastName + "\" type='text' name='lastName' class='form-control' required /></td>";
+		            update_html+="<td><input value=\"" + lastName + "\" type='text' name='lastName' class='form-control'/></td>";
 				update_html+="</tr>";
 			
 				update_html+="<tr>";
@@ -77,12 +77,12 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Email</td>";
-					update_html+="<td><input value=\"" + email + "\" type='text' name='email' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + email + "\" type='text' name='email' class='form-control'/></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
 					update_html+="<td>Mobile</td>";
-					update_html+="<td><input value=\"" + mobile + "\" type='text' name='mobile' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + mobile + "\" type='text' name='mobile' class='form-control'/></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
@@ -120,7 +120,7 @@ $(document).ready(function(){
 		$.ajax({
 		    url: "http://shingarplastic.com/api/user/update.php",   // Change Needed HERE
 		    type : "POST",
-		    contentType : 'application/json',
+		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
 		        show();

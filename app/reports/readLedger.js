@@ -43,7 +43,7 @@ read_html+=`<div class='row'>
     <td></td>
     <td></td>
     <td class='text-success'>Opening Balance</td>
-    <td class='text-right text-success'>`+data.openingBalance+`</td>
+    <td class='text-right text-success'>`+parseFloat(data.openingBalance).toFixed(3)+`</td>
     </tr>`;
     
     $.each(data.debitTransactions, function(key, val) { 
@@ -54,7 +54,7 @@ read_html+=`<div class='row'>
       read_html+="<td>"+val.id+"</td>";
       read_html+="<td>"+val.date+"</td>";
       read_html+="<td>"+val.account+"&nbsp&nbsp&nbsp<small>"+val.narration+"</small></td>";
-      read_html+="<td class='text-right'>"+val.amount+"</td>";
+      read_html+="<td class='text-right'>"+parseFloat(val.amount).toFixed(3)+"</td>";
       read_html+="</tr>";
 
     });
@@ -65,14 +65,14 @@ read_html+=`<div class='row'>
     <td></td>
     <td></td>
     <td class='text-info text-right'>Sub Total</td>
-    <td class='text-right text-info'>`+debitSubTotal+`</td>
+    <td class='text-right text-info'>`+parseFloat(debitSubTotal).toFixed(3)+`</td>
     </tr>
 
     <tr>
     <td></td>
     <td></td>
     <td class='text-info text-right'>Ledger Tally</td>
-    <td class='text-right text-info'>`+(parseFloat(data.openingBalance)+parseFloat(debitSubTotal))+`</td>
+    <td class='text-right text-info'>`+(parseFloat(data.openingBalance+debitSubTotal).toFixed(3))+`</td>
     </tr>
 
     </table>
@@ -96,7 +96,7 @@ read_html+=`<div class='row'>
       read_html+="<td>"+val.id+"</td>";
       read_html+="<td>"+val.date+"</td>";
       read_html+="<td>"+val.account+"&nbsp&nbsp&nbsp<small>"+val.narration+"</small></td>";
-      read_html+="<td class='text-right'>"+val.amount+"</td>";
+      read_html+="<td class='text-right'>"+parseFloat(val.amount).toFixed(3)+"</td>";
       read_html+="</tr>";
 
     });
@@ -106,21 +106,21 @@ read_html+=`<div class='row'>
     <td></td>
     <td></td>
     <td class='text-info text-right'>Sub Total</td>
-    <td class='text-right text-info'>`+creditSubTotal+`</td>
+    <td class='text-right text-info'>`+parseFloat(creditSubTotal).toFixed(3)+`</td>
     </tr>
 
     <tr>
     <td></td>
     <td></td>
     <td class='text-danger'>Closing Balance</td>
-    <td class='text-right text-danger'>`+data.closingBalance+`</td>
+    <td class='text-right text-danger'>`+parseFloat(data.closingBalance).toFixed(3)+`</td>
     </tr>
 
     <tr>
     <td></td>
     <td></td>
     <td class='text-info text-right'>Ledger Tally</td>
-    <td class='text-right text-info'>`+(parseFloat(data.closingBalance)+parseFloat(creditSubTotal))+`</td>
+    <td class='text-right text-info'>`+(parseFloat(data.closingBalance+creditSubTotal).toFixed(3))+`</td>
     </tr>
 
     </table>

@@ -24,7 +24,6 @@ read_html+="<table class='table table-bordered table-hover'>";
         read_html+="<th class='text-align-center'>Jobber Name</th>";
         read_html+="<th class='text-align-center'>Item Name</th>";
         read_html+="<th class='text-align-center'>Issued Quantity</th>";
-        read_html+="<th class='text-align-center'>Rate</th>";
         read_html+="<th class='text-align-center'>Pending Quantity</th>";
         read_html+="<th class='text-align-center'>Narration</th>";
         read_html+="<th class='text-align-center'>Entry By</th>";
@@ -47,7 +46,6 @@ $.each(data.materialIssue, function(key, val) {   // Change Needed HERE
         read_html+="<td>" + val.aliasName + "</td>";
         read_html+="<td>" + val.itemName + "</td>";
         read_html+="<td>" + val.quantity + "</td>";
-        read_html+="<td>" + val.rate + "</td>";
         read_html+="<td>" + val.pendingQuantity + "</td>";
         read_html+="<td>" + val.narration + "</td>";
         read_html+="<td>" + val.username + "</td>";

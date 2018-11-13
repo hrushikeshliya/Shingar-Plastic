@@ -41,7 +41,7 @@ class MaterialIssue{
     }
 
     function readOne(){	
-	    $query = "SELECT m.*,i.name itemName, a.aliasName, p.name processName,COALESCE(mr.receivedQuantity,0) receivedQuantity, m.quantity-COALESCE(mr.receivedQuantity,0) pendingQuantity FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
+	    $query = "SELECT m.*,i.name itemName,COALESCE(i.jobRate,0) jobRate , a.aliasName, p.name processName,COALESCE(mr.receivedQuantity,0) receivedQuantity, m.quantity-COALESCE(mr.receivedQuantity,0) pendingQuantity FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
         account a ON m.jobberId=a.id LEFT JOIN item i ON m.itemId=i.id LEFT JOIN (select issueId, SUM(quantity) receivedQuantity from materialReceive WHERE deleted = 0 group by issueId) mr ON m.id = mr.issueId
         where m.deleted = 0 AND m.id = ?";	
 	    $stmt = $this->conn->prepare($query);	
@@ -70,11 +70,9 @@ class MaterialIssue{
                     " . $this->table_name . "
                 SET
                 date=:date,
-                processId = :processId,
                 jobberId = :jobberId,
                 itemId = :itemId,
                 quantity = :quantity,
-                rate = :rate,
                 narration = :narration,
                 username = :username                         
                 WHERE
@@ -89,11 +87,9 @@ class MaterialIssue{
 
         // bind new values
         $stmt->bindParam(':date', $this->date);
-        $stmt->bindParam(':processId', $this->processId);
         $stmt->bindParam(':jobberId', $this->jobberId);
         $stmt->bindParam(':itemId', $this->itemId);
         $stmt->bindParam(':quantity', $this->quantity);
-        $stmt->bindParam(':rate', $this->rate);
         $stmt->bindParam(':narration', $this->narration);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':id', $this->id);
@@ -111,11 +107,9 @@ class MaterialIssue{
                        " . $this->table_name . "
                    SET
                        date=:date,
-                       processId = :processId,
                        jobberId = :jobberId,
                        itemId = :itemId,
                        quantity = :quantity,
-                       rate = :rate,
                        narration = :narration,
                        username = :username
                        "
@@ -129,11 +123,9 @@ class MaterialIssue{
 
         // bind new values
         $stmt->bindParam(':date', $this->date);
-        $stmt->bindParam(':processId', $this->processId);
         $stmt->bindParam(':jobberId', $this->jobberId);
         $stmt->bindParam(':itemId', $this->itemId);
         $stmt->bindParam(':quantity', $this->quantity);
-        $stmt->bindParam(':rate', $this->rate);
         $stmt->bindParam(':narration', $this->narration);
         $stmt->bindParam(':username', $this->username);
 

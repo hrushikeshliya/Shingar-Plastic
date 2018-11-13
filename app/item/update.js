@@ -60,19 +60,19 @@ $(document).ready(function(){
 			update_html+="<td>Item Group</td>";
 			update_html+="<td>" + itemGroup_options_html + "</td>";
 			update_html+="<td>Item Weight</td>";
-			update_html+="<td><input type='number' class='form-control' step='0.01' name = 'itemWeight' value='" + data.itemWeight+ "' min=0></td>";
+			update_html+="<td><input type='number' class='form-control' step='0.001' name = 'itemWeight' value='" + data.itemWeight+ "' min=0></td>";
 		update_html+="</tr>";			
 
 		update_html+="<tr>";
 			update_html+="<td>Purchase Rate</td>";
-			update_html+="<td><input type='number' class='form-control' step='0.01' name = 'purchaseRate' value='" + data.purchaseRate+ "' min=0></td>";
+			update_html+="<td><input type='number' class='form-control' step='0.001' name = 'purchaseRate' value='" + data.purchaseRate+ "' min=0></td>";
 			update_html+="<td>Sale Rate</td>";
-			update_html+="<td><input type='number' class='form-control' step='0.01' name = 'saleRate' value='" + data.saleRate+ "' min=0 required></td>";
+			update_html+="<td><input type='number' class='form-control' step='0.001' name = 'saleRate' value='" + data.saleRate+ "' min=0 required></td>";
 		update_html+="</tr>";			
 
 		update_html+="<tr>";
 			update_html+="<td>Job Rate</td>";
-			update_html+="<td><input type='number' class='form-control' step='0.01' name = 'jobRate' value='" + data.jobRate+ "' min=0></td>";
+			update_html+="<td><input type='number' class='form-control' step='0.001' name = 'jobRate' value='" + data.jobRate+ "' min=0></td>";
 			update_html+="<td>HSN / SAC</td>";
 			update_html+="<td><input type='text' class='form-control' name='hsnSac' value='" + data.hsnSac + "' required></td>";
 		update_html+="</tr>";			
@@ -113,7 +113,7 @@ $(document).ready(function(){
 		$.ajax({
 		    url: "http://shingarplastic.com/api/item/update.php",  // Change Needed HERE
 		    type : "POST",
-		    contentType : 'application/json',
+		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
 		        show();

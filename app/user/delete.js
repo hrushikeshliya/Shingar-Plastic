@@ -25,7 +25,7 @@ $(document).ready(function(){
 		        dataType : 'json',
 		        data : JSON.stringify({ id: id }),
 		        success : function(result) {
-		            showUsers();
+		            show();
 		        },
 		        error: function(xhr, resp, text) {
 		            console.log(xhr, resp, text);

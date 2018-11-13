@@ -19,6 +19,9 @@ $data = json_decode(file_get_contents("php://input"));
  
 $obj->name = $data->name;
 $obj->billName = $data->billName;
+$obj->billCode = $data->billCode;
+$obj->bankDetails = $data->bankDetails;
+$obj->contactDetails = $data->contactDetails;
 
 if($obj->create()){
     echo '{';

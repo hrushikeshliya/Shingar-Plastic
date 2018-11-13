@@ -24,29 +24,24 @@ $(document).ready(function(){
 				update_html+="</tr>";
 
 				update_html+="<tr>";
-					update_html+="<td>Process Name</td>";
-					update_html+="<td>"+data.processName+"</td>";
 					update_html+="<td>Jobber Name</td>";
 					update_html+="<td>"+data.aliasName+"</td>";
+					update_html+="<td>Item Name</td>";
+					update_html+="<td>"+data.itemName+"</td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
-					update_html+="<td>Item Name</td>";
-					update_html+="<td>"+data.itemName+"</td>";
 					update_html+="<td>Quantity (Psc)</td>";
-           			update_html+="<td><input type='number' id='quantity' name='quantity' value='"+data.quantity+"' min = '1' max = '"+(data.pendingQuantity+data.quantity)+"' class='form-control' required /></td>";
+           			update_html+="<td><input type='number' id='quantity' name='quantity' onkeyup=getJobCharge() value='"+data.quantity+"' min = '1' max = '"+(data.pendingQuantity+data.quantity)+"' class='form-control' required /></td>";
+					update_html+="<td>Rate</td>";
+					update_html+="<td><input type='text' id='rate' value='"+data.rate+"' name='rate'  onkeyup=getJobCharge() class='form-control' onchange=getJobCharge() required/></td>";	   
 				update_html+="</tr>";				
 
 				update_html+="<tr>";
-					update_html+="<td>Rate</td>";
-					update_html+="<td><input type='text' id='rate' value='"+data.rate+"' name='rate'  class='form-control' onchange=getJobCharge() required/></td>";
 					update_html+="<td>Job Charge</td>";
 					update_html+="<td><input type='text' id='jobCharge' value='"+data.jobCharge+"' name='jobCharge' class='form-control' required readOnly/></td>";
-				update_html+="</tr>";
-				
-				update_html+="<tr>";
 					update_html+="<td>Narration</td>";
-					update_html+="<td colspan = '3'><input type='text' value='"+data.narration+"' name='narration' class='form-control' required /></td>";
+					update_html+="<td><input type='text' value='"+data.narration+"' name='narration' class='form-control'/></td>";
 				update_html+="</tr>";
 
 		        update_html+="<tr>";
@@ -79,7 +74,7 @@ $(document).ready(function(){
 		$.ajax({
 		    url: "http://shingarplastic.com/api/materialReceive/update.php",  // Change Needed HERE
 		    type : "POST",
-		    contentType : 'application/json',
+		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
 		        show();

@@ -16,7 +16,9 @@ $db = $database->getConnection();
 $obj = new Transaction($db);
  
 $data = json_decode(file_get_contents("php://input"));
- 
+
+$type = isset($_GET['type']) ? $_GET['type'] : "NULL";
+
 $obj->type = $data->type;
 $obj->date = $data->date;
 $obj->debitAccount = $data->debitAccount;
@@ -24,6 +26,12 @@ $obj->creditAccount = $data->creditAccount;
 $obj->amount = $data->amount;
 $obj->narration = $data->narration;
 $obj->username = $data->username;
+
+if($type=='netOff') {
+    $obj->netOff = 1;
+} else {
+    $obj->netOff = 0;
+}
 
 if($obj->create()){
     echo '{';
@@ -34,4 +42,5 @@ if($obj->create()){
         echo '"message": "Internal Server Error"';
     echo '}';
 }
+
 ?>

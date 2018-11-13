@@ -38,32 +38,26 @@ $(document).ready(function(){
 		    read_one_html+="</tr>";
 
 		    read_one_html+="<tr>";
-		        read_one_html+="<td>Process Name</td>";
-		        read_one_html+="<td>" + data.processName + "</td>";
 		        read_one_html+="<td>Jobber Name</td>";
-		        read_one_html+="<td>" + data.aliasName + "</td>";
+				read_one_html+="<td>" + data.aliasName + "</td>";
+				read_one_html+="<td>Item Name</td>";
+		        read_one_html+="<td>" + data.itemName + "</td>";
 		    read_one_html+="</tr>";			
 
 		    read_one_html+="<tr>";
-		        read_one_html+="<td>Item Name</td>";
-		        read_one_html+="<td>" + data.itemName + "</td>";
 		        read_one_html+="<td>Issued Quantity</td>";
-		        read_one_html+="<td>" + data.quantity + "</td>";
+				read_one_html+="<td>" + data.quantity + "</td>";
+				read_one_html+="<td>Pending Quantity</td>";
+		        read_one_html+="<td>" + data.pendingQuantity + "</td>";
 		    read_one_html+="</tr>";			
 
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Entry By</td>";
 				read_one_html+="<td>" + data.username+ "</td>";
-				read_one_html+="<td>Pending Quantity</td>";
-		        read_one_html+="<td>" + data.pendingQuantity + "</td>";
+				read_one_html+="<td>Narration</td>";
+				read_one_html+="<td>" + data.narration + "</td>";
 		    read_one_html+="</tr>";			
 
-			read_one_html+="<tr>";
-			read_one_html+="<td>Rate</td>";
-			read_one_html+="<td>" + data.rate + "</td>";
-			read_one_html+="<td>Narration</td>";
-			read_one_html+="<td>" + data.narration + "</td>";
-			read_one_html+="</tr>";
 
 		read_one_html+="</table>";
 		

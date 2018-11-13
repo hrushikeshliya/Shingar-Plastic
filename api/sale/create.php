@@ -34,6 +34,7 @@ $obj->taxAmount = $data->taxAmount;
 $obj->grandTotal = $data->grandTotal;
 $obj->billLimit = $data->billLimit;
 $obj->invoiceId = $data->salesInvoiceId;
+$obj->billNameId = $data->billNameId;
 
 if($obj->create()){
     

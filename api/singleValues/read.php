@@ -18,6 +18,9 @@ $obj = new SingleValues($db); //Change ClassName
 // set ID property of User to be edited
 $type = isset($_GET['type']) ? $_GET['type'] : "NULL";
 
+if($type=='purchas') {
+    $type='purchase';
+}
 if($type=='distinctSale') {
     $stmt = $obj->readDistinctSaleAccount();
 } else if($type=='distinctPurchase') {

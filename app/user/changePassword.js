@@ -42,7 +42,7 @@ console.log(form_data);
 $.ajax({
     url: "http://shingarplastic.com/api/user/changePassword.php",
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         location.href = "http://shingarplastic.com"

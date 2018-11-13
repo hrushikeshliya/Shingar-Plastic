@@ -72,9 +72,19 @@ if($type=='purchase' || $type=='purchaseReturn') {
     $stmt = $purchase->readInvoiceIdByAccount();
 } else if($type=='purchaseReport') {
     $stmt = $purchase->readPurchaseReport();
+} else if($type=='amountTillDate') {
+    $purchase->id = isset($_GET['id']) ? $_GET['id'] : die();
+
+    if(isset($_GET['date'])) {
+        $purchase->date = $_GET['date'];
+    } else {
+        $purchase->date = "GETDATE()";
+    }
+
+    $stmt = $purchase->readAmountTillDate();
 }
 
-if($type=='distinctAccount' || $type=='distinctInvoiceId' || $type=='purchaseReport') {
+if($type=='distinctAccount' || $type=='distinctInvoiceId' || $type=='purchaseReport' || $type=='amountTillDate') {
 
     $num = $stmt->rowCount();
          

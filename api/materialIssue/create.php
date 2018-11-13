@@ -18,11 +18,9 @@ $obj = new MaterialIssue($db);
 $data = json_decode(file_get_contents("php://input"));
 
 $obj->date = $data->date;
-$obj->processId = $data->processId;
 $obj->jobberId = $data->jobberId;
 $obj->itemId = $data->itemId;
 $obj->quantity = $data->quantity;
-$obj->rate = $data->jobRate;
 $obj->narration = $data->narration;
 $obj->username = $data->username;
 

@@ -22,19 +22,7 @@ $(document).ready(function(){
 				}
 			});
 			item_options_html+="</select>";
-	
-			$.getJSON("http://shingarplastic.com/api/process/read.php", function(data1){ 
-				
-				process_options_html+="<select name='processId' class='form-control'>";
-				$.each(data1.process, function(key, val){
-					if(val.id==data.processId) {
-						process_options_html+="<option value='" + val.id + "' selected>" + val.name + "</option>";
-					} else {
-						process_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
-					}
-				});
-				process_options_html+="</select>";
-	
+		
 				$.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data1){ 
 				
 					jobber_options_html+="<select name='jobberId' class='form-control'>";
@@ -64,22 +52,16 @@ $(document).ready(function(){
 				update_html+="</tr>";
 
 				update_html+="<tr>";
-					update_html+="<td>Process Name</td>";
-					update_html+="<td>"+process_options_html+"</td>";
 					update_html+="<td>Jobber Name</td>";
 					update_html+="<td>"+jobber_options_html+"</td>";
+					update_html+="<td>Item Name</td>";
+					update_html+="<td>"+item_options_html+"</td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
-					update_html+="<td>Item Name</td>";
-					update_html+="<td>"+item_options_html+"</td>";
+
 					update_html+="<td>Quantity (Psc)</td>";
            			update_html+="<td><input type='number' name='quantity' value='"+data.quantity+"' min = '1' class='form-control' required /></td>";
-				update_html+="</tr>";				
-
-				update_html+="<tr>";
-					update_html+="<td>Rate</td>";
-					update_html+="<td><input type='number' name='rate' value='"+data.rate+"' min = '1' class='form-control' required /></td>";
 					update_html+="<td>Narration</td>";
 					update_html+="<td><input type='text' value='"+data.narration+"' name='narration' class='form-control' required /></td>";
 				update_html+="</tr>";
@@ -103,7 +85,6 @@ $(document).ready(function(){
 	
 	});
 
-});
 }); 
 		});
 	     	     
@@ -116,7 +97,7 @@ $(document).ready(function(){
 		$.ajax({
 		    url: "http://shingarplastic.com/api/materialIssue/update.php",  // Change Needed HERE
 		    type : "POST",
-		    contentType : 'application/json',
+		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
 		        show();

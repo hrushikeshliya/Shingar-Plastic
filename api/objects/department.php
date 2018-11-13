@@ -205,8 +205,7 @@ class Department{
                        billName = :billName,
                        billCode = :billCode,
                        bankDetails = :bankDetails,
-                       contactDetails = :contactDetails,
-                       billSeries = 1";
+                       contactDetails = :contactDetails";
         
            $stmt = $this->conn->prepare($query);
         

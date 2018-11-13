@@ -1,26 +1,62 @@
 $(document).ready(function(){
 
-var pageContent = "";
+    var monthlyTotal = 0;
+    var yearlyTotal = 0;
 
-pageContent += "<div class='row'>";
+$.getJSON("http://shingarplastic.com/api/sale/read.php?type=monthlySummary", function(data){  
 
-pageContent += "<div class='col-sm-4'>";
-pageContent += "	<h4 class='text-center'>Summary</h4>";
-pageContent += "</div>";
-pageContent += "<div class='col-sm-4'>";
-pageContent += "	<img src='images/factory.jpg'>";
-pageContent += "</div>";
-pageContent += "<div class='col-sm-4'>";
-pageContent += "	<h4 class='text-center'>Sales Summary</h4>";
-pageContent += "</div>";
+    $.getJSON("http://shingarplastic.com/api/sale/read.php?type=yearlySummary", function(data2){  
+    
+        var pageContent = "";
+
+        pageContent += "	<img src='images/factory.jpg' style='margin-left:25%; '>";
+        
+        pageContent += `
+        <HR>
+        <table class='table table-responsive table-bordered' style='margin-top:50px'>
+        <tr>
+        <td>Department</td>
+        <td>Monthly Summary</td>
+        <td>Yearly Summary <BR>(7th Nov 2018 - 31st Oct 2019)</td>
+        </tr>
+        `;
+
+        // CHANGE IN QUERY AS WELL
+        
+
+
+        $.each(data.sale, function(key, val) {  
+            $.each(data2.sale, function(key2, val2) {  
+                if (val.departmentName == val2.departmentName) {
+                    monthlyTotal += +parseFloat(val.netSale).toFixed(3);
+                    yearlyTotal += +parseFloat(val2.netSale).toFixed(3);
+                    pageContent += `
+                    <tr>
+                    <td>`+val.departmentName+`</td>
+                    <td>`+parseFloat(val.netSale).toFixed(3)+`</td>
+                    <td>`+parseFloat(val2.netSale).toFixed(3)+`</td>
+                    </tr>
+                    `;
+                }
+            });
+        });
+        pageContent += `
+
+        <tr>
+        <td>TOTAL</td>
+        <td>`+parseFloat(monthlyTotal).toFixed(2)+`</td>
+        <td>`+parseFloat(yearlyTotal).toFixed(2)+`</td>
+        </tr>
+        </table>
+
+        `;
+
+    $("#page-content").html(pageContent);
+    });
+});
 
 
 
-pageContent += "</div>";
-
-
-$("#page-content").html(pageContent);
 changePageTitle("Welcome To Shingar Plastic");
  
-    
 });

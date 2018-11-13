@@ -61,14 +61,14 @@ if($type=='sale' || $type=='purchase') {
 
     while ($row0 = $stmt0->fetch(PDO::FETCH_ASSOC)){
         extract($row0);
+        $type = $accountType;
         $opgBalance = $openingBalance; 
     }
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
         extract($row);
-        
-        $type = $name;
-        if($name == 'DEBTORS') {
+    
+        if($name == 'DEBTORS' || $name == 'CREDITORS_RETURN') {
             $debit += $amount;
             array_push($debitTransactions, $row);
         } else {

@@ -13,8 +13,7 @@ session_start();
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<link href="app/assets/css/style.css" rel="stylesheet" />
-
+	<link href="app/assets/css/style.css?<?php echo date('l jS \of F Y h:i:s A'); ?>" rel="stylesheet" />
 </head>
 <body>
 
@@ -65,6 +64,8 @@ session_start();
         var id = $("#accountId").val();
                 $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){  
                     $("#billLimit").val(data.billLimit);
+                    $("#transportId").val(data.transportId);
+                    $("#billNameId").val(id);
                 });
     }
 

@@ -57,14 +57,14 @@ $(document).ready(function(){
 
         create_html+="<tr>";
             create_html+="<td>Rate</td>";
-            create_html+="<td><input type='text' id='rate' min = 1 name='rate'  class='form-control' readonly required/></td>";
+            create_html+="<td><input type='text' id='rate' min = 0 step=0.001 name='rate'  onkeyup=getJobCharge() class='form-control' required/></td>";
             create_html+="<td>Job Charge</td>";
             create_html+="<td><input type='text' id='jobCharge' name='jobCharge' class='form-control' required readOnly/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Narration</td>";
-            create_html+="<td colspan = '3'><input type='text' name='narration' class='form-control' required /></td>";
+            create_html+="<td colspan = '3'><input type='text' name='narration' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
@@ -91,7 +91,7 @@ var form_data=JSON.stringify($(this).serializeObject());
 $.ajax({
     url: "http://shingarplastic.com/api/materialReceive/create.php",   // Change Needed HERE
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         location.reload();

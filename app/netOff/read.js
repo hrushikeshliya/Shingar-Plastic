@@ -22,15 +22,74 @@ $(document).ready(function(){
 function calculateJVAmt() {
     var currentBalance = $("#currentBalance").val();
     var netOffAmt = $("#netOffAmt").val();
-   $("#jvAmt").val(currentBalance-netOffAmt);
+   $("#amount").val(Math.abs(currentBalance-netOffAmt));
 }
 
 function getCurrentBalance() {
-    var accountName = $("#accountName").val();
+    var id= $("#accountName").val();
     var date = $("#date").val();
-    console.log("Get Current Balance For : "+accountName+" : As Of : "+date);
-    $("#currentBalance").val(100);
-    $("#netOffAmt").val(100);
+    var dateParam = "";
+
+    if (date!=''){
+        dateParam = "&date="+date;
+    }
+
+    var closingBalance = 0;
+    var openingBalance = 0;
+    var saleTillDate = 0;
+    var saleReturnTillDate = 0;
+    var purchaseTillDate = 0;
+    var purchaseReturnTillDate = 0;
+    var paymentTillDate = 0;
+    var accType = '';
+    var accName = '';
+
+    console.log("Get Current Balance For : "+id+" : As Of : "+date);
+    $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id +dateParam, function(data){  
+        openingBalance = parseFloat(data.openingBalance);
+        closingBalance = openingBalance;
+        accType = data.accountType;
+        accName = data.name;
+
+    $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
+        paymentTillDate = parseFloat(data.payment[0].amount);
+
+        if(accType == 'DEBTORS') {
+            closingBalance -= paymentTillDate;
+            $("#debitAccount").val(accName);
+            $("#creditAccount").val('DISCOUNT A/C');
+            $("#narration").val('DISCOUNT BEING GIVEN');
+            $("#type").val('JOU');
+        } else if (accType == 'CREDITORS') {
+            closingBalance += paymentTillDate;
+            $("#debitAccount").val('DISCOUNT A/C');
+            $("#creditAccount").val(accName);
+            $("#narration").val('DISCOUNT BEING TAKEN');
+            $("#type").val('JOU');
+        }
+    $.getJSON("http://shingarplastic.com/api/sale/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
+        saleTillDate = parseFloat(data.sale[0].amount);    
+        closingBalance += saleTillDate;
+    $.getJSON("http://shingarplastic.com/api/purchase/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        purchaseTillDate = parseFloat(data.purchase[0].amount);
+        closingBalance -= purchaseTillDate
+    $.getJSON("http://shingarplastic.com/api/saleReturn/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        saleReturnTillDate = parseFloat(data.saleReturn[0].amount);
+        closingBalance -= saleReturnTillDate;
+    $.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        purchaseReturnTillDate = parseFloat(data.purchaseReturn[0].amount);
+        closingBalance += purchaseReturnTillDate;
+       
+        closingBalance = closingBalance.toFixed(2)
+        $("#currentBalance").val(closingBalance);
+        $("#netOffAmt").val(closingBalance);
+
+});
+});
+});
+});
+});
+});
 }
 
 function show(){
@@ -42,7 +101,7 @@ function show(){
     accountName_options += "<datalist id='accountNameList'>";
     accountName_options += "</datalist>";
 
-    update_html+="<form id='update-form' action='#' method='post' border='0'>";
+    update_html+="<form id='create-form' action='#' method='post' border='0'>";
         update_html+="<table class='table table-bordered table-hover'>";
 
         update_html+="<tr>";
@@ -57,23 +116,37 @@ function show(){
 
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>Current Balance</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' id='currentBalance' name='currentBalance' class='form-control' required disabled/></td>";
+            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.01 id='currentBalance' name='currentBalance' class='form-control' required disabled/></td>";
         update_html+="</tr>";
 
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>Net Off Balance</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' id='netOffAmt' name='netOffAmt' class='form-control' required /></td>";
+            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.01 id='netOffAmt' name='netOffAmt' class='form-control' required /></td>";
         update_html+="</tr>";
 
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>J/V Amount</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' id='jvAmt' name='jvAmt' class='form-control' required disabled/></td>";
+            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.01 id='amount' name='amount' class='form-control' required readonly/></td>";
         update_html+="</tr>";
 
-        update_html+="<tr>"
+        update_html+="<tr>";
+            update_html+="<td class='text-align-right'>Debit Account</th>";
+            update_html+="<td class='text-align-left'><input type='text' id='debitAccount' name='debitAccount' class='form-control' required readonly/></td>";
+        update_html+="</tr>";
+
+        update_html+="<tr>";
+            update_html+="<td class='text-align-right'>Credit Account</th>";
+            update_html+="<td class='text-align-left'><input type='text' id='creditAccount' name='creditAccount' class='form-control' required readonly/></td>";
+        update_html+="</tr>";
+
+        update_html+="<tr>";
+            update_html+="<td class='text-align-center' colspan=2><input type='text' id='narration' name='narration' class='form-control' readonly/><input type='text' id='type' name='type' class='form-control' readonly/></th>";
+        update_html+="</tr>";
+
+    update_html+="<tr>"
         update_html+="<td colspan = '2' class = 'text-align-center'>";
             update_html+="<button type='submit' class='btn btn-info'>";
-                update_html+="<span class='glyphicon glyphicon-edit'></span> Update";
+                update_html+="<span class='glyphicon glyphicon-edit'></span> Submit";
             update_html+="</button>";
         update_html+="</td>";
         update_html+="<tr>"
@@ -88,7 +161,7 @@ $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
     dataList.empty();
 
 	$.each(data.account, function(key, val){
-        var opt = $("<option></option>").attr("value", val.name);
+        var opt = $("<option></option>").attr("value", val.id).text(val.name);
         dataList.append(opt);
     });
 });
@@ -98,14 +171,14 @@ $("#page-content").html(update_html);
 changePageTitle("Net Off");  // Change Needed HERE
 
 
-$(document).on('submit', '#update-form', function(){
+$(document).on('submit', '#create-form', function(){
 	
     var form_data=JSON.stringify($(this).serializeObject());
     
     $.ajax({
-        url: "http://shingarplastic.com/api/netOff/update.php",  // Change Needed HERE
+        url: "http://shingarplastic.com/api/transaction/create.php?type=netOff",  // Change Needed HERE
         type : "POST",
-        contentType : 'application/json',
+        contentType : 'multipart/form-data',
         data : form_data,
         success : function(result) {
             show();

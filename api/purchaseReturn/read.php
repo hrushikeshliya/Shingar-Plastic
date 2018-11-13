@@ -13,7 +13,19 @@ $db = $database->getConnection();
  
 $purchaseReturn = new PurchaseReturn($db);  //Change ClassName
 
-$stmt = $purchaseReturn->read();
+$type = isset($_GET['type']) ? $_GET['type'] : "NULL";
+
+if($type=='amountTillDate') {
+    $purchaseReturn->id = isset($_GET['id']) ? $_GET['id'] : die();
+    if(isset($_GET['date'])) {
+        $purchaseReturn->date = $_GET['date'];
+    } else {
+        $purchaseReturn->date = "GETDATE()";
+    }
+    $stmt = $purchaseReturn->readAmountTillDate();
+} else {
+    $stmt = $purchaseReturn->read();
+}
 
 $num = $stmt->rowCount();
      
@@ -26,17 +38,19 @@ if($num>0){
     
         extract($row);
     
-        $invoiceDetail = new InvoiceDetail($db);  //Change ClassName
-        $invoiceDetail->invoiceId = $id;
-        $invoiceDetail->type = "purchaseReturn";
-        $arr2=array();
-        $stmt2 = $invoiceDetail->readOnePurchaseReturn();
-    
-        while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)){
-            array_push($arr2, $row2);
+        if($type!='amountTillDate') {
+            $invoiceDetail = new InvoiceDetail($db);  //Change ClassName
+            $invoiceDetail->invoiceId = $id;
+            $invoiceDetail->type = "purchaseReturn";
+            $arr2=array();
+            $stmt2 = $invoiceDetail->readOnePurchaseReturn();
+        
+            while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)){
+                array_push($arr2, $row2);
+            }
+            $row['invoiceDetail']=$arr2;
         }
-        $row['invoiceDetail']=$arr2;
-    
+
         array_push($arr["purchaseReturn"], $row); 
     }
      

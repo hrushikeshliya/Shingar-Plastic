@@ -1,5 +1,9 @@
 $(document).ready(function(){
     show();
+    $(document).on('click', '.read-button', function(){
+        show();
+    });
+
 });
 
 function show(){
@@ -51,8 +55,10 @@ read_html+="<div class='row well'>";
             $.each(val.creditTransactions, function(key1, val1) {  // Change Needed HERE
                 count +=1;
                 read_html+="<tr>";
-                read_html+="<td>REC_"+val1.id+"</td>";
-                read_html+="<td><h5>"+val1.debitAccount+"<small> -"+val1.narration+"</small></h5></td>";
+                read_html+="<td><button class='btn btn-xs btn-info update-button' data-id='" + val1.id + "'>";
+                read_html+="REC_"+val1.id+"";
+                read_html+="</button></td>";
+                read_html+="<td>"+val1.debitAccount+"&nbsp;&nbsp;&nbsp;<i><small> -"+val1.narration+"</small></i></td>";
                 read_html+="<td>"+val1.amount+"</td>";
                 read_html+="</tr>";
 
@@ -85,8 +91,10 @@ read_html+="<div class='row well'>";
                 $.each(val.debitTransactions, function(key1, val1) {  // Change Needed HERE
                     count +=1;
                     read_html+="<tr>";
-                    read_html+="<td>PAY_"+val1.id+"</td>";
-                    read_html+="<td><h5>"+val1.creditAccount+"<small> -"+val1.narration+"</small></h5></td>";
+                    read_html+="<td><button class='btn btn-xs btn-info update-button' data-id='" + val1.id + "'>";
+                    read_html+="PAY_"+val1.id+"";
+                    read_html+="</button></td>";
+                    read_html+="<td>"+val1.creditAccount+"&nbsp;&nbsp;&nbsp;<i><small> -"+val1.narration+"</small></i></td>";
                     read_html+="<td>"+val1.amount+"</td>";
                     read_html+="</tr>";
     

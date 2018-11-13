@@ -37,17 +37,17 @@ $(document).ready(function(){
         
         create_html+="<tr>";
             create_html+="<td>Middle Name</td>";
-            create_html+="<td><input type='text' name='middleName' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='middleName' class='form-control'/></td>";
         create_html+="</tr>";
  
         create_html+="<tr>";
             create_html+="<td>Last Name</td>";
-            create_html+="<td><input type='text' name='lastName' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='lastName' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Email</td>";
-            create_html+="<td><input type='text' name='email' class='form-control' required /></td>";
+            create_html+="<td><input type='text' name='email' class='form-control'/></td>";
         create_html+="</tr>";
          
         create_html+="<tr>";
@@ -87,7 +87,7 @@ var form_data=JSON.stringify($(this).serializeObject());
 $.ajax({
     url: "http://shingarplastic.com/api/user/create.php",   // Change Needed HERE
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         show();

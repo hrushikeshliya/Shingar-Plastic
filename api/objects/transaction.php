@@ -42,10 +42,10 @@ class Transaction{
     function readAmountTillDate(){	
         $query = "
         select 
-        SUM(t.amount) amount
+        COALESCE(SUM(t.amount),0) amount
         from transaction t
         LEFT JOIN account a ON (t.debitAccount= a.name OR t.creditAccount = a.name) 
-        where a.id = :id AND  t.date <= :date
+        where a.id = :id AND  t.date <= :date AND t.type IN ('REC','PAY','JOU')
         ";	
 
         $stmt = $this->conn->prepare($query);	
@@ -55,16 +55,17 @@ class Transaction{
         // bind new values
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':date', $this->date);
-
+        
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
 
     function readCreditTransaction(){	
         $query = "    
-        select CONCAT(t.type,'_',t.id) id, t.date, t.debitAccount account,  t.narration, t.amount from transaction t
+        select CONCAT(t.type,'_',t.id) id, t.date, t.creditAccount account,  t.narration, t.amount from transaction t
         LEFT JOIN account a ON a.name = t.debitAccount
-        WHERE type = 'REC'
+        WHERE 
+        (t.type = 'REC' OR (t.type = 'JOU' AND t.creditAccount = 'DISCOUNT A/C')) 
         AND a.id = :accountId
         AND t.deleted = 0
         ORDER BY t.date asc";	
@@ -76,9 +77,11 @@ class Transaction{
 
     function readDebitTransaction(){	
         $query = "    
-        select CONCAT(t.type,'_',t.id) id, t.date, t.creditAccount account, t.narration, t.amount from transaction t
+        select CONCAT(t.type,'_',t.id) id, t.date, t.debitAccount account, t.narration, t.amount 
+        from transaction t
         LEFT JOIN account a ON a.name = t.creditAccount
-        WHERE type = 'PAY'
+        WHERE 
+        (t.type = 'PAY' OR (t.type = 'JOU' AND t.debitAccount = 'DISCOUNT A/C')) 
         AND a.id = :accountId
         AND t.deleted = 0
         ORDER BY t.date asc";	
@@ -194,9 +197,7 @@ class Transaction{
            }else{
                return false;
            }
-       }
-
-	
+       }	
 }
 
 ?>

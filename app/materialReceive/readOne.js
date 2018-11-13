@@ -11,8 +11,8 @@ $(document).ready(function(){
 	$.getJSON("http://shingarplastic.com/api/materialReceive/read.php?issueId="+id, function(data1){    // Change Needed HERE
 		
 		$.each(data1.materialReceive, function(key, val) {   // Change Needed HERE
-			totalCharge += val.jobCharge;
-			totalQuantity += val.quantity;
+			totalCharge += +val.jobCharge;
+			totalQuantity += +val.quantity;
 			materialReceiveDetail += "<tr><th>"+val.id+"</th><th>"+val.date+"</th><th>"+val.quantity+"</th><th>"+val.rate+"</th><th>"+val.jobCharge+"</th><th>"+val.username+"</th><th>"+val.narration+"</th></tr>";	 
 		});
 	 
@@ -38,30 +38,25 @@ $(document).ready(function(){
 		    read_one_html+="</tr>";
 
 		    read_one_html+="<tr>";
-		        read_one_html+="<td>Process Name</td>";
-		        read_one_html+="<td>" + data.processName + "</td>";
 		        read_one_html+="<td>Jobber Name</td>";
-		        read_one_html+="<td>" + data.aliasName + "</td>";
+				read_one_html+="<td>" + data.aliasName + "</td>";
+				read_one_html+="<td>Item Name</td>";
+		        read_one_html+="<td>" + data.itemName + "</td>";
 		    read_one_html+="</tr>";			
 
 		    read_one_html+="<tr>";
-		        read_one_html+="<td>Item Name</td>";
-		        read_one_html+="<td>" + data.itemName + "</td>";
 		        read_one_html+="<td>Issued Quantity</td>";
-		        read_one_html+="<td>" + data.quantity + "</td>";
+				read_one_html+="<td>" + data.quantity + "</td>";
+				read_one_html+="<td>Pending Quantity</td>";
+		        read_one_html+="<td>" + data.pendingQuantity + "</td>";
 		    read_one_html+="</tr>";			
 
 		    read_one_html+="<tr>";
 		        read_one_html+="<td>Entry By</td>";
 				read_one_html+="<td>" + data.username+ "</td>";
-				read_one_html+="<td>Pending Quantity</td>";
-		        read_one_html+="<td>" + data.pendingQuantity + "</td>";
+				read_one_html+="<td>Narration</td>";
+				read_one_html+="<td>" + data.narration + "</td>";
 		    read_one_html+="</tr>";			
-
-			read_one_html+="<tr>";
-			read_one_html+="<td>Narration</td>";
-			read_one_html+="<td colspan='3'>" + data.narration + "</td>";
-			read_one_html+="</tr>";
 
 		read_one_html+="</table>";
 		

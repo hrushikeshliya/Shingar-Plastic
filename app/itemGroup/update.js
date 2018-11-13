@@ -85,7 +85,7 @@ $(document).ready(function(){
 		$.ajax({
 		    url: "http://shingarplastic.com/api/itemGroup/update.php",  // Change Needed HERE
 		    type : "POST",
-		    contentType : 'application/json',
+		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
 		        show();

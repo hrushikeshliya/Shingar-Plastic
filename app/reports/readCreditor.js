@@ -12,6 +12,7 @@ read_html+="<div class='row'>";
 read_html+="<table class='table table-striped table-bordered'>";
 read_html+="    <thead>";
 read_html+="      <tr>";
+read_html+="        <th>Alias Name</th>";
 read_html+="        <th>Account Name</th>";
 read_html+="        <th>Opening</th>";
 read_html+="        <th>Nov</th>";
@@ -34,20 +35,20 @@ read_html+="   <tbody>";
 
 $.each(data.reports, function(key, val) { 
 
-payment = parseFloat(val.payment);
-openingBalance = parseFloat(val.openingBalance);
-november = parseFloat(val.november);
-december = parseFloat(val.december);
-january = parseFloat(val.january);
-february = parseFloat(val.february);
-march = parseFloat(val.march);
-april = parseFloat(val.april);
-may = parseFloat(val.may);
-june = parseFloat(val.june);
-july = parseFloat(val.july);
-august = parseFloat(val.august);
-september = parseFloat(val.september);
-october = parseFloat(val.october);
+    payment = parseFloat(val.payment);
+    openingBalance = parseFloat(val.openingBalance);
+    november = parseFloat(val.november);
+    december = parseFloat(val.december);
+    january = parseFloat(val.january);
+    february = parseFloat(val.february);
+    march = parseFloat(val.march);
+    april = parseFloat(val.april);
+    may = parseFloat(val.may);
+    june = parseFloat(val.june);
+    july = parseFloat(val.july);
+    august = parseFloat(val.august);
+    september = parseFloat(val.september);
+    october = parseFloat(val.october);
 
 
 if(openingBalance<0 && payment>=(openingBalance*-1) && payment!=0) {
@@ -155,21 +156,22 @@ if(october<0 && payment>=(october*-1) && payment!=0) {
 }
 
 read_html+="     <tr>";
+read_html+="        <td>"+val.aliasName+"</td>";
 read_html+="        <td>"+val.name+"</td>";
-read_html+="        <td>"+openingBalance+"</td>";
-read_html+="        <td>"+november+"</td>";
-read_html+="        <td>"+december+"</td>";
-read_html+="        <td>"+january+"</td>";
-read_html+="        <td>"+february+"</td>";
-read_html+="        <td>"+march+"</td>";
-read_html+="        <td>"+april+"</td>";
-read_html+="        <td>"+may+"</td>";
-read_html+="        <td>"+june+"</td>";
-read_html+="        <td>"+july+"</td>";
-read_html+="        <td>"+august+"</td>";
-read_html+="        <td>"+september+"</td>";
-read_html+="        <td>"+october+"</td>";
-read_html+="        <td>"+val.closingBalance+"</td>";
+read_html+="        <td>"+parseFloat(openingBalance).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(november).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(december).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(january).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(february).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(march).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(april).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(may).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(june).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(july).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(august).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(september).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(october).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(val.closingBalance).toFixed(3)+"</td>";
 read_html+="     </tr>";
 
 });

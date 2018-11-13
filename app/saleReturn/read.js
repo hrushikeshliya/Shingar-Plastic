@@ -52,13 +52,12 @@ $.each(data.saleReturn, function(key, val) {   // Change Needed HERE
         $.each(val.invoiceDetail, function(key2, val2) {
 
             narration = val2.saleNarration == null ? "" : val2.saleNarration;
-            challanLimit = val2.challanLimit;
             read_html+="<tr>";
             read_html+="<td>"+count+"</td>";
             read_html+="<td>"+val2.itemName+"   "+narration+"</td>";
-            read_html+="<td class='text-right'>"+parseFloat(val2.rate/challanLimit).toFixed(2)+"</td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.rate).toFixed(2)+"</td>";
             read_html+="<td class='text-center'>"+val2.quantity+"</td>";
-            read_html+="<td class='text-right'>"+parseFloat(val2.amount/challanLimit).toFixed(2)+"</td>";
+            read_html+="<td class='text-right'>"+parseFloat(val2.amount).toFixed(2)+"</td>";
             read_html+="</tr>";
             
             count++;
@@ -69,7 +68,7 @@ $.each(data.saleReturn, function(key, val) {   // Change Needed HERE
         read_html+="<td></td>";
         read_html+="<td>Total</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.totalAmount/challanLimit).toFixed(2)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.totalAmount).toFixed(2)+"</td>";
         read_html+="</tr>";
         read_html+="<tr class='text-info'><td colspan=5>Narration : "+val.narration+"</td></tr>";
         read_html+="</table>";

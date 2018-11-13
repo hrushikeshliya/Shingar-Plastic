@@ -8,6 +8,7 @@ function create() {
     var item_options_html = "";
     var department_options_html = "";
     var account_options_html = "";
+    var billName_options_html = "";
     var transport_options_html = "";
     var tax_options_html = "";
     var create_html="";
@@ -37,7 +38,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
         
             $.getJSON("http://shingarplastic.com/api/transport/read.php", function(data){ 
                 
-                transport_options_html+="<select name='transportId' class='form-control'>";
+                transport_options_html+="<select name='transportId' id='transportId' class='form-control'>";
                 $.each(data.transport, function(key, val){
                     transport_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
                 });
@@ -45,12 +46,21 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
 
                 $.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){ 
                 
-                    account_options_html+="<select id='accountId' name='accountId' class='form-control' onchange=getBillLimit() required>";
-                    account_options_html+="<option value=''></option>";
+                    billName_options_html+="<select id='billNameId' name='billNameId' class='form-control' required>";
+                    billName_options_html+="<option value=''></option>";
                     $.each(data.account, function(key, val){
-                        account_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
+                        billName_options_html+="<option value='" + val.id + "'>" + val.aliasName + "</option>";
                     });
-                    account_options_html+="</select>";
+                    billName_options_html+="</select>";
+
+                    $.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){ 
+                
+                        account_options_html+="<select id='accountId' name='accountId' class='form-control' onchange=getBillLimit() required>";
+                        account_options_html+="<option value=''></option>";
+                        $.each(data.account, function(key, val){
+                            account_options_html+="<option value='" + val.id + "'>" + val.aliasName + "</option>";
+                        });
+                        account_options_html+="</select>";
 
                     tax_options_html+="<select onchange=getBillAmount() id='tax' name='tax' class='form-control'>";
                     tax_options_html+="<option value='0'>Tax Free</option>";
@@ -81,14 +91,16 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
             create_html+="<td>"+transport_options_html+"</td>";
             create_html+="<td class='text-right'>Tax</td>";
             create_html+="<td>"+tax_options_html+"</td>";
-            create_html+="<td colspan=2 class='text-center'><input type='checkbox' name='showName'/> ";
-            create_html+="Show Item Name In Bill</td>";
+            create_html+="<td class='text-right'> Bill Name </td>";
+            create_html+="<td>"+billName_options_html+"</td>";
         
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Narration</td>";
-            create_html+="<td colspan=7><input type='text' name='narration' class='form-control'/></td>";
+            create_html+="<td colspan=5><input type='text' name='narration' class='form-control'/></td>";
+            create_html+="<td colspan=2 class='text-center'><input type='checkbox' name='showName'/> ";
+            create_html+="Show Item Name In Bill</td>";
         create_html+="</tr>";
 
         create_html+="<tr><td colspan=8 style = 'border:none'></td></tr><tr><td colspan=8 style = 'border:none'></td></tr><tr><td colspan=8 style = 'border:none'></td></tr><tr class='info'>";
@@ -151,7 +163,7 @@ changePageTitle("Create Sale Entry"); // Change Needed HERE
 });
 });
 });
-
+});
 } 
 
 $(document).on('submit', '#createForm', function(){
@@ -160,7 +172,7 @@ var form_data=JSON.stringify($(this).serializeObject());
 $.ajax({
     url: "http://shingarplastic.com/api/sale/create.php",   // Change Needed HERE
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         create();

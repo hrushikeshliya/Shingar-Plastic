@@ -10,6 +10,17 @@ $(document).ready(function(){
 
 
 		var read_one_html = "";
+		var billTO = "";
+		var decimal = 0;
+
+		if(billType == "challan")  {
+			decimal = 3;
+			billTO = "<b>Consignor :</b><br><b>"+data.sale[0].accountName+"</b><BR>"+data.sale[0].address1+"<BR>"+data.sale[0].address2+"<BR>City : "+data.sale[0].city+" - "+data.sale[0].pincode+"<BR>State: "+data.sale[0].state+"<BR><BR> GST : "+data.sale[0].gstNo;
+		} else {
+			decimal = 2;
+			billTO = "<b>Consignor :</b><br><b>"+data.sale[0].baAccountName+"</b><BR>"+data.sale[0].baAddress1+"<BR>"+data.sale[0].baAddress2+"<BR>City : "+data.sale[0].baCity+" - "+data.sale[0].baPincode+"<BR>State: "+data.sale[0].baState+"<BR><BR> GST : "+data.sale[0].baGstNo;
+		}
+
 		var cartoons = 0;
 		var deductions = 0;
 		var billLimit = billType=="invoice"? (0+data.sale[0].billLimit)/10 : 1;
@@ -18,7 +29,7 @@ $(document).ready(function(){
 		    read_one_html+="<span class='glyphicon glyphicon-arrow-left'></span> Go Back";
 		read_one_html+="</div>";
 		
-		read_one_html+="<table id='invoice' class='table table-bordered table-condensed'>";
+		read_one_html+="<table id='invoice' class='table table-bordered table-condensed '>";
 		
 		read_one_html+="<col width='5%'>";
 		read_one_html+="<col width='40%'>";
@@ -29,9 +40,9 @@ $(document).ready(function(){
 
 		if(billType == "challan") {
 			read_one_html+="<tr><td colspan=6><h2 class='text-danger text-center'>S.P.</h2>";
-			taxAmount = parseFloat(((0+data.sale[0].billLimit)/10 * data.sale[0].taxAmount)).toFixed(2);
+			taxAmount = parseFloat(((0+data.sale[0].billLimit)/100 * data.sale[0].taxAmount)).toFixed(decimal);
 		} else {
-			taxAmount = parseFloat((0+data.sale[0].billLimit)/10 * data.sale[0].taxAmount).toFixed(2);
+			taxAmount = parseFloat((0+data.sale[0].billLimit)/10 * data.sale[0].taxAmount).toFixed(decimal);
 			read_one_html+="<tr><td colspan=6><h4 class='text-danger text-center'>TAX INVOICE</h4>";
 			read_one_html+="<h2 class='text-danger text-center'>"+data.sale[0].billName+"</h2>";
 			read_one_html+="<h5 class='text-center'>"+data.sale[0].billAddress+"</h5>";
@@ -45,22 +56,19 @@ $(document).ready(function(){
 		var n = d.getFullYear();
 
 		read_one_html+="<tr>";
-			read_one_html+="<td rowspan=3 colspan=3><b>Consignor :</b><br><b>"+data.sale[0].accountName+"</b><BR>"+data.sale[0].address1+"<BR>"+data.sale[0].address2+"<BR>City : "+data.sale[0].city+" - "+data.sale[0].pincode+"<BR>State: "+data.sale[0].state+"<BR><BR> GST : "+data.sale[0].gstNo+"</td>";
-			read_one_html+="<td>Invoice No</td>";
-			read_one_html+="<td colspan=2>"+data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+n+"-"+(n+1)+"</td>";
-		read_one_html+="</tr>";
-		
-		read_one_html+="<tr>";
-			read_one_html+="<td>Date</td>";
-			read_one_html+="<td colspan=2>"+data.sale[0].date+"</td>";
-		read_one_html+="</tr>";
-		
-		read_one_html+="<tr>";
-			read_one_html+="<td>Transport (LR)</td>";
+			read_one_html+="<td colspan=3>"+billTO+"</td>";
+			read_one_html+="<td colspan=3>";
+			read_one_html+="<div>";
+			read_one_html+="Invoice No : " + data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+n+"-"+(n+1)+"<BR><BR>";
+			read_one_html+="Date (YYYY-MM-DD) : " + data.sale[0].date+"<BR><BR>";
 
-			var lrNo = data.sale[0].lrNo != null ? ' ['+data.sale[0].lrNo+']' : '';
-			read_one_html+="<td colspan=2>"+data.sale[0].transportName+lrNo+"</td>";
-		read_one_html+="</tr>";
+			var lrNo = '';
+			if(data.sale[0].lrNo != null && data.sale[0].lrNo != 'null') {
+				lrNo = ' ['+data.sale[0].lrNo+']';
+			}
+
+			read_one_html+="Transport (LR) : " + data.sale[0].transportName+lrNo;
+		read_one_html+="</div></td></tr>";
 
 		    read_one_html+="<tr>";
 				read_one_html+="<td class='text-center'>Sr.no</td>";
@@ -76,14 +84,16 @@ $(document).ready(function(){
 			quantityTotal = 0;
 			$.each(data.sale[0].invoiceDetail, function(key, val) {
 
-				var rate = parseFloat(billLimit * val.rate).toFixed(2);
-				var amount = parseFloat(billLimit * val.amount).toFixed(2);
+				var rate = parseFloat(billLimit * val.rate).toFixed(decimal);
+				var amount = parseFloat(billLimit * val.amount).toFixed(decimal);
+
+				var narration = val.narration == null ? '' : val.narration;
 
 				if((val.hsnSac == "3926" || val.hsnSac == "7117") && billType == "invoice") {
 					read_one_html+="<tr>";
 						read_one_html+="<td>"+srNo+"</td>";
 						if(data.sale[0].showName == "0") {
-							read_one_html+="<td>Bangles &nbsp;&nbsp<small>"+val.narration+"</small></td>";
+							read_one_html+="<td>Bangles</td>";
 						} else {
 							read_one_html+="<td>"+val.itemName+"</td>";
 						}
@@ -97,7 +107,7 @@ $(document).ready(function(){
 				} else if(billType == "challan") {
 					read_one_html+="<tr>";
 						read_one_html+="<td>"+srNo+"</td>";
-						read_one_html+="<td>"+val.itemName+"&nbsp;&nbsp<small>"+val.narration+"</small></td>";
+						read_one_html+="<td>"+val.itemName+"&nbsp;&nbsp<i><small>"+narration+"</small></i></td>";
 						read_one_html+="<td class='text-center'>"+val.hsnSac+"</td>";
 						read_one_html+="<td class='text-center'>"+val.quantity+"</td>";
 						read_one_html+="<td class='text-right'>"+rate+"</td>";
@@ -106,18 +116,18 @@ $(document).ready(function(){
 					srNo++;
 					quantityTotal += parseFloat(val.quantity);
 				} else {
-					cartoons += val.itemName == 'CARTOON' ? val.quantity:0;
+					cartoons += val.hsnSac == '11111' ? val.quantity:0;
 					deductions += amount;
 				}
 			});
 			
-			var subTotal = parseFloat((billLimit * data.sale[0].subTotal) - parseFloat(deductions)).toFixed(2);
+			var subTotal = parseFloat((billLimit * data.sale[0].subTotal).toFixed(decimal) - parseFloat(deductions)).toFixed(decimal);
 
-			var preGrandTotal = parseFloat((billLimit * data.sale[0].subTotal) - parseFloat(deductions) + parseFloat(taxAmount)).toFixed(2);
-			var roundedGrandTotal = Math.round((preGrandTotal)).toFixed(2);
-			var roundOff = (parseFloat(roundedGrandTotal) - parseFloat(preGrandTotal)).toFixed(2); 
-			
-			var grandTotal = (parseFloat(subTotal)+parseFloat(roundOff)+parseFloat(taxAmount)).toFixed(2);
+			var preGrandTotal = +subTotal + +taxAmount;
+			var roundedGrandTotal = Math.round((preGrandTotal)).toFixed(decimal);
+			var roundOff = (parseFloat(roundedGrandTotal) - parseFloat(preGrandTotal)).toFixed(decimal); 
+
+			var grandTotal = (parseFloat(subTotal)+parseFloat(roundOff)+parseFloat(taxAmount)).toFixed(decimal);
 
 			if(billType == "invoice") {
 				read_one_html+="<tr><td colspan = 6>";
@@ -129,18 +139,14 @@ $(document).ready(function(){
 			}
 
 	
-			if(billType == "challan" && data.sale[0].tax != 0) {
-
+			if(billType == "challan") {
+				grandTotal = parseFloat(preGrandTotal).toFixed(decimal);
 					read_one_html+="<tr>";
-						read_one_html+="<td rowspan=2 colspan=4></td><td>Tax @ "+data.sale[0].tax+" %</td>";
+						read_one_html+="<td colspan=2></td><td class='text-center'>Total</td>";
+						read_one_html+="<td class='text-center'>"+quantityTotal+"</td>";					
+						read_one_html+="<td>Tax @ "+data.sale[0].tax+" %</td>";
 						read_one_html+="<td class='text-right'>"+taxAmount+"</td>";
 					read_one_html+="</tr>";
-
-					read_one_html+="<tr>";
-						read_one_html+="<td><i>Rounded Off</i></td>";
-						read_one_html+="<td class='text-right'>"+roundOff+"</td>";
-					read_one_html+="</tr>";
-
 
 			} else if (billType == "invoice") {
 
@@ -157,8 +163,8 @@ $(document).ready(function(){
 					}
 				}
 
-				read_one_html+="</td><td rowspan=5></td>";
-					read_one_html+="<td rowspan=5></td>";
+				read_one_html+="</td><td rowspan=5 class='text-center'>Total</td>";
+					read_one_html+="<td rowspan=5 class='text-center'>"+quantityTotal+"</td>";
 					read_one_html+="<td>Sub Total</td>";
 					read_one_html+="<td class='text-right'>"+subTotal+"</td>";
 				read_one_html+="</tr>";
@@ -187,10 +193,7 @@ $(document).ready(function(){
 			}
 
 			read_one_html+="<tr class='info'>";
-				read_one_html+="<td  colspan=2><b>Amount (In Words) : <i>"+inWords(parseInt(grandTotal))+"</i></b></td>";
-				read_one_html+="<td>Total</td>";
-				read_one_html+="<td class='text-center'>"+quantityTotal+"</td>";
-				read_one_html+="<td></td>";
+				read_one_html+="<td  colspan=5><b>Amount (In Words) : <i>"+inWords(parseFloat(grandTotal))+"</i></b></td>";
 				read_one_html+="<td class='text-right'>"+grandTotal+"</td>";
 			read_one_html+="</tr>";
 			

@@ -79,11 +79,25 @@ class Purchase{
 
     function readPurchaseReport(){
         $query = "
-        select s.date, i.itemName, (i.quantity-COALESCE(ir.quantity,0)) quantity , i.rate, (i.amount-COALESCE(ir.amount,0)) amount from purchase s
-        LEFT JOIN invoiceDetail i ON s.id = i.invoiceId AND i.type = 'purchase'
-        LEFT JOIN invoiceDetail ir ON i.id = ir.detailId
-        WHERE s.deleted = 0
-        ORDER BY i.itemName, s.date DESC, i.rate
+        select 
+
+        p.date, i.itemName, 
+        SUM((i.quantity-COALESCE(r.quantity,0))) quantity , 
+        i.rate, 
+        SUM((i.amount-COALESCE(r.amount,0))) amount
+        
+        from purchase p 
+        LEFT JOIN invoiceDetail i ON p.id = i.invoiceId
+        LEFT JOIN (
+        
+        select i.detailId ,SUM(quantity) quantity, SUM(amount) amount from 
+        purchaseReturn pr 
+        LEFT JOIN invoiceDetail i ON i.invoiceId = pr.id
+        where pr.deleted=0 
+        GROUP BY i.detailId) r ON i.id = r.detailId
+        WHERE p.deleted = 0
+        GROUP BY i.itemName, p.date, i.rate
+        ORDER BY i.itemName, p.date DESC, i.rate
         ";
         $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	

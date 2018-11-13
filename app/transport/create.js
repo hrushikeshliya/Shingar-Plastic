@@ -61,7 +61,7 @@ $(document).on('submit', '#create-form', function(){
     $.ajax({
         url: "http://shingarplastic.com/api/transport/create.php", //Change Needed Here
         type : "POST",
-        contentType : 'application/json',
+        contentType : 'multipart/form-data',
         data : form_data,
         success : function(result) {
             show();

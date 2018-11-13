@@ -21,7 +21,10 @@ class Reports{
         (s.total + a.openingBalance) - COALESCE(tr.payment,0) closingBalance
         from saleReport s
         LEFT JOIN account a ON a.id = s.id
-        LEFT JOIN (select debitAccount name, SUM(amount) payment from transaction where type = 'REC' AND deleted = 0 GROUP BY debitAccount) tr ON tr.name = a.name";	
+        LEFT JOIN (select debitAccount name,creditAccount, SUM(amount) payment from transaction 
+        where 
+        (type = 'REC' OR (type = 'JOU' AND creditAccount = 'DISCOUNT A/C')) 
+        AND deleted = 0 GROUP BY debitAccount) tr ON tr.name = a.name";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -34,7 +37,10 @@ class Reports{
         (s.total + a.openingBalance) + COALESCE(tp.payment,0) closingBalance
         from purchaseReport s
         LEFT JOIN account a ON a.id = s.id
-        LEFT JOIN (select creditAccount name, SUM(amount) payment from transaction where type = 'PAY' AND deleted = 0 GROUP BY debitAccount) tp ON tp.name = a.name";		
+        LEFT JOIN (select creditAccount name, debitAccount, SUM(amount) payment from transaction 
+        where 
+        (type = 'PAY' OR (type = 'JOU' AND debitAccount = 'DISCOUNT A/C')) 
+        AND deleted = 0 GROUP BY creditAccount) tp ON tp.name = a.name";		
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -43,7 +49,9 @@ class Reports{
     function readFullLedger(){	
         $query = "
         
-        SELECT  CONCAT('SAL_',d.billCode,'_',s.invoiceId ) id, s.date,'SALES' account, s.grandTotal amount, s.narration, a.openingBalance, aty.name  FROM sale s
+        SELECT  CONCAT('SAL_',d.billCode,'_',s.invoiceId ) id, s.date,'SALES' account, 
+        (s.subTotal+(s.taxableAmount*s.billLimit*tax/10000)) amount, 
+        s.narration, a.openingBalance, aty.name  FROM sale s
         LEFT JOIN department d ON s.departmentId = d.Id
         LEFT JOIN account a ON s.accountId = a.id
         LEFT JOIN accountType aty ON aty.id = a.typeId
@@ -53,13 +61,60 @@ class Reports{
 
         UNION
 
-        SELECT  CONCAT('PUR_',d.billCode,'_',s.invoiceId ) id, s.date,'PURCHASE' account, s.grandTotal amount, s.narration, a.openingBalance, aty.name  FROM purchase s
+        SELECT  
+        CONCAT('SAL_RET_',d.billCode,'_',sr.returnId ) id, 
+        sr.date,
+        'SALES RETURN' account, 
+        sr.totalAmount amount, 
+        sr.narration, 
+        a.openingBalance, 
+        CONCAT(aty.name,'_RETURN') name 
+        FROM sale s
+        LEFT JOIN saleReturn sr ON s.id = sr.invoiceId and sr.deleted = 0
         LEFT JOIN department d ON s.departmentId = d.Id
         LEFT JOIN account a ON s.accountId = a.id
         LEFT JOIN accountType aty ON aty.id = a.typeId
         where 
         s.accountId = :accountId
         AND s.deleted = 0
+        AND sr.totalAmount IS NOT NULL
+
+        UNION
+
+        SELECT  
+        CONCAT('PUR_',d.billCode,'_',s.invoiceId ) id, 
+        s.date,
+        'PURCHASE' account, 
+        s.grandTotal amount, 
+        s.narration, 
+        a.openingBalance, 
+        aty.name  
+        FROM purchase s
+        LEFT JOIN department d ON s.departmentId = d.Id
+        LEFT JOIN account a ON s.accountId = a.id
+        LEFT JOIN accountType aty ON aty.id = a.typeId
+        where 
+        s.accountId = :accountId
+        AND s.deleted = 0
+
+        UNION
+
+        SELECT  
+        CONCAT('PUR_RET_',d.billCode,'_',sr.returnId ) id, 
+        sr.date,
+        'PURCHASE RETURN' account, 
+        sr.totalAmount amount, 
+        sr.narration, 
+        a.openingBalance, 
+        CONCAT(aty.name,'_RETURN') name  FROM purchase s
+        LEFT JOIN purchaseReturn sr ON s.id = sr.invoiceId AND sr.deleted = 0
+        LEFT JOIN department d ON s.departmentId = d.Id
+        LEFT JOIN account a ON s.accountId = a.id
+        LEFT JOIN accountType aty ON aty.id = a.typeId
+        where 
+        s.accountId = :accountId
+        AND s.deleted = 0
+        AND sr.totalAmount IS NOT NULL
         
         ORDER BY DATE ASC
         ";	

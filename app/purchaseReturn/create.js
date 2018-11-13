@@ -47,7 +47,7 @@ function create() {
 
         create_html+="<tr>";
             create_html+="<td>Narration</td>";
-            create_html+="<td colspan=5><input type='text' name='narration' class='form-control' required /></td>";
+            create_html+="<td colspan=5><input type='text' name='narration' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr><td colspan=6></td></tr><tr><td colspan=6></td></tr><tr><td colspan=6></td></tr><tr class='info'>";
@@ -102,7 +102,7 @@ var form_data=JSON.stringify($(this).serializeObject());
 $.ajax({
     url: "http://shingarplastic.com/api/purchaseReturn/create.php",   // Change Needed HERE
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         items = 1;

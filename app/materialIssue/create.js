@@ -18,16 +18,7 @@ show();
                 item_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
             });
             item_options_html+="</select>";
-    
-            $.getJSON("http://shingarplastic.com/api/process/read.php", function(data){ 
-                
-                process_options_html+="<select name='processId' class='form-control'>";
-                process_options_html+="<option value=''></option>";
-                $.each(data.process, function(key, val){
-                    process_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
-                });
-                process_options_html+="</select>";
-    
+        
                 $.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data){ 
                 
                     jobber_options_html+="<select id='jobberId' name='jobberId' onchange=getIssues() class='form-control'>";
@@ -50,27 +41,20 @@ show();
         create_html+="<tr>";
             create_html+="<td>Date</td>";
             create_html+="<td><input type='date' name='date' class='form-control' required /></td>";
-            create_html+="<td>Process</td>";
-            create_html+="<td>"+process_options_html+"</td>";
+            create_html+="<td>Jobber</td>";
+            create_html+="<td>"+jobber_options_html+"</td>";
         create_html+="</tr>";
  
         create_html+="<tr>";
-            create_html+="<td>Jobber</td>";
-            create_html+="<td>"+jobber_options_html+"</td>";
             create_html+="<td>Item</td>";
             create_html+="<td>"+item_options_html+"</td>";
-        create_html+="</tr>";
-
-        create_html+="<tr>";
             create_html+="<td>Quantity (Psc)</td>";
             create_html+="<td><input type='number' name='quantity' min = '1' class='form-control' required /></td>";
-            create_html+="<td>Job Rate</td>";
-            create_html+="<td><input type='number' name='jobRate' id='jobRate' min = '1' class='form-control' required /></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Narration</td>";
-            create_html+="<td colspan = '3'><input type='text' name='narration' class='form-control' required /></td>";
+            create_html+="<td colspan = '3'><input type='text' name='narration' class='form-control'/></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
@@ -90,7 +74,6 @@ create_html += "<tr>";
 create_html += "<th>Issue Id</th>";
 create_html += "<th>Date</th>";
 create_html += "<th>Issued Quantity</th>";
-create_html += "<th>Rate</th>";
 create_html += "<th>Pending Quantity</th>";
 create_html += "<th>Item Name</th>";
 create_html += "<tr></table></div>";
@@ -102,7 +85,6 @@ $("#issuedMaterials").hide();
 });
     
 });
-}); 
     }
 
 $(document).on('submit', '#createForm', function(){
@@ -111,7 +93,7 @@ var form_data=JSON.stringify($(this).serializeObject());
 $.ajax({
     url: "http://shingarplastic.com/api/materialIssue/create.php",   // Change Needed HERE
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         show();

@@ -39,14 +39,14 @@ $(document).ready(function(){
  
         create_html+="<tr>";
             create_html+="<td>Purchase Rate</td>";
-            create_html+="<td><input type='number' step='0.01' name='purchaseRate' class='form-control'/></td>";
+            create_html+="<td><input type='number' step='0.001' name='purchaseRate' class='form-control'/></td>";
             create_html+="<td>Sale Rate</td>";
-            create_html+="<td><input type='number' step='0.01'name='saleRate' class='form-control' required /></td>";
+            create_html+="<td><input type='number' step='0.001'name='saleRate' class='form-control' required /></td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
             create_html+="<td>Job Rate</td>";
-            create_html+="<td><input type='number' step='0.01'name='jobRate' class='form-control'/></td>";
+            create_html+="<td><input type='number' step='0.001'name='jobRate' class='form-control'/></td>";
             create_html+="<td>Item Weight</td>";
             create_html+="<td><input type='number' name='itemWeight' class='form-control'/></td>";
         create_html+="</tr>";
@@ -83,7 +83,7 @@ var form_data=JSON.stringify($(this).serializeObject());
 $.ajax({
     url: "http://shingarplastic.com/api/item/create.php",   // Change Needed HERE
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         show();

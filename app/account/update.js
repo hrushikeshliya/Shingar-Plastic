@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Opening Balance</td>";
-					update_html+="<td><input value=\"" + data.openingBalance + "\" type='number' step='0.01' name='openingBalance' class='form-control col-md-6' min='0' required />"+openingDirection_options_html+"</td>";
+					update_html+="<td><input value=\"" + Math.abs(data.openingBalance) + "\" type='number' step='0.01' name='openingBalance' class='form-control col-md-6' min='0' required />"+openingDirection_options_html+"</td>";
 					update_html+="<td>Current Balance</td>";
 					update_html+="<td><input value=\"" + data.currentBalance + "\" type='number' step='0.01' name='currentBalance' class='form-control' disabled/></td>";
 				update_html+="</tr>";
@@ -171,7 +171,7 @@ $(document).ready(function(){
 		$.ajax({
 		    url: "http://shingarplastic.com/api/account/update.php",   // Change Needed HERE
 		    type : "POST",
-		    contentType : 'application/json',
+		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
 				show();

@@ -100,10 +100,12 @@ class MaterialReceive{
     
 	function readJobberReport(){	
         $query = "
-        SELECT mr.date, i.name, mr.quantity, mr.rate FROM materialReceive mr
+        SELECT mr.date, i.name, SUM(mr.quantity) quantity, mr.rate, SUM(mr.jobCharge) jobCharge
+        FROM materialReceive mr
         LEFT JOIN materialIssue mi ON mr.issueId = mi.id AND mi.deleted = 0
         LEFT JOIN item i ON i.id = mi.itemId
         WHERE mr.deleted = 0
+        GROUP BY i.id, mr.date, mr.rate
         ORDER BY i.name, mr.date DESC, mr.rate
         ";	
 	    $stmt = $this->conn->prepare($query);	

@@ -11,7 +11,7 @@ function create() {
     var create_html="";
     var invoiceId = "";
 
-$.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchase", function(data){ 
+$.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchas", function(data){ 
 
     invoiceId = data.singleValues[0].id;
 
@@ -119,7 +119,7 @@ var form_data=JSON.stringify($(this).serializeObject());
 $.ajax({
     url: "http://shingarplastic.com/api/purchase/create.php",   // Change Needed HERE
     type : "POST",
-    contentType : 'application/json',
+    contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
         create();

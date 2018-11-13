@@ -71,9 +71,23 @@ if($type=='sale' || $type=='saleReturn') {
     $stmt = $sale->readInvoiceIdByAccount();
 } else if($type=='saleReport') {
     $stmt = $sale->readSaleReport();
-}
+} else if($type=='amountTillDate') {
+    $sale->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-if($type=='distinctAccount' || $type=='distinctInvoiceId' || $type=='saleReport') {
+    if(isset($_GET['date'])) {
+        $sale->date = $_GET['date'];
+    } else {
+        $sale->date = "GETDATE()";
+    }
+
+    $stmt = $sale->readAmountTillDate();
+} else if($type=='monthlySummary') {
+    $stmt = $sale->readMonthlySummary();
+} else if($type=='yearlySummary') {
+    $stmt = $sale->readYearlySummary();
+} 
+
+if($type=='distinctAccount' || $type=='distinctInvoiceId' || $type=='saleReport' || $type=='amountTillDate' || $type=='monthlySummary' || $type=='yearlySummary') {
 
 $num = $stmt->rowCount();
      

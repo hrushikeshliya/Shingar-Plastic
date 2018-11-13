@@ -13,8 +13,7 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
  
-    <link href="app/assets/css/style.css" rel="stylesheet" />
- 
+    <link href="app/assets/css/style.css?<?php echo date('l jS \of F Y h:i:s A'); ?>" rel="stylesheet" />
 </head>
 <body>
  
@@ -59,7 +58,7 @@ function getIssues() {
                 var table = $("#issuedMaterials").addClass("CSSTableGenerator");
                 var rowClass = "class='danger'";
                 if(val.pendingQuantity != "0") {
-                    var row = $("<tr "+rowClass+"><td>"+val.id+"</td><td>"+val.date+"</td><td>"+val.quantity+"</td><td>"+val.rate+"</td><td>"+val.pendingQuantity+"</td><td>"+val.itemName+"</td></tr>");
+                    var row = $("<tr "+rowClass+"><td>"+val.id+"</td><td>"+val.date+"</td><td>"+val.quantity+"</td><td>"+val.pendingQuantity+"</td><td>"+val.itemName+"</td></tr>");
                     table.append(row);
             };
                 });

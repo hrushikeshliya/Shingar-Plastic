@@ -20,11 +20,9 @@ $data = json_decode(file_get_contents("php://input"));
  
 $obj->id = $data->id; 
 $obj->date = $data->date;
-$obj->processId = $data->processId;
 $obj->jobberId = $data->jobberId;
 $obj->itemId = $data->itemId;
 $obj->quantity = $data->quantity;
-$obj->rate = $data->rate;
 $obj->narration = $data->narration;
 $obj->username = $data->username;
 
