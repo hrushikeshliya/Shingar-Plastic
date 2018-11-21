@@ -33,5 +33,89 @@
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/purchase/read.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/purchase/delete.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/purchase/update.js' ."?ts=". time() . '"></script>'; ?>
+
+<script>
+
+var items = 1;
+var subTotal = 0;
+var grandTotal = 0;
+
+function getRate() {
+    var id = $("#itemIdList option:selected").val();
+            $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){  
+                var rate = data.purchaseRate;
+                $("#itemRate").val(rate);
+            });
+            $("#quantity").val(1);
+}
+
+function addItem() {    
+
+    var selectedIndex = $("#itemIdList").prop("selectedIndex");    
+    var quantity = $("#quantity").val();
+    var itemNarration = $("#itemsNarration").val();
+    var rate = $("#itemRate").val();
+
+        if(quantity !=0 && selectedIndex != 0) {
+            var id = $("#itemIdList option:selected").val();
+            $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
+
+                        var taxable = '';
+                        var amount = parseFloat(rate * quantity).toFixed(3);
+                        subTotal += parseFloat(amount).toFixed(3);
+
+                        var markup = "<tr id='"+items+"'>";
+                        markup += "<td><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
+                        markup += "<td><input name='itemNarration' value='"+itemNarration+"' class='form-control'></td>";
+                        markup += "<td><input type='number' name='quantity' step=1 min=1 value='"+quantity+"' class='form-control listQuantity' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
+                        markup += "<td><input type='number' min='0.001' step='0.001' name='rate' value='"+rate+"' class='form-control listRate' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
+                        markup += "<td><input name='amount' value='"+amount+"' class='form-control amount listAmount' readOnly></td>";
+                        markup += "<td><a onclick=deleteItem("+items+") class='btn btn-danger'>Remove</a></td>";
+                        markup += "</tr>";
+                        $("#itemNameList").append(markup);
+                        items++;
+
+                        getBillAmount();
+                });  
+                
+                $("#itemIdList").prop("selectedIndex", 0);
+                $("#quantity").val(1);
+                $("#itemsNarration").val("");
+                $("#itemRate").val("");
+        } else {
+            if(selectedIndex == 0) {
+                $("#itemIdList").focus();
+            } else {
+                $("#quantity").focus();
+            }
+        } 
+}
+    
+function deleteItem(id) {  
+    $("#"+id).remove();
+    getBillAmount();
+}
+
+function getBillAmount() {
+
+    var listLength = $(".listQuantity").length;
+    subTotal = 0;
+
+    for (i = 0; i < listLength; i++) { 
+
+        var rate = parseFloat($(".listRate").eq(i).val()).toFixed(3);
+        var amount = parseFloat($(".listQuantity").eq(i).val() * rate).toFixed(3);
+        $(".listRate").eq(i).val(rate);
+        $(".listAmount").eq(i).val(amount);
+        subTotal += amount;
+    }
+
+          grandTotal = parseFloat(subTotal).toFixed(3);
+
+          $("#grandTotal").val(parseFloat(grandTotal));
+}
+</script>
+
 </body>
 </html>

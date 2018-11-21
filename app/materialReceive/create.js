@@ -57,7 +57,7 @@ $(document).ready(function(){
 
         create_html+="<tr>";
             create_html+="<td>Rate</td>";
-            create_html+="<td><input type='text' id='rate' min = 0 step=0.001 name='rate'  onkeyup=getJobCharge() class='form-control' required/></td>";
+            create_html+="<td><input type='number' id='rate' min = 0 step=0.001 name='rate'  onkeyup=getJobCharge() onchange=getJobCharge() class='form-control' required/></td>";
             create_html+="<td>Job Charge</td>";
             create_html+="<td><input type='text' id='jobCharge' name='jobCharge' class='form-control' required readOnly/></td>";
         create_html+="</tr>";

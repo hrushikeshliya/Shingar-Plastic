@@ -9,7 +9,15 @@ read_html="";
 
 read_html+="<div class='row'>";
 
-read_html+="<table class='table table-striped table-bordered'>";
+read_html+="<div class='row'>";
+read_html+="<div class='col-md-4'>";
+read_html+="<input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>";
+read_html+="<datalist id='accountNameList'>";
+read_html+="</datalist>";
+read_html+="</div>";
+read_html+="</div>";
+
+read_html+="<table class='table table-striped table-bordered' id='myTable'>";
 read_html+="    <thead>";
 read_html+="      <tr>";
 read_html+="        <th>Alias Name</th>";
@@ -183,6 +191,17 @@ read_html+="</div>";
 
 $("#page-content").html(read_html);
 changePageTitle("Supplier's Report");  // Change Needed HERE
+
+$.getJSON("http://shingarplastic.com/api/account/read.php?type=CREDITORS", function(data){
+
+    var dataList = $("#accountNameList");
+    dataList.empty();
+
+	$.each(data.account, function(key, val){
+        var opt = $("<option></option>").attr("value", val.aliasName);
+        dataList.append(opt);
+    });
+});
 
 }); 
 }

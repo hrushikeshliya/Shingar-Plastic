@@ -28,6 +28,8 @@ read_html+="<table class='table table-bordered table-hover' id='myTable'>";
         read_html+="<th class='text-align-center'>ID</th>";
         read_html+="<th class='text-align-center'>Transport Name</th>";
         read_html+="<th class='text-align-center'>Transport Short Name</th>";
+        read_html+="<th class='text-align-center'>Contact Name</th>";
+        read_html+="<th class='text-align-center'>Mobile 1</th>";
         read_html+="<th class='text-align-right'></th>";
     read_html+="</tr>";
      
@@ -39,6 +41,8 @@ $.each(data.transport, function(key, val) {   // Change Needed HERE
         read_html+="<td>" + val.id + "</td>";
         read_html+="<td>" + val.name + "</td>";
         read_html+="<td>" + val.shortName + "</td>";
+        read_html+="<td>" + val.contactPerson + "</td>";
+        read_html+="<td>" + val.mobile + "</td>";
 
 
         read_html+="<td class='text-right'>";

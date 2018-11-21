@@ -50,7 +50,7 @@ $.each(data.account, function(key, val) {  // Change Needed HERE
         read_html+="<td>" + val.openingBalance + "</td>";
         read_html+="<td>" + val.currentBalance + "</td>";
         read_html+="<td align='center'>";
-        read_html+="<a class='btn btn-warning m-b-10px  ledger-button' href='../ledger.php?id=" + val.id + "'>";
+        read_html+="<a class='btn btn-warning m-b-10px  ledger-button' target='_blank' href='../ledger.php?id=" + val.id + "&subType="+val.accountType+"'>";
         read_html+="<span class='glyphicon glyphicon-list'></span>";
         read_html+="</a>";
         read_html+="</td>";

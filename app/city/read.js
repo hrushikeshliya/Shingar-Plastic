@@ -43,7 +43,7 @@ $.each(data.city, function(key, val) {   // Change Needed HERE
         read_html+="<td>" + val.cityName + "</td>";
 
         read_html+="<td class='text-right'>"; 
-            read_html+="<button class='btn btn-info m-r-10px  m-b-10px update-button' data-id='" + val.id + "'>";
+            read_html+="<button class='btn btn-info m-r-10px  m-b-10px' data-id='" + val.id + "'>";
                 read_html+="<span class='glyphicon glyphicon-edit'></span>";
             read_html+="</button>";
  

@@ -11,12 +11,22 @@ function show(){
 $.getJSON("http://shingarplastic.com/api/materialIssue/read.php", function(data){    // Change Needed HERE
  
 read_html="";
- 
+
+
+read_html+="<div class='row'>";
+read_html+="<div class='col-md-4'>";
+read_html+="<input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>";
+read_html+="<datalist id='accountNameList'>";
+read_html+="</datalist>";read_html+="</div>";
 read_html+="<a class='btn btn-success pull-right m-b-15px' href='./materialIssue.php'>";
 read_html+="<span class='glyphicon glyphicon-th'></span> Material Issue"; // Change Needed HERE
 read_html+="</a>";
+read_html+="</div>";
 
-read_html+="<table class='table table-bordered table-hover'>";
+
+
+
+read_html+="<table class='table table-bordered table-hover' id='myTable'>";
  
     read_html+="<tr>";
         read_html+="<th class='text-align-center'>ID</th>";
@@ -73,6 +83,17 @@ read_html+="</table>";
 
 $("#page-content").html(read_html);
 changePageTitle("Material Issue Register");  // Change Needed HERE
+
+$.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data){
+
+    var dataList = $("#accountNameList");
+    dataList.empty();
+
+	$.each(data.account, function(key, val){
+        var opt = $("<option></option>").attr("value", val.aliasName);
+        dataList.append(opt);
+    });
+});
 });
  
 }

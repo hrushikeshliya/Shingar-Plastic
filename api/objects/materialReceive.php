@@ -32,13 +32,21 @@ class MaterialReceive{
         m.quantity - mrr.receivedQuantity pendingQuantity,
         i.name itemName, 
         a.aliasName, 
-        p.name processName 
+        p.name processName,
+        summary.quantitySummary,
+        summary.jobChargeSummary 
         FROM " . $this->table_name . " mr 
         LEFT JOIN materialIssue m ON m.id=mr.issueId  
         LEFT JOIN process p ON p.id=m.processId 
         LEFT JOIN account a ON m.jobberId=a.id 
         LEFT JOIN item i ON m.itemId=i.id 
         LEFT JOIN (select issueId, SUM(quantity) receivedQuantity from materialReceive WHERE deleted = 0 group by issueId) mrr ON mr.issueId = mrr.issueId
+        LEFT JOIN (select mi.jobberId, SUM(mr.quantity) quantitySummary, SUM(mr.jobCharge) jobChargeSummary from materialReceive mr
+        LEFT JOIN materialIssue mi ON mi.id = mr.issueId
+        WHERE 
+        mi.deleted = 0
+        AND mr.deleted = 0
+        GROUP BY mi.jobberId) summary ON summary.jobberId = a.id
         where m.deleted = 0 AND mr.deleted = 0 order by mr.id desc";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	

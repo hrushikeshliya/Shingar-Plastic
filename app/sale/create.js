@@ -81,7 +81,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
         create_html+="<td  class='text-right'>Account Name</td>";
         create_html+="<td>"+account_options_html+"</td>";
         create_html+="<td  class='text-right'>Bill Limit</td>";
-        create_html+="<td><input type='number' id='billLimit' min=1  value=25 name='billLimit' class='form-control'></td>";
+        create_html+="<td><input type='number' id='billLimit' min=1  value=25 name='billLimit' onkeyup=getBillAmount() onchange=getBillAmount() class='form-control'></td>";
     create_html+="</tr>";
 
         create_html+="<tr>";   
@@ -106,7 +106,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
         create_html+="<tr><td colspan=8 style = 'border:none'></td></tr><tr><td colspan=8 style = 'border:none'></td></tr><tr><td colspan=8 style = 'border:none'></td></tr><tr class='info'>";
         create_html+="<td colspan=3>Item Name : "+item_options_html+"</td>";
         create_html+="<td><BR><input type='text' id='itemsNarration' name='itemsNarration' class='form-control'></td>";
-        create_html+="<td>Rate : <input type='number' id='itemRate' min=1 name='itemRate' class='form-control'></td>";
+        create_html+="<td>Rate : <input type='number' id='itemRate' min=0.001 step=0.001 name='itemRate' class='form-control'></td>";
         create_html+="<td colspan=2>Quantity : <input type='number' id='quantity' min=1 class='form-control'/></td>";
         create_html+="<td align='center'><BR><a onclick=addItem() class='btn btn-success'>Add Item</a></td>";
         create_html+="</tr>";

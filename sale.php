@@ -92,9 +92,9 @@ session_start();
                             
                             markup += "<td><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
                             markup += "<td><input name='itemNarration' value='"+itemNarration+"' class='form-control'></td>";
-                            markup += "<td><input name='quantity' class='listQuantity' value='"+quantity+"' class='form-control' onkeyup=getBillAmount()></td>";
-                            markup += "<td><input name='rate' class='listRate' value='"+rate+"' class='form-control' onkeyup=getBillAmount()></td>";
-                            markup += "<td><input name='amount' class='listAmount' value='"+amount+"' class='form-control amount' readOnly></td>";
+                            markup += "<td><input type='number' min=1 name='quantity' value='"+quantity+"' class='form-control listQuantity' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
+                            markup += "<td><input type='number' min=0.001 step=0.001 name='rate' value='"+rate+"' class='form-control listRate' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
+                            markup += "<td><input name='amount' value='"+amount+"' class='form-control amount listAmount' readOnly></td>";
                             markup += "<td class='text-danger'><input type='hidden' class='listTaxable' value='"+taxable+"'>"+taxable+"</td>";
                             markup += "<td><a onclick=deleteItem("+items+") class='btn btn-danger'>Remove</a></td>";
                             markup += "</tr>";
@@ -130,20 +130,24 @@ session_start();
         taxableAmount = 0;
 
         for (i = 0; i < listLength; i++) { 
-            var amount = $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
+            var rate = parseFloat($(".listRate").eq(i).val()).toFixed(3);
+            var amount = parseFloat($(".listQuantity").eq(i).val() * rate).toFixed(3);
+            $(".listRate").eq(i).val(rate);
             $(".listAmount").eq(i).val(amount);
-            subTotal += amount;
+            subTotal += +amount;
 
             if($(".listTaxable").eq(i).val() == '*') {
                 taxableAmount += $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
             }
         }
 
-              var tax = $("#tax option:selected").val();
-              tax = tax=0? 0: tax/100;
+          var tax = $("#tax option:selected").val();
+          var billLimit = $("#billLimit").val();
+          tax = tax=0? 0: tax/100;
 
-              taxAmount = taxableAmount * tax;
-              grandTotal = subTotal + taxAmount;
+          taxAmount = parseFloat(taxableAmount * tax * billLimit /100).toFixed(3);
+          
+              grandTotal = parseFloat(+subTotal + +taxAmount).toFixed(3);
 
               $("#subTotal").val(subTotal);
               $("#taxableAmount").val(taxableAmount);

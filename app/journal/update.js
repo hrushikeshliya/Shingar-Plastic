@@ -38,7 +38,7 @@ $(document).ready(function(){
 		        update_html+="<tr>";
 				update_html+="<tr>";
 					update_html+="<td>Amount</td>";
-					update_html+="<td><input type='number' name='amount' id='amount' value='"+data.amount+"' class='form-control pull-left m-b-15px' required></td>";
+					update_html+="<td><input type='number' min=0.001 step=0.001 name='amount' id='amount' value='"+data.amount+"' class='form-control pull-left m-b-15px' required></td>";
 				update_html+="</tr>";
 				update_html+="<tr>";
 					update_html+="<td>Narration</td>";

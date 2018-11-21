@@ -27,28 +27,24 @@ create_html+="<form id='update-form' action='#' method='post'>";
 create_html+="<table class='table' id='myTable' border='all'>";
 
 create_html+="<tr>";
-create_html+="<td colspan=5> Date : <input type='date' name='date' id='date' required>";
+create_html+="<td> Date : <input type='date' name='date' id='date' class='form-control' required>";
 create_html+="<input type='hidden' name='type' id='type' value='JOU'>";
-create_html+="<input type='hidden' name='username' id='username' value='"+username+"'></td>";
+create_html+="<input type='hidden' name='username' id='username' value='"+username+"'></td><td colspan=3></td>";
 create_html+="</tr>";
     create_html+="<tr>";
         create_html+="<th class='text-align-center'>Debit A/c</th>";
-        create_html+="<th class='text-align-center'>Balance</th>";
         create_html+="<th class='text-align-center'>Credit A/c</th>";
-        create_html+="<th class='text-align-center'>Balance</th>";
         create_html+="<th class='text-align-center'>Amount</th>";
     create_html+="</tr>";
      
     create_html+="<tr>";
         create_html+="<td><input list='accountNameList' id='debitAccount' name='debitAccount' class='form-control pull-left m-b-15px' required/></td>";
-        create_html+="<td><input type='number' id='currentDebitAmt' name='currentDebitAmt' class='form-control pull-left m-b-15px' required disabled></td>";
         create_html+="<td><input list='accountNameList' id='creditAccount' name='creditAccount' class='form-control pull-left m-b-15px' required/></td>";
-        create_html+="<td><input type='number' id='currentCreditAmt' name='currentCreditAmt' class='form-control pull-left m-b-15px' required disabled></td>";
-        create_html+="<td><input type='number' id='amount' name='amount' required></td>";
+        create_html+="<td><input type='number' id='amount' name='amount' min='0.001' step='0.001' class='form-control' required></td>";
     create_html+="</tr>";
 
     create_html+="<tr>";
-        create_html+="<td colspan='4'>Narration : <input id='narration' name='narration' class='form-control pull-left m-b-15px'/></th>";
+        create_html+="<td colspan='2'>Narration : <input id='narration' name='narration' class='form-control pull-left m-b-15px'/></th>";
         create_html+="<td class='text-align-center'><BR>";
         create_html+="<button type='submit' class='btn btn-info'>";
         create_html+="<span class='glyphicon glyphicon-edit'></span> Submit";

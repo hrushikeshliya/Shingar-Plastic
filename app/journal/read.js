@@ -15,8 +15,7 @@ read_html="";
 read_html+="<div class='row'>";
 read_html+="<div class='col-md-5'>";
 
-read_html+="<label>";
-read_html+="<input list='accountNameList' id='myInput' onkeyup='search()' class='form-control pull-left m-b-15px' id='myInput' onkeyup='search()' placeholder='Account Name'/></label>";
+read_html+="<input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>";
 read_html+="<datalist id='accountNameList'>";
 read_html+="</datalist>";
 read_html+="</div>";
@@ -81,7 +80,7 @@ $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
     dataList.empty();
 
 	$.each(data.account, function(key, val){
-        var opt = $("<option></option>").attr("value", val.name);
+        var opt = $("<option></option>").attr("value", val.aliasName);
         dataList.append(opt);
     });
 });

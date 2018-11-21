@@ -46,7 +46,7 @@ create_html+="<table class='table' id='myTable' border='all'>";
         create_html+="<td><input type='date' name='date' id='date' class='form-control'></td>";
         create_html+="<td><input list='accountNameList' id='debitAcccount' name='debitAccount' class='form-control pull-left m-b-15px' required/></td>";
 		//create_html+="<td><input type='number' id='currentDebitAmt' name='currentDebitAmt' class='form-control pull-left m-b-15px' required disabled></td>";
-        create_html+="<td><input type='number' id='amount' name='amount' class='form-control pull-left m-b-15px' required></td>";
+        create_html+="<td><input type='number' id='amount' min='0.001' step='0.001' name='amount' class='form-control pull-left m-b-15px' required></td>";
     create_html+="</tr>";
 
     create_html+="<tr>";
@@ -81,7 +81,7 @@ create_html+="<table class='table' id='myTable' border='all'>";
         create_html+="<td><input type='date' name='date' id='date' class='form-control'></td>";
 		create_html+="<td><input list='accountNameList' id='creditAccount' name='creditAccount' class='form-control pull-left m-b-15px' required/></td>";
         //create_html+="<td><input type='number' id='currentCreditAmt' name='currentCreditAmt' class='form-control pull-left m-b-15px' required disabled></td>";
-        create_html+="<td><input type='number' id='amount' name='amount' class='form-control pull-left m-b-15px' required></td>";
+        create_html+="<td><input type='number' id='amount' min='0.001' step='0.001'  name='amount' class='form-control pull-left m-b-15px' required></td>";
     create_html+="</tr>";
 
     create_html+="<tr>";
@@ -100,7 +100,7 @@ changePageTitle("Day Book Entry");  // Change Needed HERE
 
 $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
 
-    var dataList = $("#debtorAccountNameList");
+    var dataList = $("#accountNameList");
     dataList.empty();
 
 	$.each(data.account, function(key, val){

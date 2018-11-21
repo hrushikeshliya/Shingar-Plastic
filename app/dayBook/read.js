@@ -7,6 +7,7 @@ $(document).ready(function(){
 });
 
 function show(){
+
     $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=dayBook", function(data){  // Change Needed HERE
  
    
@@ -34,12 +35,22 @@ read_html+="</div>";
 
 read_html+="<HR>";
 
+read_html += `<div class="panel-group" id="accordion">`;
+
 $.each(data.dayBook, function(key, val) {  // Change Needed HERE
- 	
-read_html+="<div class='row well'>";
 
-    read_html+="<div class='col-md-12'> Date : "+val.date+"</div>";
+read_html+="<div class='panel panel-default'>";
 
+read_html+= `
+    <div class="panel-heading">
+    <h4 class="panel-title">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapse`+val.date+`">Date : `+val.date+`</a>
+    </h4>
+    </div>
+    <div id="collapse`+val.date+`" class="panel-collapse collapse">
+    <div class="panel-body">
+`;
+ 
     read_html+="<div class='col-md-6'>";
         read_html+="<table class='table' frame = 'box'>";
             read_html+="<thead>";
@@ -127,11 +138,12 @@ read_html+="<div class='row well'>";
         read_html+="</table>";
     read_html+="</div>";
 
-    read_html+="<HR>";
+read_html+="</div></div></div>";
 
-read_html+="</div>";
-
+count+= +1;
 });
+
+read_html += "</div>";
 $("#page-content").html(read_html);
 changePageTitle("Day Book Register");  // Change Needed HERE
 

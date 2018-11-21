@@ -24,7 +24,8 @@ class Reports{
         LEFT JOIN (select debitAccount name,creditAccount, SUM(amount) payment from transaction 
         where 
         (type = 'REC' OR (type = 'JOU' AND creditAccount = 'DISCOUNT A/C')) 
-        AND deleted = 0 GROUP BY debitAccount) tr ON tr.name = a.name";	
+        AND deleted = 0 GROUP BY debitAccount) tr ON tr.name = a.name
+        ORDER BY a.aliasName";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -40,7 +41,8 @@ class Reports{
         LEFT JOIN (select creditAccount name, debitAccount, SUM(amount) payment from transaction 
         where 
         (type = 'PAY' OR (type = 'JOU' AND debitAccount = 'DISCOUNT A/C')) 
-        AND deleted = 0 GROUP BY creditAccount) tp ON tp.name = a.name";		
+        AND deleted = 0 GROUP BY creditAccount) tp ON tp.name = a.name
+        ORDER BY a.aliasName";		
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -49,9 +51,29 @@ class Reports{
     function readFullLedger(){	
         $query = "
         
-        SELECT  CONCAT('SAL_',d.billCode,'_',s.invoiceId ) id, s.date,'SALES' account, 
+        select 
+        CONCAT('JOB_',mr.id) id, 
+        mr.date, 
+        'JOB' account,
+        mr.jobCharge amount, 
+        mr.narration, 
+        a.openingBalance,
+        aty.name
+        FROM materialReceive mr
+        LEFT JOIN materialIssue mi ON mr.issueID = mi.id
+        LEFT JOIN account a ON a.id = mi.jobberId
+        LEFT JOIN accountType aty ON aty.id = a.typeId
+        where 
+        a.id = :accountId
+        AND mr.deleted = 0
+
+        UNION
+
+        SELECT  CONCAT('SAL_',d.billCode,'_',s.invoiceId ) id, s.date,
+        'SALES' account, 
         (s.subTotal+(s.taxableAmount*s.billLimit*tax/10000)) amount, 
-        s.narration, a.openingBalance, aty.name  FROM sale s
+        s.narration, a.openingBalance, aty.name  
+        FROM sale s
         LEFT JOIN department d ON s.departmentId = d.Id
         LEFT JOIN account a ON s.accountId = a.id
         LEFT JOIN accountType aty ON aty.id = a.typeId

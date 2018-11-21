@@ -22,7 +22,7 @@ $(document).ready(function(){
 function calculateJVAmt() {
     var currentBalance = $("#currentBalance").val();
     var netOffAmt = $("#netOffAmt").val();
-   $("#amount").val(Math.abs(currentBalance-netOffAmt));
+   $("#amount").val(parseFloat(Math.abs(currentBalance-netOffAmt)).toFixed(3));
 }
 
 function getCurrentBalance() {
@@ -83,6 +83,8 @@ function getCurrentBalance() {
         closingBalance = closingBalance.toFixed(2)
         $("#currentBalance").val(closingBalance);
         $("#netOffAmt").val(closingBalance);
+        $("#netOffAmt").attr('max',Math.abs(closingBalance));
+        
 
 });
 });
@@ -116,17 +118,17 @@ function show(){
 
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>Current Balance</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.01 id='currentBalance' name='currentBalance' class='form-control' required disabled/></td>";
+            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 id='currentBalance' name='currentBalance' class='form-control' required disabled/></td>";
         update_html+="</tr>";
 
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>Net Off Balance</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.01 id='netOffAmt' name='netOffAmt' class='form-control' required /></td>";
+            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 min=0.001 id='netOffAmt' name='netOffAmt' class='form-control' required /></td>";
         update_html+="</tr>";
 
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>J/V Amount</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.01 id='amount' name='amount' class='form-control' required readonly/></td>";
+            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 id='amount' name='amount' class='form-control' required readonly/></td>";
         update_html+="</tr>";
 
         update_html+="<tr>";

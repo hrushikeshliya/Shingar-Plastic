@@ -1,10 +1,23 @@
 $(document).ready(function(){
- 
-    $(document).on('click', '.read-one-button', function(){
+	genearateInvoice();
 
-	var billType = $(this).attr('data-id').split("|")[1];
-	var id = $(this).attr('data-id').split("|")[0];
-	console.log(billType);
+	$(document).on('click', '.print-button', function(){
+        //$("#invoice").printMe();
+        $("#read").hide();
+        $("#print").hide();
+        $("#page-title").hide();
+        window.print();
+        $("#read").show();
+        $("#print").show();
+        $("#page-title").show();
+
+    });
+});
+
+function genearateInvoice() {
+
+	var billType = $_GET('type');
+	var id = $_GET('id');
 
 	$.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
 
@@ -24,12 +37,8 @@ $(document).ready(function(){
 		var cartoons = 0;
 		var deductions = 0;
 		var billLimit = billType=="invoice"? (0+data.sale[0].billLimit)/10 : 1;
-
-		read_one_html+="<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
-		    read_one_html+="<span class='glyphicon glyphicon-arrow-left'></span> Go Back";
-		read_one_html+="</div>";
 		
-		read_one_html+="<table id='invoice' class='table table-bordered table-condensed '>";
+		read_one_html+="<table id='invoice' class='table table-bordered table-condensed'>";
 		
 		read_one_html+="<col width='5%'>";
 		read_one_html+="<col width='40%'>";
@@ -40,9 +49,9 @@ $(document).ready(function(){
 
 		if(billType == "challan") {
 			read_one_html+="<tr><td colspan=6><h2 class='text-danger text-center'>S.P.</h2>";
-			taxAmount = parseFloat(((0+data.sale[0].billLimit)/100 * data.sale[0].taxAmount)).toFixed(decimal);
+			taxAmount = parseFloat(data.sale[0].taxAmount).toFixed(decimal);
 		} else {
-			taxAmount = parseFloat((0+data.sale[0].billLimit)/10 * data.sale[0].taxAmount).toFixed(decimal);
+			taxAmount = parseFloat(data.sale[0].taxAmount*10).toFixed(decimal);
 			read_one_html+="<tr><td colspan=6><h4 class='text-danger text-center'>TAX INVOICE</h4>";
 			read_one_html+="<h2 class='text-danger text-center'>"+data.sale[0].billName+"</h2>";
 			read_one_html+="<h5 class='text-center'>"+data.sale[0].billAddress+"</h5>";
@@ -130,14 +139,19 @@ $(document).ready(function(){
 			var grandTotal = (parseFloat(subTotal)+parseFloat(roundOff)+parseFloat(taxAmount)).toFixed(decimal);
 
 			if(billType == "invoice") {
-				read_one_html+="<tr><td colspan = 6>";
-				while(srNo < 10){
-					read_one_html+="<br>";
-					srNo++;
-				}
-				read_one_html+="</td></tr>";
-			}
+					while (srNo <= 16) { 
+						read_one_html+="<tr>";
+						read_one_html+="<td><BR></td>";
+						read_one_html+="<td></td>";
+						read_one_html+="<td></td>";
+						read_one_html+="<td></td>";
+						read_one_html+="<td></td>";
+						read_one_html+="<td></td>";
+						read_one_html+="</tr>";
+						srNo++;
+					}
 
+			}
 	
 			if(billType == "challan") {
 				grandTotal = parseFloat(preGrandTotal).toFixed(decimal);
@@ -238,6 +252,4 @@ $(document).ready(function(){
 		changePageTitle("Sale Invoice");  // Change Needed HERE
 	});
 
-    });
- 
-});
+    }

@@ -68,10 +68,10 @@ if($type=='sale' || $type=='purchase') {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
         extract($row);
     
-        if($name == 'DEBTORS' || $name == 'CREDITORS_RETURN') {
+        if($account == 'SALES' || $account == 'PURCHASE RETURN') {
             $debit += $amount;
             array_push($debitTransactions, $row);
-        } else {
+        } else if($account == 'PURCHASE' || $account == 'SALES RETURN' || $account == 'JOB'){
             $credit += $amount;
             array_push($creditTransactions, $row);
         }
@@ -85,12 +85,40 @@ if($type=='sale' || $type=='purchase') {
             $credit += $amount;
             array_push($creditTransactions, $row2);
         }    
-    } else {
+    } else if ($type == 'CREDITORS' || $type == 'JOBBER') {
         $stmt2 = $transactions->readDebitTransaction();
         while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)){
             extract($row2);
             $debit += $amount;
             array_push($debitTransactions, $row2);
+        } 
+    } else if ($type == 'CASH A/C' || $type =='DISCOUNT A/C'){
+        $stmt3 = $transactions->readRECCashTransaction();
+        while ($row3 = $stmt3->fetch(PDO::FETCH_ASSOC)){
+            extract($row3);
+            $debit += $amount;
+            array_push($debitTransactions, $row3);
+        } 
+
+        $stmt4 = $transactions->readPAYCashTransaction();
+        while ($row4 = $stmt4->fetch(PDO::FETCH_ASSOC)){
+            extract($row4);
+            $credit += $amount;
+            array_push($creditTransactions, $row4);
+        } 
+    } else {
+        $stmt3 = $transactions->readRECTransaction();
+        while ($row3 = $stmt3->fetch(PDO::FETCH_ASSOC)){
+            extract($row3);
+            $debit += $amount;
+            array_push($debitTransactions, $row3);
+        } 
+
+        $stmt4 = $transactions->readPAYTransaction();
+        while ($row4 = $stmt4->fetch(PDO::FETCH_ASSOC)){
+            extract($row4);
+            $credit += $amount;
+            array_push($creditTransactions, $row4);
         } 
     }
 

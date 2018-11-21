@@ -3,11 +3,30 @@ $(document).ready(function(){
 });
 
 function show(){
-    $.getJSON("http://shingarplastic.com/api/reports/read.php?type=ledger&id="+$_GET('id'), function(data){  // Change Needed HERE
+    $.getJSON("http://shingarplastic.com/api/reports/read.php?type=ledger&id="+$_GET('id')+"&subType="+$_GET('subType'), function(data){  // Change Needed HERE
  
 
 debitSubTotal = 0;
 creditSubTotal = 0;
+
+
+creditTitle = "";
+debitTitle = "";
+
+if ($_GET('subType')=='DEBTORS') {
+  creditTitle = "Sales Return / Payment Received";
+  debitTitle = "Sales / Payment Made";
+} else if ($_GET('subType')=='CREDITORS') {
+  creditTitle = "Purchase / Payment Received";
+  debitTitle = "Purchase Return / Payment Made";
+} else if ($_GET('subType')=='JOBBER') {
+  creditTitle = "Job Work / Payment Received";
+  debitTitle = "Payment Made";
+} else {
+  creditTitle = "Payment Made";
+  debitTitle = "Payment Received";
+}
+
 
 read_html="";
 
@@ -32,7 +51,7 @@ read_html+=`<div class='row'>
 
   <div id="fullledger" class="tab-pane fade">
     <div class='col-md-6 well'>
-    <h4 class='text-center'>Debit</h4>
+    <h4 class='text-center'>`+debitTitle+`</h4>
 
     <table class='table'>
     <col width='100px'>
@@ -79,7 +98,7 @@ read_html+=`<div class='row'>
 
     </div>
     <div class='col-md-6 well'>
-    <h4 class='text-center'>Credit</h4>
+    <h4 class='text-center'>`+creditTitle+`</h4>
 
     <table class='table'>
     <col width='100px'>

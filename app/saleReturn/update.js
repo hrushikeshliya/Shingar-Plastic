@@ -1,8 +1,10 @@
 $(document).ready(function(){
-    create();
+	$(document).on('click', '.update-button', function(){
+		update();
+	});
 });
 
-function create() {
+function update() {
 
     var username = $.cookie('username');
     var item_options_html = "";
@@ -32,7 +34,7 @@ function create() {
         });
         account_options_html+="</select>";
 	
-	create_html+="<form id='createForm' action='#' method='post' border='0'>";
+	create_html+="<form id='updateForm' action='#' method='post' border='0'>";
 	
     create_html+="<table class='table table-hover table-responsive table-bordered'>";
 
@@ -89,33 +91,26 @@ function create() {
 create_html+="</form>"; 
 
 $("#page-content").html(create_html);
-changePageTitle("Create Sale Return Entry"); // Change Needed HERE
+changePageTitle("Edit Sale Return Entry"); // Change Needed HERE
 
 });
 });
-
-} 
-
-$(document).on('submit', '#createForm', function(){
-var form_data=JSON.stringify($(this).serializeObject());
-
-$.ajax({
-    url: "http://shingarplastic.com/api/saleReturn/create.php",   // Change Needed HERE
-    type : "POST",
-    contentType : 'multipart/form-data',
-    data : form_data,
-    success : function(result) {
-        items = 1;
-        total = 0;
-        totalAmount = 0;
-        currentMaxLimit = 0;
-        create();
-    },
-    error: function(xhr, resp, text) {
-        console.log(xhr, resp, text);
-    }
-});
- 
-return false;
-
-});
+}
+	$(document).on('submit', '#updateForm', function(){
+	
+		var form_data=JSON.stringify($(this).serializeObject());
+		
+		$.ajax({
+		    url: "http://shingarplastic.com/api/saleReturn/updatee.php",  // Change Needed HERE
+		    type : "POST",
+		    contentType : 'multipart/form-data',
+		    data : form_data,
+		    success : function(result) {
+		        show();
+		    },
+		    error: function(xhr, resp, text) {
+		        console.log(xhr, resp, text);
+		    }
+		});
+	    return false;
+	});

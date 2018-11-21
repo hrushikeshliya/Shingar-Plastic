@@ -84,9 +84,9 @@ session_start();
                             var markup = "<tr id='"+items+"'>";
                             markup += "<td><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
                             markup += "<td><input name='itemNarration' value='"+itemNarration+"' class='form-control'></td>";
-                            markup += "<td><input name='quantity' class='listQuantity' value='"+quantity+"' class='form-control' onkeyup=getBillAmount()></td>";
-                            markup += "<td><input name='rate' class='listRate' value='"+rate+"' class='form-control' onkeyup=getBillAmount()></td>";
-                            markup += "<td><input name='amount' class='listAmount' value='"+amount+"' class='form-control amount' readOnly></td>";
+                            markup += "<td><input type='number' name='quantity' value='"+quantity+"' class='form-control listQuantity' min=1 onkeyup=getBillAmount() onchange=getBillAmount()></td>";
+                            markup += "<td><input type='number' name='rate' value='"+rate+"' class='form-control listRate' min=0.001 step=0.001 onkeyup=getBillAmount() onchange=getBillAmount()></td>";
+                            markup += "<td><input name='amount' value='"+amount+"' class='form-control amount listAmount' readOnly></td>";
                             markup += "<td class='text-danger'><input type='hidden' class='listTaxable' value='"+taxable+"'>"+taxable+"</td>";
                             markup += "<td><a onclick=deleteItem("+items+") class='btn btn-danger'>Remove</a></td>";
                             markup += "</tr>";
@@ -120,12 +120,14 @@ session_start();
         subTotal = 0;
 
         for (i = 0; i < listLength; i++) { 
-            var amount = $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
+            var rate = parseFloat($(".listRate").eq(i).val()).toFixed(3);
+            var amount = parseFloat($(".listQuantity").eq(i).val() * rate).toFixed(3);
+            $(".listRate").eq(i).val(rate);
             $(".listAmount").eq(i).val(amount);
-            subTotal += amount;
+            subTotal += +amount;
         }
 
-              grandTotal = subTotal;
+              grandTotal = parseFloat(subTotal).toFixed(3);
 
               $("#grandTotal").val(grandTotal);
     }

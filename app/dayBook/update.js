@@ -47,15 +47,21 @@ $(document).ready(function(){
 					update_html+="<td><input list='accountNameList' id='creditAcccount' name='creditAccount' value='"+data.creditAccount+"' class='form-control pull-left m-b-15px' required/></td>";
 				}
 
-				update_html+="<td><input type='number' id='amount' name='amount' value='"+data.amount+"' class='form-control pull-left m-b-15px' required></td>";
+				update_html+="<td><input type='number' id='amount' min='0.001' step='0.001' name='amount' value='"+data.amount+"' class='form-control pull-left m-b-15px' required></td>";
 			update_html+="</tr>";
 		
 			update_html+="<tr>";
-				update_html+="<td colspan='2'>Narration : <input id='narration' name='narration' value='"+data.narration+"' class='form-control pull-left m-b-15px'/></th>";
-				update_html+="<td class='text-align-centre'><BR>";
-				update_html+="<button type='submit' class='btn btn-info'>";
-				update_html+="<span class='glyphicon glyphicon-edit'></span> Submit";
-			update_html+="</button></th>";
+				update_html+="<td colspan='2'>Narration : <input id='narration' name='narration' value='"+data.narration+"' class='form-control pull-left m-b-15px'/></td>";
+				update_html+="<td class='text-right'>"; 
+				update_html+="<button type='submit' class='btn btn-info m-r-10px  m-b-10px update-button' data-id='" + data.id + "'>";
+					update_html+="<span class='glyphicon glyphicon-edit'> Update</span>";
+				update_html+="</button>";
+	 
+				update_html+="<button class='btn btn-danger m-b-10px  delete-button' data-id='" + data.id + "'>";
+					update_html+="<span class='glyphicon glyphicon-remove'> Delete</span>";
+				update_html+="</button>";
+			update_html+="</td>";
+
 			update_html+="</tr>";
 		
 		update_html+="</table>";

@@ -4,19 +4,7 @@ $(document).ready(function(){
     $(document).on('click', '.read-button', function(){
         show();
     });
-
-    $(document).on('click', '.print-button', function(){
-        //$("#invoice").printMe();
-        $("#read").hide();
-        $("#print").hide();
-        $("#page-title").hide();
-        window.print();
-        $("#read").show();
-        $("#print").show();
-        $("#page-title").show();
-
-    });
-
+    
 });
 
 function show(){
@@ -25,12 +13,20 @@ $.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale", function(data
  
  
 read_html="";
- 
+
+read_html+="<div class='row'>";
+read_html+="<div class='col-md-4'>";
+read_html+="<input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search2()' placeholder='Search'>";
+read_html+="<datalist id='accountNameList'>";
+read_html+="</datalist>";read_html+="</div>";
 read_html+="<a class='btn btn-success pull-right m-b-15px' href='./sale.php'>";
 read_html+="<span class='glyphicon glyphicon-th'></span> Sale Entry"; // Change Needed HERE
 read_html+="</a>";
+read_html+="</div>";
 
-read_html+="<table class='table table-bordered table-condensed table-responsive'>";
+
+
+read_html+="<table class='table table-bordered table-condensed' id='myTable'>";
  
     read_html+="<tr>";
         read_html+="<th class='text-align-center'>Invoice ID</th>";
@@ -94,12 +90,12 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Tax @ "+parseFloat(val.tax).toFixed(3)+" %</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat((val.billLimit/100)*val.taxAmount).toFixed(3)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.taxAmount).toFixed(3)+"</td>";
         read_html+="</tr>";
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Grand Total</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.grandTotal-val.taxAmount+((val.billLimit/100)*val.taxAmount)).toFixed(3)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.grandTotal).toFixed(3)+"</td>";
         read_html+="</tr>";
 
         read_html+="<tr class='text-info'><td colspan=5>Narration : "+val.narration+"</td></tr>";
@@ -107,31 +103,43 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         read_html+="</table>";
         read_html+="</td><td class='text-center'>";
 
-
-        var lrNo = val.lrNo == null ? '' : val.lrNo;
+        if(val.departmentName != "MUMBAI"){
+            read_html+=val.transportName ;
+            var lrNo = val.lrNo == null ? '' : val.lrNo;
             read_html+="<form id='update-form' action='#' method='post'>";
             read_html+="<input type='hidden' name='id' value='"+val.id+"' required>"
-            read_html+="<input type='text' name='lrNo' value='"+lrNo+"' class='m-r-10px' required>"
+            read_html+="<input type='text' name='lrNo' value='"+lrNo+"' class='m-r-10px m-t-10px m-b-10px form-control' required>"
             read_html+="<button type='submit' class='btn btn-info'>";
-                read_html+="<span class='glyphicon glyphicon-edit'></span>";
+                read_html+="<span class='glyphicon glyphicon-edit'></span> Update LR No";
             read_html+="</button>";
             read_html+="</form>";
+        
 
-        read_html+=val.transportName + "</td>";
+        }
+        read_html+="</td>";
  
-        read_html+="<td class='text-right'>";   
-            read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|challan'>";
-                read_html+="<span class='glyphicon glyphicon-envelope'></span>";
-            read_html+="</button>";
+        read_html+="<td>";   
 
-            if(val.departmentName != "MUMBAI"){
-                read_html+="<button class='btn btn-info m-r-10px m-b-10px  read-one-button' data-id='" + val.id + "|invoice'>";
-                    read_html+="<span class='glyphicon glyphicon-print'></span>";
-                read_html+="</button>";
-            }
-            read_html+="<button class='btn btn-danger m-b-10px  delete-button' data-id='" + val.id + "'>";
-                read_html+="<span class='glyphicon glyphicon-remove'></span>";
+        read_html+="<a class='btn btn-warning m-r-10px m-b-10px' href='http://shingarplastic.com/saleChallan.php?type=challan&id=" + val.id + "' target='_blank'>";
+            read_html+="<span class='glyphicon glyphicon-envelope'></span>";
+        read_html+="</a>";
+
+        read_html+="<button class='btn btn-danger m-b-10px  delete-button' data-id='" + val.id + "'>";
+            read_html+="<span class='glyphicon glyphicon-remove'></span>";
+        read_html+="</button><BR>";
+
+        if(val.hasReturn == '0') {
+            read_html+="<button class='btn btn-info m-r-10px  m-b-10px update-button-2' data-id='" + val.id + "'>";
+                read_html+="<span class='glyphicon glyphicon-edit'></span>";
             read_html+="</button>";
+        }
+
+        if(val.departmentName != "MUMBAI"){
+            read_html+="<a class='btn btn-success m-b-10px' href='http://shingarplastic.com/saleInvoice.php?type=invoice&id=" + val.id + "' target='_blank'>";
+                read_html+="<span class='glyphicon glyphicon-print'></span>";
+            read_html+="</a>";
+        }
+
         read_html+="</td>";
  
     read_html+="</tr>";
@@ -142,6 +150,18 @@ read_html+="</table>";
 
 $("#page-content").html(read_html);
 changePageTitle("Sale Register");  // Change Needed HERE
+
+$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
+
+    var dataList = $("#accountNameList");
+    dataList.empty();
+
+	$.each(data.account, function(key, val){
+        var opt = $("<option></option>").attr("value", val.aliasName);
+        dataList.append(opt);
+    });
+});
+
 });
  
 }
@@ -152,7 +172,7 @@ $(document).on('submit', '#update-form', function(){
     var form_data=JSON.stringify($(this).serializeObject());
     
     $.ajax({
-        url: "http://shingarplastic.com/api/sale/update.php",  // Change Needed HERE
+        url: "http://shingarplastic.com/api/sale/update.php?type=DEBTORS",  // Change Needed HERE
         type : "POST",
         contentType : 'application/json',
         data : form_data,

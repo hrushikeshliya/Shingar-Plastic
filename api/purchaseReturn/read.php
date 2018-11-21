@@ -15,7 +15,18 @@ $purchaseReturn = new PurchaseReturn($db);  //Change ClassName
 
 $type = isset($_GET['type']) ? $_GET['type'] : "NULL";
 
-if($type=='amountTillDate') {
+if($type=='purchase' || $type=='purchaseReturn') {
+
+    $id= isset($_GET['id']) ? $_GET['id'] : "NULL";
+
+    if($id == "NULL") {
+        $stmt = $purchaseReturn->read();
+    } else {
+        $purchaseReturn->id = $id;
+        $stmt = $purchaseReturn->readOne();
+    }
+
+} else if($type=='amountTillDate') {
     $purchaseReturn->id = isset($_GET['id']) ? $_GET['id'] : die();
     if(isset($_GET['date'])) {
         $purchaseReturn->date = $_GET['date'];
@@ -23,9 +34,7 @@ if($type=='amountTillDate') {
         $purchaseReturn->date = "GETDATE()";
     }
     $stmt = $purchaseReturn->readAmountTillDate();
-} else {
-    $stmt = $purchaseReturn->read();
-}
+} 
 
 $num = $stmt->rowCount();
      

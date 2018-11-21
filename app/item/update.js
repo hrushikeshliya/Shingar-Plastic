@@ -67,7 +67,7 @@ $(document).ready(function(){
 			update_html+="<td>Purchase Rate</td>";
 			update_html+="<td><input type='number' class='form-control' step='0.001' name = 'purchaseRate' value='" + data.purchaseRate+ "' min=0></td>";
 			update_html+="<td>Sale Rate</td>";
-			update_html+="<td><input type='number' class='form-control' step='0.001' name = 'saleRate' value='" + data.saleRate+ "' min=0 required></td>";
+			update_html+="<td><input type='number' class='form-control' step='0.001' name = 'saleRate' value='" + data.saleRate+ "' min=0.001 required></td>";
 		update_html+="</tr>";			
 
 		update_html+="<tr>";

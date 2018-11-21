@@ -41,7 +41,7 @@ class Account{
     }
     
 	function readByType($type){	
-	    $query = "SELECT a.*, t.name transportName, at.name accountType, at.description FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 AND at.name LIKE '%".$type."%' order by at.id, a.name";	
+	    $query = "SELECT a.*, t.name transportName, at.name accountType, at.description FROM " . $this->table_name . " a LEFT JOIN transport t ON a.transportId = t.id LEFT JOIN accountType at ON a.typeId = at.id where a.deleted = 0 AND at.name LIKE '%".$type."%' order by a.aliasName";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	

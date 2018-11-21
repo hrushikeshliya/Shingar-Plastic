@@ -32,15 +32,16 @@ class Sale{
 
 	function read(){	
         $query = "SELECT s.*,
-         d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.others, 
-         a.name accountName,a.aliasName,t.name transportName, 
-         ba.name baAccountName, ba.aliasName baAliasName
-         FROM ". $this->table_name . " s 
-         LEFT JOIN department d ON s.departmentId = d.id 
-         LEFT JOIN account a ON s.accountId = a.id
-         LEFT JOIN account ba ON s.billNameId = ba.id 
-         LEFT JOIN transport t ON s.transportId = t.id 
-         WHERE s.deleted = 0 ORDER BY s.id DESC";	
+        d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.others, 
+        a.name accountName,a.aliasName,t.name transportName, 
+        ba.name baAccountName, ba.aliasName baAliasName, COALESCE(hr.hasReturn,0) hasReturn
+        FROM sale s 
+        LEFT JOIN department d ON s.departmentId = d.id 
+        LEFT JOIN account a ON s.accountId = a.id
+        LEFT JOIN account ba ON s.billNameId = ba.id 
+        LEFT JOIN transport t ON s.transportId = t.id 
+        LEFT JOIN (select invoiceId, true hasReturn from saleReturn  where deleted = 0 group by invoiceId) hr ON hr.invoiceId = s.id
+        WHERE s.deleted = 0 ORDER BY s.id DESC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -249,7 +250,66 @@ class Sale{
            }
        }
 
-	
+       function updateSale(){
+        
+        $query = "UPDATE
+                   " . $this->table_name . "
+               SET
+
+               date = :date,
+               departmentId = :departmentId,
+               transportId = :transportId,
+               accountId = :accountId,
+               tax = :tax,
+               showName = :showName,
+               narration = :narration,
+               username = :username,
+               subTotal = :subTotal,
+               taxableAmount = :taxableAmount,
+               taxAmount = :taxAmount,
+               grandTotal = :grandTotal,
+               billLimit = :billLimit,
+               billNameId = :billNameId,
+               invoiceId = :invoiceId
+
+               WHERE 
+                Id = :id
+               
+                   "
+                   ;
+    
+       $stmt = $this->conn->prepare($query);
+    
+    // sanitize
+    $this->id=htmlspecialchars(strip_tags($this->id));
+    $this->username=htmlspecialchars(strip_tags($this->username));
+    $this->narration=htmlspecialchars(strip_tags($this->narration));
+
+    // bind new values
+    $stmt->bindParam(':id', $this->id);
+    $stmt->bindParam(':date', $this->date);
+    $stmt->bindParam(':departmentId', $this->departmentId);
+    $stmt->bindParam(':transportId', $this->transportId);
+    $stmt->bindParam(':accountId', $this->accountId);
+    $stmt->bindParam(':tax', $this->tax);
+    $stmt->bindParam(':showName', $this->showName);
+    $stmt->bindParam(':subTotal', $this->subTotal);
+    $stmt->bindParam(':taxableAmount', $this->taxableAmount);
+    $stmt->bindParam(':taxAmount', $this->taxAmount);
+    $stmt->bindParam(':grandTotal', $this->grandTotal);
+    $stmt->bindParam(':billLimit', $this->billLimit);
+    $stmt->bindParam(':billNameId', $this->billNameId);
+    $stmt->bindParam(':invoiceId', $this->invoiceId);
+    $stmt->bindParam(':username', $this->username);
+    $stmt->bindParam(':narration', $this->narration);
+    
+       if($stmt->execute()){
+           return true;
+       }else{
+           return false;
+       }
+   }
+       
 }
 
 ?>

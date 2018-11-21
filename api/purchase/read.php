@@ -21,7 +21,7 @@ if($type=='purchase' || $type=='purchaseReturn') {
     if($id == "NULL") {
         $stmt = $purchase->read();
     } else {
-        $sale->id = $id;
+        $purchase->id = $id;
         $stmt = $purchase->readOne();
     }
 

@@ -32,12 +32,30 @@ class Transaction{
     }
     
 	function readDayBook(){	
-	    $query = "SELECT * FROM " . $this->table_name . " t LEFT JOIN openingBalance o ON t.date = o.date where deleted = 0 AND (type = 'REC' OR type = 'PAY') ORDER BY t.date asc";	
+	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 AND type IN ('PAY', 'REC') ORDER BY date asc";	
         $stmt = $this->conn->prepare($query);	
         $stmt->execute();	 	
 	    return $stmt;	
     }
 
+
+    function readDayBookOpening() {
+        $query = "
+        select (openingBalance + COALESCE(rec,0) - COALESCE(pay,0)) AS openingBalance  from account a
+        LEFT JOIN 
+        (select SUM(amount) rec, creditAccount from transaction where type = 'REC' and deleted=0 and creditAccount = 'CASH A/C') r 
+        ON a.name = r.creditAccount
+        LEFT JOIN 
+        (select SUM(amount) pay, debitAccount from transaction where type = 'PAY' and deleted=0  and debitAccount = 'CASH A/C') p 
+        ON a.name = p.debitAccount
+        where 
+        a.name = 'CASH A/C'
+        AND a.deleted = 0
+        ";	
+	    $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;
+    }
 
     function readAmountTillDate(){	
         $query = "
@@ -63,9 +81,94 @@ class Transaction{
     function readCreditTransaction(){	
         $query = "    
         select CONCAT(t.type,'_',t.id) id, t.date, t.creditAccount account,  t.narration, t.amount from transaction t
-        LEFT JOIN account a ON a.name = t.debitAccount
+        LEFT JOIN account a ON (a.name = t.debitAccount OR a.aliasName = t.debitAccount)
         WHERE 
         (t.type = 'REC' OR (t.type = 'JOU' AND t.creditAccount = 'DISCOUNT A/C')) 
+        AND a.id = :accountId
+        AND t.deleted = 0
+        ORDER BY t.date asc";	
+        $stmt = $this->conn->prepare($query);	
+        $stmt->bindParam(':accountId', $this->accountId);
+        $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+
+    function readRECTransaction(){	
+        $query = "    
+        select 
+        CONCAT(t.type,'_',t.id) id, 
+        t.date, 
+        t.creditAccount account,  
+        t.narration, 
+        t.amount 
+        from transaction t
+        LEFT JOIN account a ON a.name = t.debitAccount
+        WHERE 
+        (t.type = 'REC' OR t.type = 'JOU') 
+        AND a.id = :accountId
+        AND t.deleted = 0
+        ORDER BY t.date asc";	
+        $stmt = $this->conn->prepare($query);	
+        $stmt->bindParam(':accountId', $this->accountId);
+        $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+    function readPAYTransaction(){	
+        $query = "    
+        select 
+        CONCAT(t.type,'_',t.id) id, 
+        t.date, 
+        t.debitAccount account,  
+        t.narration, 
+        t.amount 
+        from transaction t
+        LEFT JOIN account a ON a.name = t.creditAccount
+        WHERE 
+        (t.type = 'PAY' OR t.type = 'JOU') 
+        AND a.id = :accountId
+        AND t.deleted = 0
+        ORDER BY t.date asc";	
+        $stmt = $this->conn->prepare($query);	
+        $stmt->bindParam(':accountId', $this->accountId);
+        $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+    function readRECCashTransaction(){	
+        $query = "    
+        select 
+        CONCAT(t.type,'_',t.id) id, 
+        t.date, 
+        t.debitAccount account,  
+        t.narration, 
+        t.amount 
+        from transaction t
+        LEFT JOIN account a ON a.name = t.creditAccount
+        WHERE 
+        (t.type = 'REC' OR t.type = 'JOU') 
+        AND a.id = :accountId
+        AND t.deleted = 0
+        ORDER BY t.date asc";	
+        $stmt = $this->conn->prepare($query);	
+        $stmt->bindParam(':accountId', $this->accountId);
+        $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+    function readPAYCashTransaction(){	
+        $query = "    
+        select 
+        CONCAT(t.type,'_',t.id) id, 
+        t.date, 
+        t.creditAccount account,  
+        t.narration, 
+        t.amount 
+        from transaction t
+        LEFT JOIN account a ON a.name = t.debitAccount
+        WHERE 
+        (t.type = 'PAY' OR t.type = 'JOU') 
         AND a.id = :accountId
         AND t.deleted = 0
         ORDER BY t.date asc";	
@@ -79,7 +182,7 @@ class Transaction{
         $query = "    
         select CONCAT(t.type,'_',t.id) id, t.date, t.debitAccount account, t.narration, t.amount 
         from transaction t
-        LEFT JOIN account a ON a.name = t.creditAccount
+        LEFT JOIN account a ON (a.name = t.creditAccount OR a.aliasName = t.creditAccount)
         WHERE 
         (t.type = 'PAY' OR (t.type = 'JOU' AND t.debitAccount = 'DISCOUNT A/C')) 
         AND a.id = :accountId

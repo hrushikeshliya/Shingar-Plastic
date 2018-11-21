@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Opening Balance</td>";
-					update_html+="<td><input value=\"" + Math.abs(data.openingBalance) + "\" type='number' step='0.01' name='openingBalance' class='form-control col-md-6' min='0' required />"+openingDirection_options_html+"</td>";
+					update_html+="<td><input value=\"" + Math.abs(data.openingBalance) + "\" type='number' step='0.001' name='openingBalance' class='form-control col-md-6' min='0.001' required />"+openingDirection_options_html+"</td>";
 					update_html+="<td>Current Balance</td>";
 					update_html+="<td><input value=\"" + data.currentBalance + "\" type='number' step='0.01' name='currentBalance' class='form-control' disabled/></td>";
 				update_html+="</tr>";

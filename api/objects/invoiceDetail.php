@@ -125,6 +125,22 @@ class InvoiceDetail{
         
     }
 
+    function hardDelete(){
+    
+        $query = "DELETE FROM " . $this->table_name . " WHERE invoiceId = :invoiceId AND type=:type"; 
+        $stmt = $this->conn->prepare($query);
+        $this->type=htmlspecialchars(strip_tags($this->type));
+        $stmt->bindParam(":type", $this->type);
+        $stmt->bindParam(":invoiceId", $this->invoiceId);
+    
+        if($stmt->execute()){
+            return true;
+        }
+    
+        return false;
+        
+    }
+
     function create(){
         
             $query = "INSERT INTO

@@ -79,7 +79,7 @@ $(document).ready(function(){
         create_html+="<tr>";
             create_html+="<td>Opening Balance";
             create_html+="</td>";
-            create_html+="<td><input type='number' value=0 min=0 step='0.01' name='openingBalance' class='form-control' required />";
+            create_html+="<td><input type='number' value=0 min=0 step='0.001' name='openingBalance' class='form-control' required />";
             create_html+="<select name='openingDirection' class='form-control'>";
             create_html+="<option value='-1'>(Credit With Us) / (Money To Be Given)</option>";
             create_html+="<option value='1'>(Debit With Us) / (Money To Be Taken)</option>";
