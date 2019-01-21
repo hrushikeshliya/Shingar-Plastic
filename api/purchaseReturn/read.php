@@ -20,6 +20,27 @@ if($type=='purchase' || $type=='purchaseReturn') {
     $id= isset($_GET['id']) ? $_GET['id'] : "NULL";
 
     if($id == "NULL") {
+
+        if(isset($_GET['startDate'])) {
+            $purchaseReturn->startDate = $_GET['startDate'];
+        }
+        
+        if(isset($_GET['endDate'])) {
+            $purchaseReturn->endDate = $_GET['endDate'];
+        }
+
+        if(isset($_GET['departmentId'])) {
+            $purchaseReturn->departmentId = $_GET['departmentId'];
+        }
+
+        if(isset($_GET['accountId'])) {
+            $purchaseReturn->accountId = $_GET['accountId'];
+        }
+
+        if(isset($_GET['itemId'])) {
+            $purchaseReturn->itemId = $_GET['itemId'];
+        }
+
         $stmt = $purchaseReturn->read();
     } else {
         $purchaseReturn->id = $id;

@@ -1,36 +1,55 @@
-$(document).ready(function(){
-    show();
+
     $(document).on('click', '.read-button', function(){
-        show();
+        show("","");
     });
 
-});
+    $(document).on('click', '.search-button', function(){
+        var startDate = $("#startDate").val();
+        var endDate = $("#endDate").val();
+        show(startDate, endDate);
+    });
 
-function show(){
+function show(startDate, endDate){
+    var params = "";
+    
+    if(startDate != "") {
+        params += "&startDate="+startDate;
+    }
 
-    $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=dayBook", function(data){  // Change Needed HERE
+    if(endDate != "") {
+        params += "&endDate="+endDate;
+    }
+
+    $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=dayBook"+params, function(data){  // Change Needed HERE
  
    
 read_html="";
 
-read_html+="<div class='row'>";
+read_html+="<div class='row readOnlyContent'>";
 
-    read_html+="<div class='col-md-2'>";
+    read_html+="<div class='col-lg-2'>";
     read_html+="From : ";
-    read_html+="<input type='date' id='dateFrom' name='dateFrom' class='form-control pull-left m-b-15px'/>";
+    read_html+="<input type='date' id='startDate' name='startDate' value='"+startDate+"' class='form-control pull-left m-b-15px'/>";
     read_html+="</div>";
 
-    read_html+="<div class='col-md-2'>";
+    read_html+="<div class='col-lg-2'>";
     read_html+="To : ";
-    read_html+="<input type='date' id='dateTo' name='dateTo' class='form-control pull-left m-b-15px'/>";
+    read_html+="<input type='date' id='endDate' name='endDate' value='"+endDate+"' class='form-control pull-left m-b-15px'/>";
     read_html+="</div>";
 
-    read_html+="<div class='col-md-8'><br>";
+    read_html+="<div class='col-lg-6'><br>";
     read_html+="<div id='search' class='btn btn-success pull-leftm-b-15px search-button'>";
     read_html+="<span class='glyphicon glyphicon-search'></span> Search";
     read_html+="</div>";
     read_html+="</div>";
     
+    read_html+=`
+        <div class='col-lg-2'><br>
+            <div id='print' class='btn btn-primary pull-right m-b-15px print-button'>
+                <span class='glyphicon glyphicon-print'></span> Print
+            </div>
+        </div>
+    `;
 read_html+="</div>";
 
 read_html+="<HR>";
@@ -43,15 +62,14 @@ read_html+="<div class='panel panel-default'>";
 
 read_html+= `
     <div class="panel-heading">
-    <h4 class="panel-title">
-    <a data-toggle="collapse" data-parent="#accordion" href="#collapse`+val.date+`">Date : `+val.date+`</a>
-    </h4>
+        <h4 class="panel-title">
+        Date : `+val.date+`
+        </h4>
     </div>
-    <div id="collapse`+val.date+`" class="panel-collapse collapse">
     <div class="panel-body">
 `;
  
-    read_html+="<div class='col-md-6'>";
+    read_html+="<div class='col-sm-6'>";
         read_html+="<table class='table' frame = 'box'>";
             read_html+="<thead>";
                 read_html+="<tr>";
@@ -66,7 +84,7 @@ read_html+= `
             $.each(val.creditTransactions, function(key1, val1) {  // Change Needed HERE
                 count +=1;
                 read_html+="<tr>";
-                read_html+="<td><button class='btn btn-xs btn-info update-button' data-id='" + val1.id + "'>";
+                read_html+="<td><button class='btn btn-xs btn-info update-button readOnlyContent' data-id='" + val1.id + "'>";
                 read_html+="REC_"+val1.id+"";
                 read_html+="</button></td>";
                 read_html+="<td>"+val1.debitAccount+"&nbsp;&nbsp;&nbsp;<i><small> -"+val1.narration+"</small></i></td>";
@@ -94,7 +112,7 @@ read_html+= `
         read_html+="</table>";
     read_html+="</div>";
 
-    read_html+="<div class='col-md-6'>";
+    read_html+="<div class='col-sm-6'>";
                 read_html+="<table class='table' frame='box'>";
                 read_html+="<tbody>";
 
@@ -102,7 +120,7 @@ read_html+= `
                 $.each(val.debitTransactions, function(key1, val1) {  // Change Needed HERE
                     count +=1;
                     read_html+="<tr>";
-                    read_html+="<td><button class='btn btn-xs btn-info update-button' data-id='" + val1.id + "'>";
+                    read_html+="<td><button class='btn btn-xs btn-info update-button readOnlyContent' data-id='" + val1.id + "'>";
                     read_html+="PAY_"+val1.id+"";
                     read_html+="</button></td>";
                     read_html+="<td>"+val1.creditAccount+"&nbsp;&nbsp;&nbsp;<i><small> -"+val1.narration+"</small></i></td>";
@@ -138,7 +156,7 @@ read_html+= `
         read_html+="</table>";
     read_html+="</div>";
 
-read_html+="</div></div></div>";
+read_html+="</div></div>";
 
 count+= +1;
 });

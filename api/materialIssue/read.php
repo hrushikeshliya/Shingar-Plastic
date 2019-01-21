@@ -16,6 +16,23 @@ $obj = new MaterialIssue($db);  //Change ClassName
 $type = isset($_GET['type']) ? $_GET['type'] : 'NULL'; 
 
 if($type == 'NULL'){
+
+    if(isset($_GET['startDate'])) {
+        $obj->startDate = $_GET['startDate'];
+    }
+    
+    if(isset($_GET['endDate'])) {
+        $obj->endDate = $_GET['endDate'];
+    }
+
+    if(isset($_GET['accountId'])) {
+        $obj->accountId = $_GET['accountId'];
+    }
+
+    if(isset($_GET['itemId'])) {
+        $obj->itemId = $_GET['itemId'];
+    }
+
     $stmt = $obj->read();
 } else {
     $id = isset($_GET['id']) ? $_GET['id'] : die(); 

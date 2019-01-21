@@ -3,10 +3,10 @@ $(document).ready(function(){
     // app html
     app_html="";
  
-    app_html+="<div class='container'>";
+    app_html+="<div class='container-fluid'>";
  
         app_html+="<div>";
-            app_html+="<h3 id='page-title'>Page Title</h3><br>";
+            app_html+="<h3 id='page-title'>Loading...</h3><br>";
             
         app_html+="</div>";
  
@@ -41,6 +41,18 @@ function changePageTitle(page_title){
     $('#page-title').text(page_title);
     document.title=page_title;
 }
+
+$(document).on('click', '.print-button', function(){
+    $("#read").hide();
+    $("#print").hide();
+    $("#page-title").hide();
+    $(".readOnlyContent").hide();
+    window.print();
+    $("#read").show();
+    $("#print").show();
+    $("#page-title").show();
+    $(".readOnlyContent").show();
+});
 
 function inWords2 (num) {
 

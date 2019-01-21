@@ -10,23 +10,24 @@ function show(){
 $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=JOU", function(data){  // Change Needed HERE
  
  
-read_html="";
+read_html=`
 
-read_html+="<div class='row'>";
-read_html+="<div class='col-md-5'>";
+<div class='row readOnlyContent'>
 
-read_html+="<input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>";
-read_html+="<datalist id='accountNameList'>";
-read_html+="</datalist>";
-read_html+="</div>";
-read_html+="<div class='col-md-3'>";
-read_html+="";
-read_html+="</div>";
-read_html+="<div class='col-md-4'>";
-read_html+="";
-read_html+="</div>";
+    <div class='col-md-5'>
+        <input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>
+            <datalist id='accountNameList'></datalist>
+    </div>
 
-read_html+="</div>";
+    <div class='col-md-5'>
+    </div>
+
+    <div class='col-lg-2'><br>
+        <div id='print' class='btn btn-primary pull-right m-b-15px print-button'>
+            <span class='glyphicon glyphicon-print'></span> Print
+        </div>
+    </div>
+</div>`;
 
 read_html+="<table class='table table-striped table-hover' id='myTable'>";
     read_html+="<tr>";
@@ -37,7 +38,7 @@ read_html+="<table class='table table-striped table-hover' id='myTable'>";
         read_html+="<th class='text-align-center'>Amount</th>";
         read_html+="<th class='text-align-center'>Username</th>";
         read_html+="<th class='text-align-center'>Narration</th>";
-        read_html+="<th class='text-align-center'>Action</th>";
+        read_html+="<th class='text-align-center readOnlyContent'>Action</th>";
     read_html+="</tr>";
      
 
@@ -53,7 +54,7 @@ $.each(data.transaction, function(key, val) {  // Change Needed HERE
         read_html+="<td>" + val.username + "</td>";
         read_html+="<td>" + val.narration + "</td>";
 
-        read_html+="<td class='text-align-center'>";
+        read_html+="<td class='text-align-center readOnlyContent'>";
 
             read_html+="<button class='btn btn-info m-r-10px  m-b-10px update-button' data-id='" + val.id + "'>";
                 read_html+="<span class='glyphicon glyphicon-edit'></span>";
@@ -80,7 +81,7 @@ $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
     dataList.empty();
 
 	$.each(data.account, function(key, val){
-        var opt = $("<option></option>").attr("value", val.aliasName);
+        var opt = $("<option></option>").attr("value", val.name);
         dataList.append(opt);
     });
 });

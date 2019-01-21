@@ -119,9 +119,10 @@
                             var amount = (rate * quantity) 
                             total += amount;
                             var markup = "<tr id='"+items+"'>";
-                            markup += "<td><input name='detailId' value='"+detailId+"' class='form-control' type='hidden'><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' readOnly></td>";
+                            markup += "<td><input name='detailId' value='"+detailId+"' class='form-control' type='hidden'><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
+                            markup += "<td><input name='itemNarration' class='form-control'></td>";
                             markup += "<td><input name='quantity' class='listQuantity form-control' onkeyup=getBillAmount() value='"+quantity+"' type='number' min='1' max='"+maxQuantity+"'></td>";
-                            markup += "<td><input name='rate' class='listRate form-control' value='"+rate+"' readOnly></td>";
+                            markup += "<td><input type='number' min=0.001 step=0.001 name='rate' class='listRate form-control' value='"+rate+"' readOnly></td>";
                             markup += "<td><input name='amount' value='"+amount+"' class='form-control listAmount' readOnly></td>";
                             markup += "<td><a onclick=deleteItem("+items+","+selectedIndex+") class='btn btn-danger'>Remove</a></td>";
                             markup += "</tr>";
@@ -147,6 +148,7 @@
     function deleteItem(id,index) {  
         $("#itemIdList").prop("selectedIndex", index);
         $("#itemIdList option:selected").removeAttr('disabled'); 
+        $("#itemIdList").prop("selectedIndex", 0);
         $("#"+id).remove();
         getBillAmount();
     }
@@ -157,12 +159,13 @@
         subTotal = 0;
 
         for (i = 0; i < listLength; i++) { 
-            var amount = $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
+            var rate = parseFloat($(".listRate").eq(i).val()).toFixed(3);
+            var amount = parseFloat($(".listQuantity").eq(i).val() * rate).toFixed(3);
+            $(".listRate").eq(i).val(rate);
             $(".listAmount").eq(i).val(amount);
-            subTotal += amount;
+            subTotal += +amount;
 
         }
-
               $("#totalAmount").val(subTotal);
     }
 </script>

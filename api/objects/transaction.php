@@ -32,7 +32,19 @@ class Transaction{
     }
     
 	function readDayBook(){	
-	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 AND type IN ('PAY', 'REC') ORDER BY date asc";	
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND date<='".$this->endDate."'";
+        }
+
+
+        $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 AND type IN ('PAY', 'REC') ".$whereClause." ORDER BY date asc";	
+        
         $stmt = $this->conn->prepare($query);	
         $stmt->execute();	 	
 	    return $stmt;	
@@ -40,13 +52,20 @@ class Transaction{
 
 
     function readDayBookOpening() {
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND date<'".$this->startDate."'";
+        }
+
         $query = "
-        select (openingBalance + COALESCE(rec,0) - COALESCE(pay,0)) AS openingBalance  from account a
+        select ROUND((openingBalance + COALESCE(rec,0) - COALESCE(pay,0)),3) AS openingBalance  from account a
         LEFT JOIN 
-        (select SUM(amount) rec, creditAccount from transaction where type = 'REC' and deleted=0 and creditAccount = 'CASH A/C') r 
+        (select SUM(amount) rec, creditAccount from transaction where type = 'REC' and deleted=0 and creditAccount = 'CASH A/C' ".$whereClause." ) r 
         ON a.name = r.creditAccount
         LEFT JOIN 
-        (select SUM(amount) pay, debitAccount from transaction where type = 'PAY' and deleted=0  and debitAccount = 'CASH A/C') p 
+        (select SUM(amount) pay, debitAccount from transaction where type = 'PAY' and deleted=0  and debitAccount = 'CASH A/C' ".$whereClause." ) p 
         ON a.name = p.debitAccount
         where 
         a.name = 'CASH A/C'
@@ -63,7 +82,7 @@ class Transaction{
         COALESCE(SUM(t.amount),0) amount
         from transaction t
         LEFT JOIN account a ON (t.debitAccount= a.name OR t.creditAccount = a.name) 
-        where a.id = :id AND  t.date <= :date AND t.type IN ('REC','PAY','JOU')
+        where a.id = :id AND  t.date <= :date AND t.type IN ('REC','PAY','JOU') AND t.deleted = 0
         ";	
 
         $stmt = $this->conn->prepare($query);	
@@ -202,6 +221,24 @@ class Transaction{
 	    return $stmt;	
     }
     
+    function readNetOffDate(){	
+        $query = "
+        select COALESCE(MAX(date),0) netOffDate from transaction t
+        LEFT JOIN account a ON t.creditAccount = a.name OR t.creditAccount = a.aliasName OR t.debitAccount = a.aliasName OR t.debitAccount = a.name
+        where a.id = :id AND t.type = 'JOU'
+        AND t.deleted = 0
+        ";	
+
+        $stmt = $this->conn->prepare($query);	
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        // bind new values
+        $stmt->bindParam(':id', $this->accountId);
+        
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
     function update(){
         $query = "UPDATE
                     " . $this->table_name . "
@@ -211,7 +248,8 @@ class Transaction{
                 creditAccount = :creditAccount,
                 amount = :amount,
                 narration = :narration,
-                username = :username 
+                username = :username,
+                date = :date 
                     
                 WHERE
                     Id = :id";
@@ -223,6 +261,7 @@ class Transaction{
         $this->crediAccount=htmlspecialchars(strip_tags($this->creditAccount));
         $this->narration=htmlspecialchars(strip_tags($this->narration));
         $this->username=htmlspecialchars(strip_tags($this->username));
+        $this->date=htmlspecialchars(strip_tags($this->date));
         $this->id=htmlspecialchars(strip_tags($this->id));
 
         // bind new values
@@ -231,6 +270,7 @@ class Transaction{
         $stmt->bindParam(':narration', $this->narration);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':amount', $this->amount);
+        $stmt->bindParam(':date', $this->date);
         $stmt->bindParam(':id', $this->id);
 
         try {

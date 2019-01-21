@@ -11,13 +11,54 @@ function update(id) {
     var item_options_html = "";
     var account_options_html = "";
     var create_html="";
-    var invoiceId = "";
+    var returnInvoiceId = "";
 
     $.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php?type=purchaseReturn&id=" + id, function(mainData){ 
 
-    invoiceId = mainData.purchaseReturn[0].invoiceId;
+    returnInvoiceId = id;
+
     item_options_html+="<select id='itemIdList' onchange = setQuantityLimit() class='form-control'>";
     item_options_html+="<option value=''></option>";
+
+    $.getJSON("http://shingarplastic.com/api/invoiceDetail/read.php?type=purchase&id=" + mainData.purchaseReturn[0].purchaseId, function(data){ 
+        var match = false;
+        var returnQty = 0
+        var index = 1;
+        var markup = "";
+
+        $.each(data.invoiceDetail, function(key, val) {
+            match = false;
+            returnQty = 0;
+            $.each(mainData.purchaseReturn[0].invoiceDetail, function(key2, val2) {
+                if (val.itemId == val2.itemId) {
+                    match = true;
+                    returnQty = val2.quantity;
+
+                    var narration = val2.narration == null ? '' : val2.narration;
+                    var taxable = val2.hsnSac == "7117" ? '*':'';
+                    markup += "<tr id='"+items+"'>";
+                    
+                    markup += "<td><input name='detailId' value='"+val.id+"' class='form-control' type='hidden'><input name='itemId' value='"+val2.itemId+"' class='form-control' type='hidden'><input name='itemName' value='"+val2.itemName+"' class='form-control' readOnly></td>";
+                    markup += "<td><input name='itemNarration' value='"+narration+"' class='form-control'></td>";
+                    markup += "<td><input type='number' name='quantity' min=1 value='"+val2.quantity+"' max="+(val.quantity-val.returnQuantity+(+returnQty))+" class='form-control listQuantity' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
+                    markup += "<td><input type='number' name='rate'  min=0.001 step=0.001 value='"+val2.rate+"' class='form-control listRate' onkeyup=getBillAmount() onchange=getBillAmount() readOnly></td>";
+                    markup += "<td><input name='amount' value='"+val2.amount+"' class='form-control amount listAmount' readOnly></td>";
+                    markup += "<td><a onclick=deleteItem("+items+","+index+") class='btn btn-danger'>Remove</a></td>";
+                    markup += "</tr>";
+        
+                    items++;
+
+                }
+            });
+
+            if(match){
+                item_options_html += "<option value='"+val.id+"|"+val.itemId+"|"+(val.quantity-val.returnQuantity+(+returnQty))+"|"+val.rate+"' disabled='disabled'>"+val.itemName+" ["+(val.quantity-val.returnQuantity+(+returnQty))+" Pcs]"+"</option>";
+            } else {
+                item_options_html += "<option value='"+val.id+"|"+val.itemId+"|"+(val.quantity-val.returnQuantity)+"|"+val.rate+"'>"+val.itemName+" ["+(val.quantity-val.returnQuantity)+" Pcs]"+"</option>";
+            }
+            index++;
+        });
+
     item_options_html+="</select>";
 
     $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){ 
@@ -40,12 +81,19 @@ function update(id) {
 	
     create_html+="<table class='table table-hover table-responsive table-bordered'>";
 
-    var d = new Date(mainData.purchaseReturn[0].date);
+    var d = new Date(mainData.purchaseReturn[0].purchaseDate);
     var n = d.getFullYear();
-    
+
+    var dr = new Date(mainData.purchaseReturn[0].date);
+    var nr = dr.getFullYear();
+
         create_html+="<tr>";
-            create_html+="<td>Purchase Invoice Id : <BR>Purchase Return Invoice Id : </td>";
-            create_html+="<td  class='text-danger'>"+mainData.purchaseReturn[0].billCode + "/"+mainData.purchaseReturn[0].purchaseInvoiceId+"/"+ n +"/"+(n+1) +"<BR>"+ mainData.purchaseReturn[0].billCode + "/"+mainData.purchaseReturn[0].returnId+"/"+ n +"/"+(n+1) +" <input type='hidden' name='invoiceId' value='"+id+"' class='form-control' required /></td>";
+            create_html+="<td class='text-danger'>Id : <BR>Purchase Invoice Id : <BR>Purchase Return Invoice Id : </td>";
+            create_html+=`<td class='text-danger'>`+
+            mainData.purchaseReturn[0].id+`<BR>`+
+            mainData.purchaseReturn[0].billCode+`/`+mainData.purchaseReturn[0].purchaseInvoiceId+`/`+nr+`-`+(nr+1)+`<BR>`+
+            mainData.purchaseReturn[0].billCode+`/`+mainData.purchaseReturn[0].returnId+`/`+n+`-`+(n+1)+`<BR>`+
+            `</td>`; 
             create_html+="<td>Date</td>";
             create_html+="<td><input type='date' value='"+mainData.purchaseReturn[0].date+"' name='date' class='form-control' required /></td>";    
             create_html+="<td>Account Name</td>";
@@ -77,30 +125,14 @@ function update(id) {
                     create_html+="<th></th>";                                
                     create_html+="</tr>";        
                     
-                    items = 1;
-                    $.each(mainData.purchaseReturn[0].invoiceDetail, function(key2, val2) {
-                        var narration = val2.narration == null ? '' : val2.narration;
-                        var markup = "<tr id='"+items+"'>";
-                        
-                        markup += "<td><input name='itemId' value='"+val2.itemId+"' class='form-control' type='hidden'><input name='itemName' value='"+val2.itemName+"' class='form-control' readOnly></td>";
-                        markup += "<td><input name='itemNarration' value='"+narration+"' class='form-control'></td>";
-                        markup += "<td><input type='number' name='quantity' step=1 min=1 value='"+val2.quantity+"' class='form-control listQuantity' onkeyup=getBillAmount()></td>";
-                        markup += "<td><input type='number' min='0.001' step='0.001' name='rate' value='"+val2.rate+"' class='form-control listRate' onkeyup=getBillAmount()></td>";
-                        markup += "<td><input name='amount' value='"+val2.amount+"' class='form-control amount listAmount' readOnly></td>";
-                        markup += "<td><a onclick=deleteItem("+items+") class='btn btn-danger'>Remove</a></td>";
-                        markup += "</tr>";
-                        
-                        create_html += markup;
-                        items++;
-                        
-                    });
+                    create_html += markup;
 
                 create_html+="</table>";
             create_html+="</td>";
         create_html+="</tr>";
 
         create_html+="<tr>";
-            create_html+="<td colspan=4><input type='hidden' name='username' value='"+username+"' required></td>";
+            create_html+="<td colspan=4><input type='hidden' name='invoiceId' value='"+id+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
             create_html+="<td>Total </td><td><input id='totalAmount' value='"+mainData.purchaseReturn[0].totalAmount+"' name='totalAmount' class='form-control pull-right' value='0' required readOnly></td>";
         create_html+="</tr>";
 
@@ -117,9 +149,9 @@ create_html+="</form>";
 
 $("#page-content").html(create_html);
 
-getInvoiceItems(invoiceId);
 changePageTitle("Edit Purchase Return Entry"); // Change Needed HERE
 
+});
 });
 });
 }
@@ -128,7 +160,7 @@ changePageTitle("Edit Purchase Return Entry"); // Change Needed HERE
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/purchaseReturn/updatee.php",  // Change Needed HERE
+		    url: "http://shingarplastic.com/api/purchaseReturn/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

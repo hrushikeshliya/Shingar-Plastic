@@ -4,11 +4,24 @@ $(document).ready(function(){
 
 function show(){
     
-    totalSale = 0;
+    var totalQty = 0;
+    var totalAmt = 0;
 
     $.getJSON("http://shingarplastic.com/api/sale/read.php?type=saleReport", function(data){  // Change Needed HERE
  
-        read_html="";
+        read_html=`
+
+        <div class= 'row readOnlyContent'>
+        
+            <div class='col-md-offset-10 col-lg-2'><br>
+                <div id='print' class='btn btn-primary pull-right m-b-15px print-button'>
+                <span class='glyphicon glyphicon-print'></span> Print
+                </div>
+            </div>
+
+        </div>
+        
+        `;
 
         currentItem = "";
         totalItemSale = 0;
@@ -53,10 +66,12 @@ function show(){
 
             amount = val.quantity * val.rate;
             totalItemSale += amount;
-            totalSale +=amount;
 
+            totalQty += +val.quantity;
+            totalAmt += +amount;
+            
             read_html+="<tr><td>"+val.date+"</td>";
-            read_html+="<td colspan=2>"+val.quantity+"x"+val.rate+"</td>";
+            read_html+="<td colspan=2>"+val.quantity+"x"+parseFloat(val.rate).toFixed(3)+"</td>";
             read_html+="<td>"+parseFloat(amount).toFixed(3)+"</td></tr>"
 
         });
@@ -66,10 +81,14 @@ function show(){
 
         read_html+="</div>";
         read_html+="</div>";
-        read_html+="<h4 class='text-danger'>Total Sale : "+parseFloat(totalSale).toFixed(3)+"</h4>";
+
+        read_html+="<h5 class='text-danger m-l-15px'>Total Quantity : <span id='totalQty'></span> &nbsp;&nbsp;&nbsp;Total Amount : <span id='totalAmt'></span></h5>";
+        read_html+="<HR>";
 
         $("#page-content").html(read_html);
         changePageTitle("Sale Report");  // Change Needed HERE
+        $("#totalQty").html(totalQty);
+        $("#totalAmt").html(parseFloat(totalAmt).toFixed(3));
 
     }); 
 }

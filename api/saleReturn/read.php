@@ -26,7 +26,36 @@ if($type=='amountTillDate') {
 
     $stmt = $saleReturn->readAmountTillDate();
 } else {
-    $stmt = $saleReturn->read();
+    $id= isset($_GET['id']) ? $_GET['id'] : "NULL";
+
+    if($id == "NULL") {
+
+        if(isset($_GET['startDate'])) {
+            $saleReturn->startDate = $_GET['startDate'];
+        }
+        
+        if(isset($_GET['endDate'])) {
+            $saleReturn->endDate = $_GET['endDate'];
+        }
+
+        if(isset($_GET['departmentId'])) {
+            $saleReturn->departmentId = $_GET['departmentId'];
+        }
+
+        if(isset($_GET['accountId'])) {
+            $saleReturn->accountId = $_GET['accountId'];
+        }
+
+        if(isset($_GET['itemId'])) {
+            $saleReturn->itemId = $_GET['itemId'];
+        }
+
+        $stmt = $saleReturn->read();
+    } else {
+        $saleReturn->id = $id;
+        $stmt = $saleReturn->readOne();
+    }
+
 }
 $num = $stmt->rowCount();
      

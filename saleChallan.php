@@ -43,7 +43,7 @@
 
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/sale/readOne.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/sale/readChallan.js' ."?ts=". time() . '"></script>'; ?>
 
 <script src="jquery/jquery-printme.js"></script>
 

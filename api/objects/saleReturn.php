@@ -22,12 +22,48 @@ class SaleReturn{
     	}
 
 	function read(){	
-        $query = "SELECT sr.*,s.invoiceId saleInvoiceId,d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " sr
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND sr.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND sr.date<='".$this->endDate."'";
+        }
+
+        if($this->departmentId != "") {
+            $whereClause = $whereClause." AND s.departmentId=".$this->departmentId;
+        }
+
+        if($this->accountId != "") {
+            $whereClause = $whereClause." AND sr.accountId=".$this->accountId;
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND s.id IN (select invoiceId from invoiceDetail where type='sale' AND itemId = ".$this->itemId.")";
+        }
+
+        $query = "SELECT sr.*,s.invoiceId saleInvoiceId,s.date saleDate,s.id saleId, d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " sr
          LEFT JOIN sale s ON s.id = sr.invoiceId
          LEFT JOIN department d ON s.departmentId = d.id
          LEFT JOIN account a ON sr.accountId = a.id  
-         WHERE sr.deleted = 0 ORDER BY date desc, id desc";	
+         WHERE sr.deleted = 0 ".$whereClause." ORDER BY date desc, id desc";	
 	    $stmt = $this->conn->prepare($query);	
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
+
+    function readOne(){	
+        $query = "SELECT sr.*,s.invoiceId saleInvoiceId,s.date saleDate,s.id saleId, d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " sr
+         LEFT JOIN sale s ON s.id = sr.invoiceId
+         LEFT JOIN department d ON s.departmentId = d.id
+         LEFT JOIN account a ON sr.accountId = a.id  
+         WHERE sr.deleted = 0  AND sr.id = ? ORDER BY date desc, id desc";	
+        $stmt = $this->conn->prepare($query);	
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $stmt->bindParam(1, $this->id);
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
@@ -109,6 +145,41 @@ class SaleReturn{
                return false;
            }
        }
+
+       function update(){
+
+        $query = "UPDATE
+                   " . $this->table_name . "
+               SET
+               date = :date,
+               narration = :narration,
+               username = :username,
+               totalAmount = :totalAmount
+               WHERE
+               id = :id
+                   "
+                   ;
+    
+       $stmt = $this->conn->prepare($query);
+    
+    // sanitize
+    $this->id=htmlspecialchars(strip_tags($this->id));
+    $this->username=htmlspecialchars(strip_tags($this->username));
+    $this->narration=htmlspecialchars(strip_tags($this->narration));
+
+    // bind new values
+    $stmt->bindParam(':id', $this->id);
+    $stmt->bindParam(':date', $this->date);
+    $stmt->bindParam(':totalAmount', $this->totalAmount);
+    $stmt->bindParam(':username', $this->username);
+    $stmt->bindParam(':narration', $this->narration);
+    
+       if($stmt->execute()){
+           return true;
+       }else{
+           return false;
+       }
+   }
 
 	
 }

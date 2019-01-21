@@ -20,6 +20,26 @@ class MaterialReceive{
     	}
 
 	function read(){	
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND mr.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND mr.date<='".$this->endDate."'";
+        }
+
+        if($this->accountId != "") {
+            $whereClause = $whereClause." AND m.jobberId=".$this->accountId;
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND m.itemId = ".$this->itemId;
+        }
+
+
         $query = "SELECT
         m.date issueDate,
         m.processId,
@@ -47,7 +67,7 @@ class MaterialReceive{
         mi.deleted = 0
         AND mr.deleted = 0
         GROUP BY mi.jobberId) summary ON summary.jobberId = a.id
-        where m.deleted = 0 AND mr.deleted = 0 order by mr.id desc";	
+        where m.deleted = 0 AND mr.deleted = 0 ".$whereClause." order by mr.id desc";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
@@ -121,6 +141,28 @@ class MaterialReceive{
 	    return $stmt;		
     }
 
+    function readAmountTillDate(){	
+        $query = "
+        select COALESCE(SUM(mr.jobCharge),0) amount 
+        from materialReceive mr
+        LEFT JOIN materialIssue mi ON mr.issueId = mi.id
+        where 
+        mr.deleted = 0 
+        AND mi.deleted = 0 
+        AND mr.date <= :date
+        AND mi.jobberId = :id
+        ";	
+        $stmt = $this->conn->prepare($query);	
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        // bind new values
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':date', $this->date);
+
+	    $stmt->execute();	 	
+	    return $stmt;	
+    }
 
     function delete(){
     

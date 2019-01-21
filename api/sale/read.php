@@ -18,8 +18,29 @@ $type = isset($_GET['type']) ? $_GET['type'] : "NULL";
 if($type=='sale' || $type=='saleReturn') {
 
     $id= isset($_GET['id']) ? $_GET['id'] : "NULL";
-
+    
     if($id == "NULL") {
+
+        if(isset($_GET['startDate'])) {
+            $sale->startDate = $_GET['startDate'];
+        }
+        
+        if(isset($_GET['endDate'])) {
+            $sale->endDate = $_GET['endDate'];
+        }
+
+        if(isset($_GET['departmentId'])) {
+            $sale->departmentId = $_GET['departmentId'];
+        }
+
+        if(isset($_GET['accountId'])) {
+            $sale->accountId = $_GET['accountId'];
+        }
+
+        if(isset($_GET['itemId'])) {
+            $sale->itemId = $_GET['itemId'];
+        }
+
         $stmt = $sale->read();
     } else {
         $sale->id = $id;

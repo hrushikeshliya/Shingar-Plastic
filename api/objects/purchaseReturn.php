@@ -22,18 +22,41 @@ class PurchaseReturn{
     	}
 
 	function read(){	
-        $query = "SELECT pr.*,p.invoiceId purchaseInvoiceId,d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " pr
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND pr.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND pr.date<='".$this->endDate."'";
+        }
+
+        if($this->departmentId != "") {
+            $whereClause = $whereClause." AND p.departmentId=".$this->departmentId;
+        }
+
+        if($this->accountId != "") {
+            $whereClause = $whereClause." AND pr.accountId=".$this->accountId;
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND p.id IN (select invoiceId from invoiceDetail where type='purchase' AND itemId = ".$this->itemId.")";
+        }
+
+        $query = "SELECT pr.*,p.invoiceId purchaseInvoiceId,p.date purchaseDate,p.id purchaseId,d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " pr
         LEFT JOIN purchase p ON p.id = pr.invoiceId
         LEFT JOIN department d ON p.departmentId = d.id
         LEFT JOIN account a ON pr.accountId = a.id  
-        WHERE pr.deleted = 0 ORDER BY pr.date desc, pr.id desc";	
+        WHERE pr.deleted = 0 ".$whereClause." ORDER BY pr.date desc, pr.id desc";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
 
     function readOne(){	
-        $query = "SELECT pr.*,p.invoiceId purchaseInvoiceId,d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " pr
+        $query = "SELECT pr.*,p.invoiceId purchaseInvoiceId,p.date purchaseDate,p.id purchaseId,d.billCode,a.name accountName,a.aliasName FROM ". $this->table_name . " pr
         LEFT JOIN purchase p ON p.id = pr.invoiceId
         LEFT JOIN department d ON p.departmentId = d.id
         LEFT JOIN account a ON pr.accountId = a.id  
@@ -126,6 +149,40 @@ class PurchaseReturn{
            }
        }
 
+       function update(){
+
+        $query = "UPDATE
+                   " . $this->table_name . "
+               SET
+               date = :date,
+               narration = :narration,
+               username = :username,
+               totalAmount = :totalAmount
+               WHERE
+               id = :id
+                   "
+                   ;
+    
+       $stmt = $this->conn->prepare($query);
+    
+    // sanitize
+    $this->id=htmlspecialchars(strip_tags($this->id));
+    $this->username=htmlspecialchars(strip_tags($this->username));
+    $this->narration=htmlspecialchars(strip_tags($this->narration));
+
+    // bind new values
+    $stmt->bindParam(':id', $this->id);
+    $stmt->bindParam(':date', $this->date);
+    $stmt->bindParam(':totalAmount', $this->totalAmount);
+    $stmt->bindParam(':username', $this->username);
+    $stmt->bindParam(':narration', $this->narration);
+    
+       if($stmt->execute()){
+           return true;
+       }else{
+           return false;
+       }
+   }
 	
 }
 

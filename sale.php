@@ -56,7 +56,28 @@ session_start();
     function getInvoiceId() {
         var id = $("#departmentId option:selected").val();
                 $.getJSON("http://shingarplastic.com/api/department/read.php?id=" + id, function(data){  
+                    $('#salesInvoiceIdList')
+                    .empty();
+
                     $("#salesInvoiceId").val(data.department[0].billSeriesSales);
+
+                    $('#salesInvoiceIdList')
+                    .append($("<option>"+data.department[0].billSeriesSales+"</option>")
+                    .attr("value",data.department[0].billSeriesSales));
+                });
+    }
+
+        function getDeletedInvoiceId() {
+        var id = $("#departmentId option:selected").val();
+                $.getJSON("http://shingarplastic.com/api/department/read.php?id=" + id, function(data){  
+                    $('#salesInvoiceIdList')
+                    .empty();
+
+                    $("#salesInvoiceId").val(data.department[0].billSeriesSales);
+
+                    $('#salesInvoiceIdList')
+                    .append($("<option>"+data.department[0].billSeriesSales+"</option>")
+                    .attr("value",data.department[0].billSeriesSales));
                 });
     }
 

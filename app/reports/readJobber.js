@@ -4,28 +4,38 @@ $(document).ready(function(){
 
 function show(){
     
-    totalWork = 0;
+    var totalQty = 0;
+    var totalAmt = 0;
 
     $.getJSON("http://shingarplastic.com/api/materialReceive/read.php?type=jobberReport", function(data){  // Change Needed HERE
  
-        read_html="";
+    read_html=`
+
+    <div class= 'row readOnlyContent'>
+    
+        <div class='col-md-offset-10 col-lg-2'><br>
+            <div id='print' class='btn btn-primary pull-right m-b-15px print-button'>
+            <span class='glyphicon glyphicon-print'></span> Print
+            </div>
+        </div>
+
+    </div>
+    
+    `;
 
         currentItem = "";
         totalItemWork =0;
-        flag = false;
-        count = 0
+        count = 1
 
         $.each(data.materialReceive, function(key, val) { 
 
-            count +=1;
-
-            if(count == 5) {
-                count = 1;
+            if(count == 4) {
+                count = 0;
             }
 
-            if(val.itemName != currentItem && currentItem != ""){
-                currentItem = val.itemName;
-                read_html+="<td colspan=3 class='text-right text-danger'>Total</td><td>"+totalItemWork+"</td>";
+            if(val.name != currentItem && currentItem != ""){
+                currentItem = val.name;
+                read_html+="<td colspan=3 class='text-right text-danger'>Total</td><td>"+parseFloat(totalItemWork).toFixed(3)+"</td>";
                 read_html+="</table>";
                 read_html+="</div>";
 
@@ -39,42 +49,44 @@ function show(){
                 read_html+="<tr><td colspan=4 class='text-center text-danger'>"+val.name+"</td></tr>";
 
                 totalItemWork = 0; 
+
+                count+= +1;
             }
 
             if(val.itemName != currentItem && currentItem == ""){
-                currentItem = val.itemName;
+                currentItem = val.name;
                 read_html+="<div class='row'>";
                 read_html+="<div class='col-md-3'>";
                 read_html+="<table class='table table-bordered'>";
                 read_html+="<tr><td colspan=4 class='text-center text-danger'>"+val.name+"</td></tr>";
 
                 totalItemWork = 0;
+                count+= +1;
             }
 
             amount = val.jobCharge;
             totalItemWork += +amount;
-            totalWork += +amount;
 
+            totalQty += +val.quantity;
+            totalAmt += +amount;
 
             read_html+="<tr><td>"+val.date+"</td>";
             read_html+="<td colspan=2>"+val.quantity+"x"+parseFloat(val.rate).toFixed(3)+"</td>";
             read_html+="<td>"+parseFloat(amount).toFixed(3)+"</td></tr>"
 
-            flag = true;
-
         });
 
-        if(flag){
             read_html+="<td colspan=3 class='text-right text-danger'>Total</td><td>"+parseFloat(totalItemWork).toFixed(3)+"</td>";
             read_html+="</table>";
             read_html+="</div>";
-        }
-
         read_html+="</div>";
-        read_html+="<h4 class='text-danger'>Total Job Work : "+parseFloat(totalWork).toFixed(3)+"</h4>";
+
+        read_html+="<h5 class='text-danger m-l-15px'>Total Quantity : <span id='totalQty'></span> &nbsp;&nbsp;&nbsp;Total Amount : <span id='totalAmt'></span></h5>";
+        read_html+="<HR>";
 
         $("#page-content").html(read_html);
         changePageTitle("Job Report");  // Change Needed HERE
-
+        $("#totalQty").html(totalQty);
+        $("#totalAmt").html(parseFloat(totalAmt).toFixed(3));
     }); 
 }

@@ -74,8 +74,17 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
     create_html+="<table class='table table-responsive table-bordered' cellpadding=0>";
 
     create_html+="<tr>";
-        create_html+="<td  class='text-right'>Invoice No</td>";
-        create_html+="<td  class='text-danger text-center'>"+invoiceId+ " <input type='hidden' id='salesInvoiceId' name='salesInvoiceId' class='form-control' required /> <input type='hidden' name='invoiceId' value='"+invoiceId+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
+        create_html+="<td  class='text-right'>Bill No</td>";
+        create_html+=`
+        <td  class='text-danger text-center'> 
+            <select class='form-control' id='salesInvoiceIdList' name='salesInvoiceIdList'>
+            <option value=''>Select Department To Get Bill No</option>
+            </select>
+            <input type='hidden' id='salesInvoiceId' name='salesInvoiceId' class='form-control' required /> 
+            <input type='hidden' name='invoiceId' value='`+invoiceId+`' class='form-control' required />
+            <input type='hidden' name='username' value='`+username+`' required>
+        </td>`;
+
         create_html+="<td  class='text-right'>Date</td>";
         create_html+="<td><input type='date' id = 'date' name='date' class='form-control' required /></td>";
         create_html+="<td  class='text-right'>Account Name</td>";

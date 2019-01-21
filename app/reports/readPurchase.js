@@ -3,12 +3,25 @@ $(document).ready(function(){
 });
 
 function show(){
-    
-    totalPurchase = 0;
+
+    var totalQty = 0;
+    var totalAmt = 0;
 
     $.getJSON("http://shingarplastic.com/api/purchase/read.php?type=purchaseReport", function(data){  // Change Needed HERE
  
-        read_html="";
+    read_html=`
+
+    <div class= 'row readOnlyContent'>
+    
+        <div class='col-md-offset-10 col-lg-2'><br>
+            <div id='print' class='btn btn-primary pull-right m-b-15px print-button'>
+            <span class='glyphicon glyphicon-print'></span> Print
+            </div>
+        </div>
+
+    </div>
+    
+    `;
 
         currentItem = "";
         totalItemPurchase =0;
@@ -22,7 +35,7 @@ function show(){
 
             if(val.itemName != currentItem && currentItem != ""){
                 currentItem = val.itemName;
-                read_html+="<td colspan=3 class='text-right text-danger'>Total</td><td>"+totalItemSale+"</td>";
+                read_html+="<td colspan=3 class='text-right text-danger'>Total</td><td>"+parseFloat(totalItemPurchase).toFixed(3)+"</td>";
                 read_html+="</table>";
                 read_html+="</div>";
 
@@ -51,22 +64,28 @@ function show(){
 
             amount = val.quantity * val.rate;
             totalItemPurchase += amount;
-            totalPurchase +=amount;
+
+            totalQty += +val.quantity;
+            totalAmt += +amount;
 
             read_html+="<tr><td>"+val.date+"</td>";
-            read_html+="<td colspan=2>"+val.quantity+"x"+val.rate+"</td>";
-            read_html+="<td>"+amount+"</td></tr>"
+            read_html+="<td colspan=2>"+val.quantity+"x"+parseFloat(val.rate).toFixed(3)+"</td>";
+            read_html+="<td>"+parseFloat(amount).toFixed(3)+"</td></tr>"
 
         });
 
-        read_html+="<td colspan=3 class='text-right text-danger'>Total</td><td>"+totalItemPurchase+"</td>";
+        read_html+="<td colspan=3 class='text-right text-danger'>Total</td><td>"+parseFloat(totalItemPurchase).toFixed(3)+"</td>";
         read_html+="</table>";
+
         read_html+="</div>";
         read_html+="</div>";
-        read_html+="<h4 class='text-danger'>Total Purchase : "+totalPurchase+"</h4>";
+
+        read_html+="<h5 class='text-danger m-l-15px'>Total Quantity : <span id='totalQty'></span> &nbsp;&nbsp;&nbsp;Total Amount : <span id='totalAmt'></span></h5>";
+        read_html+="<HR>";
 
         $("#page-content").html(read_html);
         changePageTitle("Purchase Report");  // Change Needed HERE
-
+        $("#totalQty").html(totalQty);
+        $("#totalAmt").html(parseFloat(totalAmt).toFixed(3));
     }); 
 }

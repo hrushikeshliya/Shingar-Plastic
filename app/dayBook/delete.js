@@ -25,7 +25,7 @@ $(document).ready(function(){
 		        dataType : 'json',
 		        data : JSON.stringify({ id: id }),
 		        success : function(result) {
-		            show();
+		            show("","");
 		        },
 		        error: function(xhr, resp, text) {
 		            console.log(xhr, resp, text);

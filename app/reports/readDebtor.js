@@ -9,12 +9,20 @@ read_html="";
 
 read_html+="<div class='row'>";
 
-read_html+="<div class='row'>";
+read_html+="<div class='row readOnlyContent'>";
+
 read_html+="<div class='col-md-4'>";
 read_html+="<input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>";
 read_html+="<datalist id='accountNameList'>";
 read_html+="</datalist>";
 read_html+="</div>";
+
+read_html+="<div class='col-md-offset-6 col-lg-2'><br>";
+read_html+="<div id='print' class='btn btn-primary pull-right m-b-15px print-button'>";
+read_html+="<span class='glyphicon glyphicon-print'></span> Print";
+read_html+="</div>";
+read_html+="</div>";
+
 read_html+="</div>";
 
 read_html+="<table class='table table-striped table-bordered' id='myTable'>";

@@ -31,6 +31,29 @@ class Sale{
     	}
 
 	function read(){	
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND date<='".$this->endDate."'";
+        }
+
+        if($this->departmentId != "") {
+            $whereClause = $whereClause." AND s.departmentId=".$this->departmentId;
+        }
+
+        if($this->accountId != "") {
+            $whereClause = $whereClause." AND s.accountId=".$this->accountId;
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND s.id IN (select invoiceId from invoiceDetail where type='sale' AND itemId = ".$this->itemId.")";
+        }
+
         $query = "SELECT s.*,
         d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.others, 
         a.name accountName,a.aliasName,t.name transportName, 
@@ -41,7 +64,7 @@ class Sale{
         LEFT JOIN account ba ON s.billNameId = ba.id 
         LEFT JOIN transport t ON s.transportId = t.id 
         LEFT JOIN (select invoiceId, true hasReturn from saleReturn  where deleted = 0 group by invoiceId) hr ON hr.invoiceId = s.id
-        WHERE s.deleted = 0 ORDER BY s.id DESC";	
+        WHERE s.deleted = 0 ".$whereClause." ORDER BY s.id DESC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	

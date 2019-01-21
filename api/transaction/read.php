@@ -26,15 +26,14 @@ $currentOpeningBalance = 0;
 $closingBalance = 0;
 
 $arr = array();
+$account->id = 29;
+$stmt0 = $account->readOne();
+$row0 = $stmt0->fetch(PDO::FETCH_ASSOC);
+$currentOpeningBalance = $row0['openingBalance'];
 
 if(isset($_GET['startDate'])) {
     $obj->startDate = $_GET['startDate'];
     $stmt0 = $obj->readDayBookOpening();
-    $row0 = $stmt0->fetch(PDO::FETCH_ASSOC);
-    $currentOpeningBalance = $row0['openingBalance'];
-} else {
-    $account->id = 29;
-    $stmt0 = $account->readOne();
     $row0 = $stmt0->fetch(PDO::FETCH_ASSOC);
     $currentOpeningBalance = $row0['openingBalance'];
 }

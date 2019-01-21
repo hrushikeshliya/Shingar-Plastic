@@ -153,7 +153,7 @@ changePageTitle("Edit Purchase Entry"); // Change Needed HERE
 		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
-		        show();
+		        show("","","","","");
 		    },
 		    error: function(xhr, resp, text) {
 		        console.log(xhr, resp, text);

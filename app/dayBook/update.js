@@ -90,14 +90,15 @@ $(document).ready(function(){
 	$(document).on('submit', '#update-form', function(){
 	
 		var form_data=JSON.stringify($(this).serializeObject());
-		
+		var obj = jQuery.parseJSON(form_data);
+
 		$.ajax({
 		    url: "http://shingarplastic.com/api/transaction/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
-		        show();
+		        show(obj.date,obj.date);
 		    },
 		    error: function(xhr, resp, text) {
 		        console.log(xhr, resp, text);

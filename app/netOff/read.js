@@ -40,6 +40,7 @@ function getCurrentBalance() {
     var saleReturnTillDate = 0;
     var purchaseTillDate = 0;
     var purchaseReturnTillDate = 0;
+    var jobTillDate = 0;
     var paymentTillDate = 0;
     var accType = '';
     var accName = '';
@@ -66,6 +67,12 @@ function getCurrentBalance() {
             $("#creditAccount").val(accName);
             $("#narration").val('DISCOUNT BEING TAKEN');
             $("#type").val('JOU');
+        } else if (accType == 'JOBBER') {
+            closingBalance += paymentTillDate;
+            $("#debitAccount").val('DISCOUNT A/C');
+            $("#creditAccount").val(accName);
+            $("#narration").val('DISCOUNT BEING TAKEN');
+            $("#type").val('JOU');
         }
     $.getJSON("http://shingarplastic.com/api/sale/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
         saleTillDate = parseFloat(data.sale[0].amount);    
@@ -79,13 +86,16 @@ function getCurrentBalance() {
     $.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
         purchaseReturnTillDate = parseFloat(data.purchaseReturn[0].amount);
         closingBalance += purchaseReturnTillDate;
-       
+    $.getJSON("http://shingarplastic.com/api/materialReceive/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        jobTillDate = parseFloat(data.materialReceive[0].amount);
+        closingBalance -= jobTillDate;
+           
         closingBalance = closingBalance.toFixed(2)
         $("#currentBalance").val(closingBalance);
         $("#netOffAmt").val(closingBalance);
         $("#netOffAmt").attr('max',Math.abs(closingBalance));
         
-
+});
 });
 });
 });
@@ -123,7 +133,7 @@ function show(){
 
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>Net Off Balance</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 min=0.001 id='netOffAmt' name='netOffAmt' class='form-control' required /></td>";
+            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 id='netOffAmt' name='netOffAmt' class='form-control' required /></td>";
         update_html+="</tr>";
 
         update_html+="<tr>";
@@ -163,7 +173,7 @@ $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
     dataList.empty();
 
 	$.each(data.account, function(key, val){
-        var opt = $("<option></option>").attr("value", val.id).text(val.name);
+        var opt = $("<option></option>").attr("value", val.id).text(val.aliasName);
         dataList.append(opt);
     });
 });

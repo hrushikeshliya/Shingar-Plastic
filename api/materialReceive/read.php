@@ -17,6 +17,23 @@ $issueId = isset($_GET['issueId']) ? $_GET['issueId'] : 'NULL';
 
 if($type== 'NULL'){
     if($issueId == 'NULL'){
+
+        if(isset($_GET['startDate'])) {
+            $obj->startDate = $_GET['startDate'];
+        }
+        
+        if(isset($_GET['endDate'])) {
+            $obj->endDate = $_GET['endDate'];
+        }
+
+        if(isset($_GET['accountId'])) {
+            $obj->accountId = $_GET['accountId'];
+        }
+
+        if(isset($_GET['itemId'])) {
+            $obj->itemId = $_GET['itemId'];
+        }
+
         $stmt = $obj->read();
     } else {
         $obj->issueId = $issueId; 
@@ -24,6 +41,16 @@ if($type== 'NULL'){
     }
 } else if($type=='jobberReport') {
     $stmt = $obj->readJobberReport();
+} else if($type=='amountTillDate') {
+    $obj->id = isset($_GET['id']) ? $_GET['id'] : die();
+
+    if(isset($_GET['date'])) {
+        $obj->date = $_GET['date'];
+    } else {
+        $obj->date = "GETDATE()";
+    }
+
+    $stmt = $obj->readAmountTillDate();
 }
 
 $num = $stmt->rowCount();

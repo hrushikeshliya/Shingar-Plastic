@@ -23,9 +23,28 @@ class MaterialIssue{
     	}
 
 	function read(){	
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND m.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND m.date<='".$this->endDate."'";
+        }
+
+        if($this->accountId != "") {
+            $whereClause = $whereClause." AND m.jobberId=".$this->accountId;
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND m.itemId = ".$this->itemId;
+        }
+
         $query = "SELECT m.*,i.name itemName, a.aliasName, p.name processName,COALESCE(mr.receivedQuantity,0) receivedQuantity, m.quantity-COALESCE(mr.receivedQuantity,0) pendingQuantity  FROM " . $this->table_name . " m LEFT JOIN process p ON p.id=m.processId LEFT JOIN
         account a ON m.jobberId=a.id LEFT JOIN item i ON m.itemId=i.id LEFT JOIN (select issueId, SUM(quantity) receivedQuantity from materialReceive WHERE deleted = 0 group by issueId) mr ON m.id = mr.issueId
-        where m.deleted = 0 order by m.id desc";	
+        where m.deleted = 0 ".$whereClause." order by m.id desc";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	

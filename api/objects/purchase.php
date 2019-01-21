@@ -29,13 +29,36 @@ class Purchase{
     	}
 
 	function read(){	
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND p.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND p.date<='".$this->endDate."'";
+        }
+
+        if($this->departmentId != "") {
+            $whereClause = $whereClause." AND p.departmentId=".$this->departmentId;
+        }
+
+        if($this->accountId != "") {
+            $whereClause = $whereClause." AND p.accountId=".$this->accountId;
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND p.id IN (select invoiceId from invoiceDetail where type='purchase' AND itemId = ".$this->itemId.")";
+        }
+
         $query = "SELECT p.*,
         d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.others, 
         a.name accountName,a.aliasName, COALESCE(hr.hasReturn,0) hasReturn FROM " . $this->table_name . " p 
         LEFT JOIN department d ON p.departmentId = d.id 
         LEFT JOIN account a ON p.accountId = a.id 
         LEFT JOIN (select invoiceId, true hasReturn from purchaseReturn  where deleted = 0 group by invoiceId) hr ON hr.invoiceId = p.id
-        WHERE p.deleted = 0 ORDER BY p.id DESC";	
+        WHERE p.deleted = 0 ".$whereClause." ORDER BY p.id DESC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
