@@ -33,6 +33,10 @@ if($type=='netOff') {
     $obj->netOff = 0;
 }
 
+$stmt = $obj->checkForDuplicate();
+$num = $stmt->rowCount();
+
+if($num == 0) {
 if($obj->create()){
     echo '{';
         echo '"message": "Success"';
@@ -40,6 +44,10 @@ if($obj->create()){
 } else {
     echo '{';
         echo '"message": "Internal Server Error"';
+    echo '}';
+}}else {
+    echo '{';
+        echo '"message": "You Tried Adding Duplicate Record"';
     echo '}';
 }
 

@@ -59,6 +59,7 @@ if($obj->create()){
         $detail->type = "sale";
         $detail->itemId = $data->itemId;
         $detail->itemName = $data->itemName;
+        $detail->narration = $data->itemNarration;
         $detail->quantity = $data->quantity;
         $detail->rate = $data->rate;
         $detail->amount = $data->amount;

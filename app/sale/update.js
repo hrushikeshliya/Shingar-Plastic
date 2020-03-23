@@ -14,11 +14,11 @@ $(document).ready(function(){
 		var create_html="";
 		var invoiceId = "";
 	
-	$.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale&id=" + id, function(mainData){ 
+	$.getJSON(apiURL+"/sale/read.php?type=sale&id=" + id, function(mainData){ 
 	
 		invoiceId = id;
 	
-		$.getJSON("http://shingarplastic.com/api/item/read.php", function(data){ 
+		$.getJSON(apiURL+"/item/read.php", function(data){ 
 				
 			item_options_html+="<select id='itemIdList' class='form-control' onchange=getRate()>";
 			item_options_html+="<option value=''>Select Item</option>";
@@ -27,7 +27,7 @@ $(document).ready(function(){
 			});
 			item_options_html+="</select>";
 	
-			$.getJSON("http://shingarplastic.com/api/department/read.php?type=active", function(data){ 
+			$.getJSON(apiURL+"/department/read.php?type=active", function(data){ 
 				
 			
 				department_options_html+="<select id='departmentId' name='departmentId' class='form-control' required readonly>";
@@ -38,7 +38,7 @@ $(document).ready(function(){
 				});
 				department_options_html+="</select>";
 			
-				$.getJSON("http://shingarplastic.com/api/transport/read.php", function(data){ 
+				$.getJSON(apiURL+"/transport/read.php", function(data){ 
 					
 					transport_options_html+="<select name='transportId' id='transportId' class='form-control'>";
 					$.each(data.transport, function(key, val){
@@ -51,7 +51,7 @@ $(document).ready(function(){
 					});
 					transport_options_html+="</select>";
 	
-					$.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){ 
+					$.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data){ 
 					
 						billName_options_html+="<select id='billNameId' name='billNameId' class='form-control' required>";
 						billName_options_html+="<option value=''></option>";
@@ -65,7 +65,7 @@ $(document).ready(function(){
 						});
 						billName_options_html+="</select>";
 	
-						$.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){ 
+						$.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data){ 
 					
 							account_options_html+="<select id='accountId' name='accountId' class='form-control' onchange=getBillLimit() required>";
 							account_options_html+="<option value=''></option>";
@@ -115,10 +115,35 @@ $(document).ready(function(){
 		var d = new Date(mainData.sale[0].date);
 		var n = d.getFullYear();
 
+		var y1 = 0;
+		var y2 = 0;
+		var fy = "";
+
+		var compare_dates = function(date1,date2){
+			if (date1>date2) return false;
+			else if (date1<date2) return true;
+			else return true; 
+		}
+	
+		if(compare_dates(d,new Date('2019-03-31'))){
+			y1 = n 
+			y2 = n+1
+		} else {
+			fy = "FY"
+			console.log(d)
+			console.log(d.getMonth())
+			if(d.getMonth()<3){
+				y1 = n-1
+				y2 = n
+			} else {
+				y1 = n
+				y2 = n+1
+			}
+		}
 
 		create_html+="<tr>";
 			create_html+="<td  class='text-right'>Invoice No</td>";
-			create_html+="<td  class='text-danger text-center'>"+mainData.sale[0].billCode+"/"+mainData.sale[0].invoiceId+"/"+n+"-"+(n+1)+" <input type='hidden' id='salesInvoiceId' name='salesInvoiceId' value='"+mainData.sale[0].invoiceId+"' class='form-control' required /> <input type='hidden' name='invoiceId' value='"+invoiceId+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
+			create_html+="<td  class='text-danger text-center'>"+mainData.sale[0].billCode+"/"+mainData.sale[0].invoiceId+"/"+fy+y1+"-"+y2+" <input type='hidden' id='salesInvoiceId' name='salesInvoiceId' value='"+mainData.sale[0].invoiceId+"' class='form-control' required /> <input type='hidden' name='invoiceId' value='"+invoiceId+"' class='form-control' required /><input type='hidden' name='username' value='"+username+"' required></td>";
 			create_html+="<td  class='text-right'>Date</td>";
 			create_html+="<td><input type='date' id = 'date' name='date' value='"+mainData.sale[0].date+"' class='form-control' required /></td>";
 			create_html+="<td  class='text-right'>Account Name</td>";
@@ -142,7 +167,12 @@ $(document).ready(function(){
 			create_html+="<tr>";
 				create_html+="<td>Narration</td>";
 				create_html+="<td colspan=5><input type='text' value='"+mainData.sale[0].narration+"' name='narration' class='form-control'/></td>";
-				create_html+="<td colspan=2 class='text-center'><input type='checkbox' name='showName'/> ";
+				create_html+="<td colspan=2 class='text-center'>";
+				if(mainData.sale[0].showName == "1") {
+					create_html+="<input type='checkbox' name='showName' checked/> ";
+				} else {
+					create_html+="<input type='checkbox' name='showName'/> ";
+				}
 				create_html+="Show Item Name In Bill</td>";
 			create_html+="</tr>";
 	
@@ -170,7 +200,7 @@ $(document).ready(function(){
 						items = 1;
 						$.each(mainData.sale[0].invoiceDetail, function(key2, val2) {
 							var narration = val2.narration == null ? '' : val2.narration;
-							var taxable = val2.hsnSac == "7117" ? '*':'';
+							var taxable = val2.hsnSac == "7117" || val2.hsnSac == "3923" ? '*':'';
                             var markup = "<tr id='"+items+"'>";
                             
                             markup += "<td><input name='itemId' value='"+val2.itemId+"' class='form-control' type='hidden'><input name='itemName' value='"+val2.itemName+"' class='form-control' readOnly></td>";
@@ -237,12 +267,12 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/sale/updateSale.php",  // Change Needed HERE
+		    url: apiURL+"/sale/updateSale.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
-		        show();
+				show("","","","","");
 		    },
 		    error: function(xhr, resp, text) {
 		        console.log(xhr, resp, text);

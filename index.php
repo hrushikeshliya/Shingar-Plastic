@@ -8,7 +8,16 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link href="app/assets/css/style.css?<?php echo date('l jS \of F Y h:i:s A'); ?>" rel="stylesheet" />
+	<script>
 
+function redirectURL() {
+
+if(window.location.href != "http://shingarplastic.com.cp-in-14.webhostbox.net/") {
+	window.location.href = "http://shingarplastic.com.cp-in-14.webhostbox.net/";
+}
+}
+//redirectURL();
+</script>
 </head>
 <body>
 
@@ -28,6 +37,15 @@
 		    </div>
 		  </div>
 		
+		  <div class="form-group">
+		    <div class="col-md-offset-4 col-sm-4"> 
+				<select style="margin-top:15px" id="financialYear" name="financialYear">;
+					<option value='2019-2020'>2019-2020</option>
+					<option value='2018-2019'>2018-2019</option>
+				</select>
+		    </div>
+		  </div>
+
 		  <div class="form-group"> 
 		    <div class="col-md-offset-4 col-sm-4 col-md-offset-4">
 		      <button type="submit" class="btn btn-primary btn-block">Login</button>

@@ -1,3 +1,9 @@
+//const apiURL = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+//const siteURL = "http://shingarplastic.com.cp-in-14.webhostbox.net/";
+
+const apiURL = "http://shingarplastic.com/api";
+const siteURL = "http://shingarplastic.com/";
+
 $(document).ready(function(){
      
     // app html
@@ -18,7 +24,6 @@ $(document).ready(function(){
     $("#app").html(app_html);
  
     app_nav="<p class='text-center'>Loading...<p>";
-
     $("#nav").html(app_nav);
 });
 
@@ -70,7 +75,6 @@ function inWords2 (num) {
     return str + 'Rupees Only.';
 }
 
-
 function Rs(amount){
     var words = new Array();
     words[0] = 'Zero';words[1] = 'One';words[2] = 'Two';words[3] = 'Three';words[4] = 'Four';words[5] = 'Five';words[6] = 'Six';words[7] = 'Seven';words[8] = 'Eight';words[9] = 'Nine';words[10] = 'Ten';words[11] = 'Eleven';words[12] = 'Twelve';words[13] = 'Thirteen';words[14] = 'Fourteen';words[15] = 'Fifteen';words[16] = 'Sixteen';words[17] = 'Seventeen';words[18] = 'Eighteen';words[19] = 'Nineteen';words[20] = 'Twenty';words[30] = 'Thirty';words[40] = 'Forty';words[50] = 'Fifty';words[60] = 'Sixty';words[70] = 'Seventy';words[80] = 'Eighty';words[90] = 'Ninety';var op;
@@ -111,8 +115,7 @@ function Rs(amount){
     return words_string;
 }
 
-
-    function inWords(n){
+function inWords(n){
     nums = n.toString().split('.')
     var whole = Rs(nums[0])
     if(nums[1]==null)nums[1]=0;
@@ -131,13 +134,11 @@ function Rs(amount){
 }
 }
     
-
-
 function getJobCharge() {
     var quantity = $('#quantity').val();
     var jobRate = $('#rate').val();
     var jobCharge = quantity * jobRate;
-    $('#jobCharge').val(parseFloat(jobCharge).toFixed(3));
+    $('#jobCharge').val(parseFloat(jobCharge).toFixed(2));
     }
 
 // function To Export to csv
@@ -222,9 +223,9 @@ function search() {
                 tr[i].style.display = "none";
             }   
     }
-  }
+}
 
-  function search2() {
+function search2() {
     // Declare variables 
     var input, filter, table, tr, td, i, match;
     input = document.getElementById("myInput");
@@ -249,14 +250,13 @@ function search() {
                 tr[i].style.display = "none";
             }   
     }
-  }
+}
 
 $(document).on('keyup', "input[type=text]", function () {
     $(this).val(function (_, val) {
         return val.toUpperCase();
     });
 });
-
 
 // function to make form values to json format
 $.fn.serializeObject = function()

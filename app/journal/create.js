@@ -32,8 +32,8 @@ create_html+="<input type='hidden' name='type' id='type' value='JOU'>";
 create_html+="<input type='hidden' name='username' id='username' value='"+username+"'></td><td colspan=3></td>";
 create_html+="</tr>";
     create_html+="<tr>";
-        create_html+="<th class='text-align-center'>Debit A/c</th>";
-        create_html+="<th class='text-align-center'>Credit A/c</th>";
+        create_html+="<th class='text-align-center'>Debit A/c (Alias)</th>";
+        create_html+="<th class='text-align-center'>Credit A/c (Alias)</th>";
         create_html+="<th class='text-align-center'>Amount</th>";
     create_html+="</tr>";
      
@@ -56,13 +56,13 @@ create_html+="</form>";
 $("#page-content").html(create_html);
 changePageTitle("Journal Entry");  // Change Needed HERE
 
-$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
+$.getJSON(apiURL+"/account/read.php", function(data){
 
     var dataList = $("#accountNameList");
     dataList.empty();
 
 	$.each(data.account, function(key, val){
-        var opt = $("<option></option>").attr("value", val.name);
+        var opt = $("<option></option>").attr("value", val.aliasName);
         dataList.append(opt);
     });
 });
@@ -73,7 +73,7 @@ $(document).on('submit', '#update-form', function(){
     var form_data=JSON.stringify($(this).serializeObject());
     
     $.ajax({
-        url: "http://shingarplastic.com/api/transaction/create.php",   // Change Needed HERE
+        url: apiURL+"/transaction/create.php",   // Change Needed HERE
         type : "POST",
         contentType : 'multipart/form-data',
         data : form_data,

@@ -10,7 +10,7 @@ show();
         var process_options_html = "";
         var jobber_options_html = "";
     
-        $.getJSON("http://shingarplastic.com/api/item/read.php", function(data){ 
+        $.getJSON(apiURL+"/item/read.php", function(data){ 
                 
             item_options_html+="<select name='itemId' id='itemId' onchange=getRate() class='form-control'>";
             item_options_html+="<option value=''></option>";
@@ -19,7 +19,7 @@ show();
             });
             item_options_html+="</select>";
         
-                $.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data){ 
+                $.getJSON(apiURL+"/account/read.php?type=JOBBER", function(data){ 
                 
                     jobber_options_html+="<select id='jobberId' name='jobberId' onchange=getIssues() class='form-control'>";
                     jobber_options_html+="<option value=''></option>";
@@ -40,7 +40,7 @@ show();
  
         create_html+="<tr>";
             create_html+="<td>Date</td>";
-            create_html+="<td><input type='date' name='date' class='form-control' required /></td>";
+            create_html+="<td><input type='date' name='date'   min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control' required /></td>";
             create_html+="<td>Jobber</td>";
             create_html+="<td>"+jobber_options_html+"</td>";
         create_html+="</tr>";
@@ -91,7 +91,7 @@ $(document).on('submit', '#createForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/materialIssue/create.php",   // Change Needed HERE
+    url: apiURL+"/materialIssue/create.php",   // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

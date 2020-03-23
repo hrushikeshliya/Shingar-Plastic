@@ -1,6 +1,6 @@
 
     $(document).on('click', '.read-button', function(){
-        show("","");
+        show($.cookie('startDate'),$.cookie('endDate'));
     });
 
     $(document).on('click', '.search-button', function(){
@@ -20,7 +20,7 @@ function show(startDate, endDate){
         params += "&endDate="+endDate;
     }
 
-    $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=dayBook"+params, function(data){  // Change Needed HERE
+    $.getJSON(apiURL+"/transaction/read.php?type=dayBook"+params, function(data){  // Change Needed HERE
  
    
 read_html="";
@@ -29,12 +29,12 @@ read_html+="<div class='row readOnlyContent'>";
 
     read_html+="<div class='col-lg-2'>";
     read_html+="From : ";
-    read_html+="<input type='date' id='startDate' name='startDate' value='"+startDate+"' class='form-control pull-left m-b-15px'/>";
+    read_html+="<input type='date' id='startDate' name='startDate' value='"+startDate+"' min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control pull-left m-b-15px'/>";
     read_html+="</div>";
 
     read_html+="<div class='col-lg-2'>";
     read_html+="To : ";
-    read_html+="<input type='date' id='endDate' name='endDate' value='"+endDate+"' class='form-control pull-left m-b-15px'/>";
+    read_html+="<input type='date' id='endDate' name='endDate' value='"+endDate+"'  min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control pull-left m-b-15px'/>";
     read_html+="</div>";
 
     read_html+="<div class='col-lg-6'><br>";
@@ -75,7 +75,7 @@ read_html+= `
                 read_html+="<tr>";
                 read_html+="<th></th>";
                 read_html+="<th class='text-success'>Opening Balance</th>";
-                read_html+="<th class='text-success'>"+val.openingBalance+"</th>";
+                read_html+="<th class='text-success'>"+parseFloat(val.openingBalance).toFixed(2)+"</th>";
                 read_html+="</tr>";
             read_html+="</thead>";
             read_html+="<tbody>";
@@ -88,7 +88,7 @@ read_html+= `
                 read_html+="REC_"+val1.id+"";
                 read_html+="</button></td>";
                 read_html+="<td>"+val1.debitAccount+"&nbsp;&nbsp;&nbsp;<i><small> -"+val1.narration+"</small></i></td>";
-                read_html+="<td>"+val1.amount+"</td>";
+                read_html+="<td>"+parseFloat(val1.amount).toFixed(2)+"</td>";
                 read_html+="</tr>";
 
             });
@@ -98,14 +98,14 @@ read_html+= `
                 read_html+="<tr>";
                 read_html+="<td></td>";
                 read_html+="<td>SubTotal</td>";
-                read_html+="<td  class='text-info'>"+val.creditTotal+"</td>";
+                read_html+="<td  class='text-info'>"+parseFloat(val.creditTotal).toFixed(2)+"</td>";
                 read_html+="</tr>";
             }
                 // Grand Total
                 read_html+="<tr>";
                 read_html+="<td></td>";
                 read_html+="<td></td>";
-                read_html+="<td  class='text-info'>"+(val.openingBalance+val.creditTotal)+"</td>";
+                read_html+="<td  class='text-info'>"+parseFloat((val.openingBalance+val.creditTotal)).toFixed(2)+"</td>";
                 read_html+="</tr>";
 
             read_html+="</tbody>";
@@ -124,7 +124,7 @@ read_html+= `
                     read_html+="PAY_"+val1.id+"";
                     read_html+="</button></td>";
                     read_html+="<td>"+val1.creditAccount+"&nbsp;&nbsp;&nbsp;<i><small> -"+val1.narration+"</small></i></td>";
-                    read_html+="<td>"+val1.amount+"</td>";
+                    read_html+="<td>"+parseFloat(val1.amount).toFixed(2)+"</td>";
                     read_html+="</tr>";
     
                 });
@@ -134,7 +134,7 @@ read_html+= `
                 read_html+="<tr>";
                 read_html+="<td></td>";
                 read_html+="<td>SubTotal</td>";
-                read_html+="<td  class='text-info'>"+val.debitTotal+"</td>";
+                read_html+="<td  class='text-info'>"+parseFloat(val.debitTotal).toFixed(2)+"</td>";
                 read_html+="</tr>";
                 }
 
@@ -142,14 +142,14 @@ read_html+= `
                 read_html+="<tr>";
                 read_html+="<td></td>";
                 read_html+="<td class='text-danger'>Closing Balance</td>";
-                read_html+="<td class='text-danger'>"+val.closingBalance+"</td>";
+                read_html+="<td class='text-danger'>"+parseFloat(val.closingBalance).toFixed(2)+"</td>";
                 read_html+="</tr>";
 
                 // GrandTotal
                 read_html+="<tr>";
                 read_html+="<td></td>";
                 read_html+="<td></td>";
-                read_html+="<td  class='text-info'>"+(val.openingBalance+val.creditTotal)+"</td>";
+                read_html+="<td  class='text-info'>"+parseFloat((val.openingBalance+val.creditTotal)).toFixed(2)+"</td>";
                 read_html+="</tr>";
 
                 read_html+="</tbody>";

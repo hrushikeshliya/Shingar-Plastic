@@ -11,6 +11,21 @@ $(document).ready(function(){
 
 function show(startDate, endDate){
  
+var compare_dates = function(startDate,currentDate,endDate){
+    if(startDate == "" && endDate == ""){
+      return true;
+    }
+    if(startDate != "" && endDate == "" ){
+      return (new Date(startDate)<=new Date(currentDate));
+    }
+    if(startDate == "" && endDate != "" ){
+      return (new Date(currentDate)<=new Date(endDate));
+    }
+    if(startDate != "" && endDate != "" ){
+      return ((new Date(startDate)<=new Date(currentDate)) && (new Date(currentDate)<=new Date(endDate)));
+    }
+}
+
 $.getJSON(apiURL+"/reports/read.php?type=ledger&id="+$_GET('id')+"&subType="+$_GET('subType'), function(data){  // Change Needed HERE
 
 debitSubTotal = 0;
@@ -344,16 +359,8 @@ read_html+=`
       </tr>`;
       
 
-    const debitTransactionsPartial = data.debitTransactions.filter(function(transaction){
-        return transaction.date >= startDate && transaction.date <= endDate
-    })
-
-    const creditTransactionsPartial = data.creditTransactions.filter(function(transaction){
-      return transaction.date >= startDate && transaction.date <= endDate
-  })
-
-    debitTransactionLength = debitTransactionsPartial.length;
-    creditTransactionLength = creditTransactionsPartial.length;
+    debitTransactionLength = data.debitTransactions.length;
+    creditTransactionLength = data.creditTransactions.length;
 
     console.log("PATIAL");
     console.log("Debit : "+debitTransactionLength);
@@ -370,25 +377,39 @@ read_html+=`
 
         if(i<debitTransactionLength) {
 
-          currentDate = debitTransactionsPartial[i].date
-          debitSubTotal  += parseFloat(debitTransactionsPartial[i].amount);
-          read_html+="<td>"+debitTransactionsPartial[i].id+"</td>";
-          read_html+="<td>"+currentDate+"</td>";
-          read_html+="<td>"+debitTransactionsPartial[i].account+"&nbsp&nbsp&nbsp<small>"+debitTransactionsPartial[i].narration+"</small></td>";
-          read_html+="<td class='text-right'>"+parseFloat(debitTransactionsPartial[i].amount).toFixed(2)+"</td>";
+          currentDate = data.debitTransactions[i].date
+          visible = compare_dates(startDate,currentDate,endDate);
+
+          if(visible){
+            debitSubTotal  += parseFloat(data.debitTransactions[i].amount);
+
+            read_html+="<td>"+data.debitTransactions[i].id+"</td>";
+            read_html+="<td>"+currentDate+"</td>";
+            read_html+="<td>"+data.debitTransactions[i].account+"&nbsp&nbsp&nbsp<small>"+data.debitTransactions[i].narration+"</small> <span class='text-danger'>"+visible+"</span></td>";
+            read_html+="<td class='text-right'>"+parseFloat(data.debitTransactions[i].amount).toFixed(2)+"</td>";
+            } else {
+              read_html+="<td></td><td></td><td></td><td></td>";    
+            }
         } else {
           read_html+="<td></td><td></td><td></td><td></td>";
         }
 
         if(i<creditTransactionLength) {
 
-          currentDate = creditTransactionsPartial[i].date
-          creditSubTotal += parseFloat(creditTransactionsPartial[i].amount);
-          read_html+="<td>"+creditTransactionsPartial[i].id+"</td>";
+          currentDate = data.creditTransactions[i].date
+          visible = compare_dates(startDate,currentDate,endDate);
+
+          if(visible){
+          creditSubTotal += parseFloat(data.creditTransactions[i].amount);
+
+          read_html+="<td>"+data.creditTransactions[i].id+"</td>";
           read_html+="<td>"+currentDate+"</td>";
-          read_html+="<td>"+creditTransactionsPartial[i].account+"&nbsp&nbsp&nbsp<small>"+creditTransactionsPartial[i].narration+"</small></td>";
-          read_html+="<td class='text-right'>"+parseFloat(creditTransactionsPartial[i].amount).toFixed(2)+"</td>";
+          read_html+="<td>"+data.creditTransactions[i].account+"&nbsp&nbsp&nbsp<small>"+data.creditTransactions[i].narration+"</small> <span class='text-danger'>"+visible+"</span></td>";
+          read_html+="<td class='text-right'>"+parseFloat(data.creditTransactions[i].amount).toFixed(2)+"</td>";
           read_html+="</tr>";
+          } else {
+            read_html+="<td></td><td></td><td></td><td></td>";
+          }
         } else {
           read_html+="<td></td><td></td><td></td><td></td>";
         }

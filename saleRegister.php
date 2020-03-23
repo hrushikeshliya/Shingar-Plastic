@@ -17,7 +17,7 @@
     <style type="text/css">
     @page 
     {
-        size: auto;   /* auto is the initial value */
+        size: A4;   /* auto is the initial value */
         margin: 3mm;  /* this affects the margin in the printer settings */
     }
 </style>
@@ -50,10 +50,11 @@ var subTotal = 0;
 var taxableAmount = 0;
 var taxAmount = 0;
 var grandTotal = 0;
+var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
 
 function getRate() {
     var id = $("#itemIdList option:selected").val();
-            $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){  
+            $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){  
                 var rate = data.saleRate;
                 $("#itemRate").val(rate);
             });
@@ -62,14 +63,14 @@ function getRate() {
 
 function getInvoiceId() {
     var id = $("#departmentId option:selected").val();
-            $.getJSON("http://shingarplastic.com/api/department/read.php?id=" + id, function(data){  
+            $.getJSON(apiURL2+"/department/read.php?id=" + id, function(data){  
                 $("#salesInvoiceId").val(data.department[0].billSeriesSales);
             });
 }
 
 function getBillLimit() {
     var id = $("#accountId").val();
-            $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){  
+            $.getJSON(apiURL2+"/account/readOne.php?id=" + id, function(data){  
                 $("#billLimit").val(data.billLimit);
                 $("#transportId").val(data.transportId);
                 $("#billNameId").val(id);
@@ -85,14 +86,14 @@ function addItem() {
 
         if(quantity !=0 && selectedIndex != 0) {
             var id = $("#itemIdList option:selected").val();
-            $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
+            $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
-                        var taxable = data.hsnSac == "7117" ? '*':'';
+                        var taxable = data.hsnSac == "7117" || data.hsnSac == "3923" ? '*':'';
                         var amount = (rate * quantity)
                         subTotal += amount;
 
                         if(taxable == "*") {
-                            taxableAmount += amount;
+                            taxableAmount += +amount;
                         }
 
                         var markup = "<tr id='"+items+"'>";
@@ -147,6 +148,9 @@ function getBillAmount() {
             taxableAmount += $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
         }
     }
+
+          subTotal = parseFloat(subTotal).toFixed(3);
+          taxableAmount = parseFloat(taxableAmount).toFixed(3);
 
           var tax = $("#tax option:selected").val();
           var billLimit = $("#billLimit").val();

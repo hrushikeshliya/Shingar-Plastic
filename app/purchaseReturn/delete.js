@@ -20,7 +20,7 @@ $(document).ready(function(){
 	    callback: function (result) {
 	        if(result==true){
 		    $.ajax({
-		        url: "http://shingarplastic.com/api/purchaseReturn/delete.php",  // Change Needed HERE
+		        url: apiURL+"/purchaseReturn/delete.php",  // Change Needed HERE
 		        type : "POST",
 		        dataType : 'json',
 		        data : JSON.stringify({ id: id }),

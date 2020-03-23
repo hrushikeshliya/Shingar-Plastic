@@ -4,7 +4,7 @@ $(document).ready(function(){
         
         var id = $(this).attr('data-id');
         
-        $.getJSON("http://shingarplastic.com/api/transport/readOne.php?id=" + id, function(data){   // Change Needed HERE
+        $.getJSON(apiURL+"/transport/readOne.php?id=" + id, function(data){   // Change Needed HERE
  
 		 var id = data.id;
 		 var name = data.name;
@@ -74,7 +74,7 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/transport/update.php",  // Change Needed HERE
+		    url: apiURL+"/transport/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

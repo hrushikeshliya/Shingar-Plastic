@@ -11,7 +11,7 @@ function create() {
     var create_html="";
     var returnInvoiceId = "";
 
-    $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=purchaseReturn", function(data){ 
+    $.getJSON(apiURL+"/singleValues/read.php?type=purchaseReturn", function(data){ 
 
         returnInvoiceId = data.singleValues[0].id;
 
@@ -23,7 +23,7 @@ function create() {
     invoice_options_html+="<option value=''></option>";
     invoice_options_html+="</select>";
 
-    $.getJSON("http://shingarplastic.com/api/purchase/read.php?type=distinctAccount", function(data){ 
+    $.getJSON(apiURL+"/purchase/read.php?type=distinctAccount", function(data){ 
                 
         account_options_html+="<select id='accountId' name='accountId' onchange = getInvoiceId() class='form-control'>";
         account_options_html+="<option value=''></option>";
@@ -100,7 +100,7 @@ $(document).on('submit', '#createForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/purchaseReturn/create.php",   // Change Needed HERE
+    url: apiURL+"/purchaseReturn/create.php",   // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

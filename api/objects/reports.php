@@ -24,7 +24,7 @@ class Reports{
         LEFT JOIN (select debitAccount name,creditAccount, SUM(amount) payment from transaction 
         where 
         (type = 'REC' OR (type = 'JOU' AND creditAccount = 'DISCOUNT A/C')) 
-        AND deleted = 0 GROUP BY debitAccount) tr ON tr.name = a.name
+        AND deleted = 0 GROUP BY debitAccount) tr ON tr.name = a.name OR tr.name = a.aliasName
         ORDER BY a.aliasName";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
@@ -41,7 +41,7 @@ class Reports{
         LEFT JOIN (select creditAccount name, debitAccount, SUM(amount) payment from transaction 
         where 
         (type = 'PAY' OR (type = 'JOU' AND debitAccount = 'DISCOUNT A/C')) 
-        AND deleted = 0 GROUP BY creditAccount) tp ON tp.name = a.name
+        AND deleted = 0 GROUP BY creditAccount) tp ON tp.name = a.name OR tp.name = a.aliasName
         ORDER BY a.aliasName";		
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	

@@ -3,9 +3,9 @@ $(document).ready(function(){
     var monthlyTotal = 0;
     var yearlyTotal = 0;
 
-$.getJSON("http://shingarplastic.com/api/sale/read.php?type=monthlySummary", function(data){  
+$.getJSON(apiURL+"/sale/read.php?type=monthlySummary", function(data){  
 
-    $.getJSON("http://shingarplastic.com/api/sale/read.php?type=yearlySummary", function(data2){  
+    $.getJSON(apiURL+"/sale/read.php?type=yearlySummary", function(data2){  
     
         var pageContent = "";
 
@@ -28,13 +28,13 @@ $.getJSON("http://shingarplastic.com/api/sale/read.php?type=monthlySummary", fun
         $.each(data.sale, function(key, val) {  
             $.each(data2.sale, function(key2, val2) {  
                 if (val.departmentName == val2.departmentName) {
-                    monthlyTotal += +parseFloat(val.netSale).toFixed(3);
-                    yearlyTotal += +parseFloat(val2.netSale).toFixed(3);
+                    monthlyTotal += +parseFloat(val.netSale).toFixed(2);
+                    yearlyTotal += +parseFloat(val2.netSale).toFixed(2);
                     pageContent += `
                     <tr>
                     <td>`+val.departmentName+`</td>
-                    <td>`+parseFloat(val.netSale).toFixed(3)+`</td>
-                    <td>`+parseFloat(val2.netSale).toFixed(3)+`</td>
+                    <td>`+parseFloat(val.netSale).toFixed(2)+`</td>
+                    <td>`+parseFloat(val2.netSale).toFixed(2)+`</td>
                     </tr>
                     `;
                 }

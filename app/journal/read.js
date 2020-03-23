@@ -1,26 +1,49 @@
-$(document).ready(function(){
-    show();
-    $(document).on('click', '.read-button', function(){
-        show();
-    });
+show($.cookie('startDate'),$.cookie('endDate'));
+$(document).on('click', '.read-button', function(){
+    show($.cookie('startDate'),$.cookie('endDate'));
 });
 
-function show(){
+$(document).on('click', '.search-button', function(){
+    var startDate = $("#startDate").val();
+    var endDate = $("#endDate").val();
+    show(startDate, endDate);
+});
+
+function show(startDate, endDate){
+var params = "";
+
+if(startDate != "") {
+    params += "&startDate="+startDate;
+}
+
+if(endDate != "") {
+    params += "&endDate="+endDate;
+}
+
  
-$.getJSON("http://shingarplastic.com/api/transaction/read.php?type=JOU", function(data){  // Change Needed HERE
+$.getJSON(apiURL+"/transaction/read.php?type=JOU"+params, function(data){  // Change Needed HERE
  
  
 read_html=`
 
 <div class='row readOnlyContent'>
 
-    <div class='col-md-5'>
+<div class='col-lg-2'>From : <input type='date' id='startDate' name='startDate' value='${startDate}' min='${+$.cookie('startDate')}' max='${$.cookie('endDate')}' class='form-control pull-left m-b-15px'/></div>
+
+<div class='col-lg-2'>To : <input type='date' id='endDate' name='endDate' value='${endDate}'  min='${$.cookie('startDate')}' max='${$.cookie('endDate')}' class='form-control pull-left m-b-15px'/></div>
+
+<div class='col-lg-2'><br>
+<div id='search' class='btn btn-success pull-leftm-b-15px search-button'>
+<span class='glyphicon glyphicon-search'></span> Search
+</div>
+</div>
+
+    <div class='col-md-4'>
         <input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>
             <datalist id='accountNameList'></datalist>
     </div>
 
-    <div class='col-md-5'>
-    </div>
+
 
     <div class='col-lg-2'><br>
         <div id='print' class='btn btn-primary pull-right m-b-15px print-button'>
@@ -50,7 +73,7 @@ $.each(data.transaction, function(key, val) {  // Change Needed HERE
         read_html+="<td>" + val.date + "</td>";
         read_html+="<td>" + val.debitAccount + "</td>";
         read_html+="<td>" + val.creditAccount + "</td>";
-        read_html+="<td>" + val.amount + "</td>";
+        read_html+="<td>" + parseFloat(val.amount).toFixed(2) + "</td>";
         read_html+="<td>" + val.username + "</td>";
         read_html+="<td>" + val.narration + "</td>";
 
@@ -75,7 +98,7 @@ read_html+="</table>";
 $("#page-content").html(read_html);
 changePageTitle("Journal Register");  // Change Needed HERE
 
-$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
+$.getJSON(apiURL+"/account/read.php", function(data){
 
     var dataList = $("#accountNameList");
     dataList.empty();

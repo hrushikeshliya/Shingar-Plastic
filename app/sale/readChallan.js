@@ -1,19 +1,5 @@
 $(document).ready(function(){
 	genearateInvoice("*");
-
-	$(document).on('click', '.print-button', function(){
-        //$("#invoice").printMe();
-        $("#read").hide();
-        $("#print").hide();
-		$("#page-title").hide();
-		$("#challanOptions").hide();
-        window.print();
-        $("#read").show();
-        $("#print").show();
-		$("#page-title").show();
-		$("#challanOptions").show();
-
-	});
 	
 	$(document).on('click', '.sepChallan-button', function(){
 		var selectedHsn = [];
@@ -31,7 +17,7 @@ function genearateInvoice(passedHsn) {
 	var billType = $_GET('type');
 	var id = $_GET('id');
 
-	$.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
+	$.getJSON(apiURL+"/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
 
 		var read_one_html = "";
 		var billTO = "";
@@ -39,7 +25,7 @@ function genearateInvoice(passedHsn) {
 		var sepChallan_html = "";
 		var hsnSacList = [];
 
-			sepChallan_html += `<div id='challanOptions' class='row'> 
+			sepChallan_html += `<div id='challanOptions' class='row readOnlyContent'> 
 			<div class='col-md-10'>
 			Select HSN/SAC To Generate Challan : &nbsp;&nbsp;`;
 	
@@ -61,7 +47,7 @@ function genearateInvoice(passedHsn) {
 
 			sepChallan_html += "</div>";
 
-			decimal = 3;
+			decimal = 2;
 			billTO = "<b>Consignor :</b><br><b>"+data.sale[0].accountName+"</b><BR>"+data.sale[0].address1+"<BR>"+data.sale[0].address2+"<BR>City : "+data.sale[0].city+" - "+data.sale[0].pincode+"<BR>State: "+data.sale[0].state+"<BR><BR> GST : "+data.sale[0].gstNo;
 
 		var deductions = 0;
@@ -90,11 +76,37 @@ function genearateInvoice(passedHsn) {
 		var d = new Date(data.sale[0].date);
 		var n = d.getFullYear();
 
+		var y1 = 0;
+		var y2 = 0;
+		var fy = "";
+
+		var compare_dates = function(date1,date2){
+			if (date1>date2) return false;
+			else if (date1<date2) return true;
+			else return true; 
+		}
+	
+		if(compare_dates(d,new Date('2019-03-31'))){
+			y1 = n 
+			y2 = n+1
+		} else {
+			fy = "FY"
+			console.log(d)
+			console.log(d.getMonth())
+			if(d.getMonth()<3){
+				y1 = n-1
+				y2 = n
+			} else {
+				y1 = n
+				y2 = n+1
+			}
+		}
+
 		read_one_html+="<tr>";
 			read_one_html+="<td colspan=3>"+billTO+"</td>";
 			read_one_html+="<td colspan=3>";
 			read_one_html+="<div>";
-			read_one_html+="Invoice No : " + data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+n+"-"+(n+1)+"<BR><BR>";
+			read_one_html+="Invoice No : " + data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+fy+y1+"-"+y2+"<BR><BR>";
 			read_one_html+="Date (YYYY-MM-DD) : " + data.sale[0].date+"<BR><BR>";
 
 			var lrNo = '';

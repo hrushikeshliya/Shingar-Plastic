@@ -40,12 +40,12 @@ $(document).on('submit', '#changePasswordForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 console.log(form_data);
 $.ajax({
-    url: "http://shingarplastic.com/api/user/changePassword.php",
+    url: apiURL+"/user/changePassword.php",
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,
     success : function(result) {
-        location.href = "http://shingarplastic.com"
+        location.href = siteURL
     },
     error: function(xhr, resp, text) {
         console.log(xhr, resp, text);

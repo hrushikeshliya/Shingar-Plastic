@@ -13,14 +13,14 @@ function update(id) {
     var create_html="";
     var returnInvoiceId = "";
 
-    $.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php?type=purchaseReturn&id=" + id, function(mainData){ 
+    $.getJSON(apiURL+"/purchaseReturn/read.php?type=purchaseReturn&id=" + id, function(mainData){ 
 
     returnInvoiceId = id;
 
     item_options_html+="<select id='itemIdList' onchange = setQuantityLimit() class='form-control'>";
     item_options_html+="<option value=''></option>";
 
-    $.getJSON("http://shingarplastic.com/api/invoiceDetail/read.php?type=purchase&id=" + mainData.purchaseReturn[0].purchaseId, function(data){ 
+    $.getJSON(apiURL+"/invoiceDetail/read.php?type=purchase&id=" + mainData.purchaseReturn[0].purchaseId, function(data){ 
         var match = false;
         var returnQty = 0
         var index = 1;
@@ -61,7 +61,7 @@ function update(id) {
 
     item_options_html+="</select>";
 
-    $.getJSON("http://shingarplastic.com/api/account/read.php", function(data){ 
+    $.getJSON(apiURL+"/account/read.php", function(data){ 
                 
         account_options_html+="<select id='accountId' name='accountId' class='form-control' readOnly>";
         $.each(data.account, function(key, val){
@@ -160,7 +160,7 @@ changePageTitle("Edit Purchase Return Entry"); // Change Needed HERE
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/purchaseReturn/update.php",  // Change Needed HERE
+		    url: apiURL+"/purchaseReturn/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

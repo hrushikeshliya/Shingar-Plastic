@@ -39,7 +39,7 @@ $(document).on('submit', '#create-form', function(){
     var form_data=JSON.stringify($(this).serializeObject());
 
     $.ajax({
-        url: "http://shingarplastic.com/api/roles/create.php", //Change Needed Here
+        url: apiURL+"/roles/create.php", //Change Needed Here
         type : "POST",
         contentType : 'multipart/form-data',
         data : form_data,

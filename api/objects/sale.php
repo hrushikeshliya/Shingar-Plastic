@@ -64,41 +64,22 @@ class Sale{
         LEFT JOIN account ba ON s.billNameId = ba.id 
         LEFT JOIN transport t ON s.transportId = t.id 
         LEFT JOIN (select invoiceId, true hasReturn from saleReturn  where deleted = 0 group by invoiceId) hr ON hr.invoiceId = s.id
-        WHERE s.deleted = 0 ".$whereClause." ORDER BY s.id DESC";	
+        WHERE s.deleted = 0 ".$whereClause." ORDER BY s.date DESC, d.name, s.id DESC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
 
-    function readMonthlySummary(){	
-        $query = "select 
-        MAX(d.name) departmentName, 
-        (COALESCE(SUM(s.subTotal+(s.taxableAmount*s.billLimit*tax/10000)),0)-COALESCE(SUM(sr.totalAmount),0)) netSale 
-        from 
-        department d 
-        LEFT JOIN sale s ON d.Id = s.departmentId AND s.deleted = 0 AND s.date>= '2018-11-07' AND s.date <= '2019-11-06' AND month(s.date) = month(CURRENT_DATE)
-        LEFt JOIN saleReturn sr ON s.id = sr.invoiceId AND sr.deleted = 0
-        where 
-        d.deleted = 0
-        GROUP BY d.Id
-        ORDER BY d.name";	
-	    $stmt = $this->conn->prepare($query);	
-	    $stmt->execute();	 	
-	    return $stmt;	
-    }
-
-    function readYearlySummary(){	
-        $query = "select MAX(d.name) departmentName, 
-        (COALESCE(SUM(s.subTotal+(s.taxableAmount*s.billLimit*tax/10000)),0)-COALESCE(SUM(sr.totalAmount),0)) netSale 
-        from 
-        department d 
-        LEFT JOIN sale s ON d.Id = s.departmentId AND s.deleted = 0 AND s.date>= '2018-11-07' AND s.date <= '2019-11-06'
-        LEFt JOIN saleReturn sr ON s.id = sr.invoiceId AND sr.deleted = 0
-        where 
-        d.deleted = 0
-        GROUP BY d.Id
-        ORDER BY d.name";	
-	    $stmt = $this->conn->prepare($query);	
+    function readSummary($financialYear){	
+        $query = "select ys.departmentName, fy.startDate, fy.endDate ,ms.netSale monthlySummary, ys.netSale yearlySummary 
+        from yearlySummary ys 
+        LEFT JOIN monthlySummary ms ON ys.displayName = ms.displayName AND ys.departmentName = ms.departmentName AND ms.month = month(CURRENT_DATE)
+        LEFT JOIN financialYear fy ON fy.displayName = ys.displayName 
+        where fy.displayName = :displayName
+        ";	
+        $stmt = $this->conn->prepare($query);	
+        $financialYear=htmlspecialchars(strip_tags($financialYear));
+        $stmt->bindParam(':displayName', $financialYear);
 	    $stmt->execute();	 	
 	    return $stmt;	
     }
@@ -144,12 +125,27 @@ class Sale{
     }
 
     function readSaleReport(){
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND s.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND s.date<='".$this->endDate."'";
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND i.itemId = ".$this->itemId;
+        }
+
         $query = "
         select s.date, i.itemName, SUM((i.quantity-COALESCE(ir.quantity,0))) quantity , i.rate, 
         SUM((i.amount-COALESCE(ir.amount,0))) amount from sale s
         LEFT JOIN invoiceDetail i ON s.id = i.invoiceId AND i.type = 'sale'
         LEFT JOIN invoiceDetail ir ON i.id = ir.detailId
-        WHERE s.deleted = 0
+        WHERE s.deleted = 0 ".$whereClause."
         GROUP BY i.itemName, s.date, i.rate
         ORDER BY i.itemName, s.date DESC, i.rate
         ";
@@ -161,7 +157,7 @@ class Sale{
     function readDistinctAccount(){	
         $query = "SELECT DISTINCT s.accountId,a.name accountName,a.aliasName FROM ". $this->table_name . " s 
          LEFT JOIN account a ON s.accountId = a.id 
-         WHERE s.deleted = 0";	
+         WHERE s.deleted = 0 ORDER BY a.name";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	

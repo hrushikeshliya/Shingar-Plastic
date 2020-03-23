@@ -1,8 +1,8 @@
 $(document).ready(function(){
-    show("","","","","");
+    show($.cookie("startDate"),$.cookie("endDate"),"","","");
 
     $(document).on('click', '.read-button', function(){
-        show("","","","","");
+        show($.cookie("startDate"),$.cookie("endDate"),"","","");
     });
     
     $(document).on('click', '.search-button', function(){
@@ -25,27 +25,27 @@ function show(startDate, endDate, departmentId, accountId, itemId){
     var totalTax = 0;
     var totalAmtSub = 0;
 
-    if(startDate != "") {
+    if(startDate != undefined) {
         params += "&startDate="+startDate;
     }
 
-    if(endDate != "") {
+    if(endDate != undefined) {
         params += "&endDate="+endDate;
     }
 
-    if(departmentId != "") {
+    if(departmentId != undefined) {
         params += "&departmentId="+departmentId;
     }
 
-    if(accountId != "") {
+    if(accountId != undefined) {
         params += "&accountId="+accountId;
     }
 
-    if(itemId != "") {
+    if(itemId != undefined) {
         params += "&itemId="+itemId;
     }
 
-$.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale"+params, function(data){    // Change Needed HERE
+$.getJSON(apiURL+"/sale/read.php?type=sale"+params, function(data){    // Change Needed HERE
   
 read_html="";
 
@@ -66,7 +66,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='departmentId' name='departmentId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/department/read.php", function(data2){    
+    $.getJSON(apiURL+"/department/read.php", function(data2){    
         $.each(data2.department, function(key2, val2){
             if(departmentId == val2.Id) {
                 read_html += "<option value="+val2.Id+" selected>"+val2.name+"</option>";
@@ -84,7 +84,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='accountId' name='accountId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data3){    
+    $.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data3){    
         $.each(data3.account, function(key3, val3){
             if(accountId == val3.id) {
                 read_html += "<option value="+val3.id+" selected>"+val3.aliasName+"</option>";
@@ -102,7 +102,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='itemId' name='itemId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/item/read.php", function(data4){    
+    $.getJSON(apiURL+"/item/read.php", function(data4){    
         $.each(data4.item, function(key4, val4){
             if(itemId == val4.id) {
                 read_html += "<option value="+val4.id+" selected>"+val4.name+"</option>";
@@ -145,10 +145,37 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
      
     var d = new Date(val.date);
     var n = d.getFullYear();
+    
+    var y1 = 0;
+    var y2 = 0;
+    var fy = "";
+
+    var compare_dates = function(date1,date2){
+        if (date1>date2) return false;
+        else if (date1<date2) return true;
+        else return true; 
+    }
+
+    if(compare_dates(d,new Date('2019-03-31'))){
+        y1 = n 
+        y2 = n+1
+    } else {
+        fy = "FY"
+        console.log(d)
+        console.log(d.getMonth())
+        if(d.getMonth()<3){
+            y1 = n-1
+            y2 = n
+        } else {
+            y1 = n
+            y2 = n+1
+        }
+    }
+
     subTotal = 0;
     read_html+="<tr>";
  
-        read_html+="<td>"+ val.billCode + "/"+val.invoiceId+"/"+ n +"-"+(n+1)+"</td>";
+        read_html+="<td>"+ val.billCode + "/"+val.invoiceId+"/"+fy+ y1 +"-"+y2+"</td>";
         read_html+="<td>" + val.date + "</td>";
 
         if(val.accountId == val.billNameId) {
@@ -180,7 +207,7 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
                 read_html+="<td>"+val2.itemName+"&nbsp;&nbsp<small>"+narration+"</small></td>";
                 read_html+="<td class='text-right'>"+parseFloat(val2.rate).toFixed(3)+"</td>";
                 read_html+="<td class='text-center'>"+val2.quantity+"</td>";
-                read_html+="<td class='text-right'>"+parseFloat(val2.amount).toFixed(3)+"</td>";
+                read_html+="<td class='text-right'>"+parseFloat(val2.amount).toFixed(2)+"</td>";
                 read_html+="</tr>";
                 
                 quantityTotal += parseFloat(val2.quantity);
@@ -196,17 +223,17 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Sub Total</td>";
         read_html+="<td class='text-center'>"+quantityTotal+"</td>";
-        read_html+="<td class='text-right'>"+parseFloat(subTotal).toFixed(3)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(subTotal).toFixed(2)+"</td>";
         read_html+="</tr>";
         read_html+="<tr>";
-        read_html+="<td colspan=3 class='text-right'>Tax @ "+parseFloat(val.tax).toFixed(3)+" %</td>";
+        read_html+="<td colspan=3 class='text-right'>Tax @ "+parseFloat(val.tax).toFixed(2)+" %</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.taxAmount).toFixed(3)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.taxAmount).toFixed(2)+"</td>";
         read_html+="</tr>";
         read_html+="<tr>";
         read_html+="<td colspan=3 class='text-right'>Grand Total</td>";
         read_html+="<td></td>";
-        read_html+="<td class='text-right'>"+parseFloat(val.grandTotal).toFixed(3)+"</td>";
+        read_html+="<td class='text-right'>"+parseFloat(val.grandTotal).toFixed(2)+"</td>";
         read_html+="</tr>";
 
         read_html+="<tr class='text-info'><td colspan=5>Narration : "+val.narration+"</td></tr>";
@@ -231,7 +258,7 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
  
         read_html+="<td class='readOnlyContent'>";   
 
-        read_html+="<a class='btn btn-warning m-r-10px m-b-10px' href='http://shingarplastic.com/saleChallan.php?type=challan&id=" + val.id + "' target='_blank'>";
+        read_html+="<a class='btn btn-warning m-r-10px m-b-10px' href='"+siteURL+"saleChallan.php?type=challan&id=" + val.id + "' target='_blank'>";
             read_html+="<span class='glyphicon glyphicon-envelope'></span>";
         read_html+="</a>";
 
@@ -246,7 +273,7 @@ $.each(data.sale, function(key, val) {   // Change Needed HERE
         }
 
         if(val.departmentName != "MUMBAI"){
-            read_html+="<a class='btn btn-success m-b-10px' href='http://shingarplastic.com/saleInvoice.php?type=invoice&id=" + val.id + "' target='_blank'>";
+            read_html+="<a class='btn btn-success m-b-10px' href='"+siteURL+"saleInvoice.php?type=invoice&id=" + val.id + "' target='_blank'>";
                 read_html+="<span class='glyphicon glyphicon-print'></span>";
             read_html+="</a>";
         }
@@ -264,8 +291,8 @@ read_html+="<HR>";
 
 $("#page-content").html(read_html);
 $("#totalQty").html(totalQty);
-$("#totalAmt").html(parseFloat(totalAmt).toFixed(3));
-$("#totalTax").html(parseFloat(totalTax).toFixed(3));
+$("#totalAmt").html(parseFloat(totalAmt).toFixed(2));
+$("#totalTax").html(parseFloat(totalTax).toFixed(2));
 
 changePageTitle("Sale Register");  // Change Needed HERE
 
@@ -283,13 +310,12 @@ $(document).on('submit', '#update-form', function(){
     var form_data=JSON.stringify($(this).serializeObject());
     
     $.ajax({
-        url: "http://shingarplastic.com/api/sale/update.php?type=DEBTORS",  // Change Needed HERE
+        url: apiURL+"/sale/update.php?type=DEBTORS",  // Change Needed HERE
         type : "POST",
         contentType : 'application/json',
         data : form_data,
         success : function(result) {
             alert('LR No Updated');
-            show();
         },
         error: function(xhr, resp, text) {
             console.log(xhr, resp, text);

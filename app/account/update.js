@@ -5,25 +5,25 @@ $(document).ready(function(){
 	var accountType_options_html=""; 
 	var transport_options_html=""; 
 
-	$.getJSON("http://shingarplastic.com/api/city/readCity.php", function(data){ 
+	$.getJSON(apiURL+"/city/readCity.php", function(data){ 
 		$.each(data.records, function(key, val){
 				city_options_html+="<option value='" + val.cityName + "'>" + val.cityName + "</option>";
 		});
 	});   
 
-	$.getJSON("http://shingarplastic.com/api/city/readState.php", function(data){ 
+	$.getJSON(apiURL+"/city/readState.php", function(data){ 
 		$.each(data.records, function(key, val){
 				state_options_html+="<option value='" + val.stateName + "'>" + val.stateName + "</option>";
 		});
 	}); 
 
-	$.getJSON("http://shingarplastic.com/api/accountType/read.php", function(data){ 
+	$.getJSON(apiURL+"/accountType/read.php", function(data){ 
 		$.each(data.accountType, function(key, val){
 				accountType_options_html+="<option value='" + val.Id + "'>" + val.name + "</option>";
 		});
 	});          
 
-	$.getJSON("http://shingarplastic.com/api/transport/read.php", function(data){ 
+	$.getJSON(apiURL+"/transport/read.php", function(data){ 
 		$.each(data.transport, function(key, val){
 				transport_options_html+="<option value='" + val.id + "'>" + val.name + "</option>";
 		});
@@ -36,7 +36,7 @@ $(document).ready(function(){
 		var openingDirection_options_html = "";
 		var status_options_html = "";
 
-        $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){   // Change Needed HERE
+        $.getJSON(apiURL+"/account/readOne.php?id=" + id, function(data){   // Change Needed HERE
 	 
 
 		openingDirection_options_html+="<select name='openingDirection' class='form-control'>";
@@ -69,9 +69,9 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Account Name</td>";
-					update_html+="<td><input value=\"" + data.name + "\" type='text' name='name' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + data.name + "\" type='text' name='name' class='form-control' required readOnly/></td>";
 					update_html+="<td>Alias Name</td>";
-					update_html+="<td><input value=\"" + data.aliasName + "\" type='text' name='aliasName' class='form-control' required /></td>";
+					update_html+="<td><input value=\"" + data.aliasName + "\" type='text' name='aliasName' class='form-control' required readOnly/></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
@@ -169,7 +169,7 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/account/update.php",   // Change Needed HERE
+		    url: apiURL+"/account/update.php",   // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

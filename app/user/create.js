@@ -2,7 +2,7 @@ $(document).ready(function(){
  
     $(document).on('click', '.create-button', function(){
 	      
-	$.getJSON("http://shingarplastic.com/api/roles/read.php", function(data){ 
+	$.getJSON(apiURL+"/roles/read.php", function(data){ 
 		var roles_options_html=""; 
 		roles_options_html+="<select name='roleId' class='form-control'>";
 		$.each(data.roles, function(key, val){
@@ -85,7 +85,7 @@ $(document).on('submit', '#create-form', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/user/create.php",   // Change Needed HERE
+    url: apiURL+"/user/create.php",   // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

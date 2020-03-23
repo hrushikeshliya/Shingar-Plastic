@@ -102,6 +102,21 @@ class Purchase{
     }
     
     function readPurchaseReport(){
+
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND p.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND p.date<='".$this->endDate."'";
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND i.itemId = ".$this->itemId;
+        }
+
         $query = "
         select 
 
@@ -119,7 +134,7 @@ class Purchase{
         LEFT JOIN invoiceDetail i ON i.invoiceId = pr.id
         where pr.deleted=0 
         GROUP BY i.detailId) r ON i.id = r.detailId
-        WHERE p.deleted = 0
+        WHERE p.deleted = 0 ".$whereClause."
         GROUP BY i.itemName, p.date, i.rate
         ORDER BY i.itemName, p.date DESC, i.rate
         ";

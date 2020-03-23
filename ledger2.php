@@ -15,6 +15,23 @@ session_start();
 
 	<link href="app/assets/css/style.css?<?php echo date('l jS \of F Y h:i:s A'); ?>" rel="stylesheet" />
 
+    <style type="text/css">
+
+
+    @media print {
+
+		@page {                
+			size: A4;
+			margin: 3mm;
+		}
+
+		table {
+			border : 2px solid !important;
+		}
+}
+
+</style>
+
 </head>
 <body>
 
@@ -25,18 +42,14 @@ session_start();
 <!-- our app will be injected here -->
 <div id="app"></div>
 
-<script src="app/assets/js/jquery.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script> 
 <script src="app/assets/js/jquery.cookie.js"></script> 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="app/assets/js/bootbox.min.js"></script>
       
 <?php echo '<script src="app/app.js' ."?ts=". time() . '"></script>'; ?>
 <?php echo '<script src="app/navBar/createNavBar.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/dayBook/read.js' ."?ts=". time() . '"></script>'; ?>
-<script>
-show($.cookie('startDate'),$.cookie('endDate'));
-</script>
-<?php echo '<script src="app/dayBook/update.js' ."?ts=". time() . '"></script>'; ?>
-<?php echo '<script src="app/dayBook/delete.js' ."?ts=". time() . '"></script>'; ?>
+<?php echo '<script src="app/reports/readLedger2.js' ."?ts=". time() . '"></script>'; ?>
+
 </body>
 </html>

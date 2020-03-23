@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){  // Change Needed HERE
+$.getJSON(apiURL+"/account/read.php", function(data){  // Change Needed HERE
  
 var openingDirection = "";
 var currentDirection = "";
@@ -33,7 +33,7 @@ read_html+="<table class='table table-bordered table-hover' id='myTable'>";
         read_html+="<th class='text-align-center'>Account Name</th>";
         read_html+="<th class='text-align-center'>Account Type</th>";
         read_html+="<th class='text-align-center'>Opg Bal.</th>";
-        read_html+="<th class='text-align-center'>Cur Bal.</th>";
+        //read_html+="<th class='text-align-center'>Cur Bal.</th>";
         read_html+="<th class='text-align-center'>Ledger</th>";
         read_html+="<th class='text-align-center'></th>";
     read_html+="</tr>";
@@ -47,8 +47,8 @@ $.each(data.account, function(key, val) {  // Change Needed HERE
         read_html+="<td>" + val.aliasName + "</td>";
         read_html+="<td>" + val.name + "</td>";
         read_html+="<td>" + val.accountType + "</td>";
-        read_html+="<td>" + val.openingBalance + "</td>";
-        read_html+="<td>" + val.currentBalance + "</td>";
+        read_html+="<td>" + parseFloat(val.openingBalance).toFixed(2) + "</td>";
+        //read_html+="<td>" + val.currentBalance + "</td>";
         read_html+="<td align='center'>";
         read_html+="<a class='btn btn-warning m-b-10px  ledger-button' target='_blank' href='../ledger.php?id=" + val.id + "&subType="+val.accountType+"'>";
         read_html+="<span class='glyphicon glyphicon-list'></span>";

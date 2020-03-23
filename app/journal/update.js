@@ -5,7 +5,7 @@ $(document).ready(function(){
         var id = $(this).attr('data-id');
 		var username = $.cookie('username');
 		
-        $.getJSON("http://shingarplastic.com/api/transaction/readOne.php?id=" + id, function(data){  // Change Needed HERE
+        $.getJSON(apiURL+"/transaction/readOne.php?id=" + id, function(data){  // Change Needed HERE
 
 		var update_html = "";
 		
@@ -28,11 +28,11 @@ $(document).ready(function(){
 					update_html+="<td>"+data.date+"</td>";
 				update_html+="</tr>";
 				update_html+="<tr>";
-					update_html+="<td>Debit Account</td>";
+					update_html+="<td>Debit Account (Alias)</td>";
 					update_html+="<td><input list='accountNameList' type='text' name='debitAccount' id='debitAccount' value='"+data.debitAccount+"' class='form-control pull-left m-b-15px' required></td>";
 				update_html+="</tr>";
 				update_html+="<tr>";
-					update_html+="<td>Credit Account</td>";
+					update_html+="<td>Credit Account (Alias)</td>";
 					update_html+="<td><input list='accountNameList' type='text' name='creditAccount' id='creditAccount' value='"+data.creditAccount+"' class='form-control pull-left m-b-15px' required></td>";
 				update_html+="</tr>";
 		        update_html+="<tr>";
@@ -61,12 +61,12 @@ $(document).ready(function(){
 		$("#page-content").html(update_html);
 		changePageTitle("Edit Journal Entry");  // Change Needed HERE
 		
-		$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
+		$.getJSON(apiURL+"/account/read.php", function(data){
 
     	var dataList = $("#accountNameList");
     	dataList.empty();
 		$.each(data.account, function(key, val){
-			var opt = $("<option></option>").attr("value", val.name);
+			var opt = $("<option></option>").attr("value", val.aliasName);
 			dataList.append(opt);
 		});
 		});
@@ -80,7 +80,7 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/transaction/update.php",  // Change Needed HERE
+		    url: apiURL+"/transaction/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

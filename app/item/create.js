@@ -2,7 +2,7 @@ $(document).ready(function(){
  
     var itemGroup_options_html = "";
 
-    $.getJSON("http://shingarplastic.com/api/itemGroup/read.php", function(data){ 
+    $.getJSON(apiURL+"/itemGroup/read.php", function(data){ 
             
         itemGroup_options_html+="<select name='itemGroup' class='form-control'>";
         $.each(data.itemGroup, function(key, val){
@@ -81,7 +81,7 @@ $(document).on('submit', '#createForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/item/create.php",   // Change Needed HERE
+    url: apiURL+"/item/create.php",   // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

@@ -25,7 +25,17 @@ class Transaction{
     	}
 
 	function readJournal(){	
-	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 AND type = 'JOU' ORDER BY date asc";	
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND date<='".$this->endDate."'";
+        }
+
+	    $query = "SELECT * FROM " . $this->table_name . " where deleted = 0 AND type = 'JOU' ".$whereClause." ORDER BY date asc";	
         $stmt = $this->conn->prepare($query);	
         $stmt->execute();	 	
 	    return $stmt;	
@@ -50,7 +60,6 @@ class Transaction{
 	    return $stmt;	
     }
 
-
     function readDayBookOpening() {
 
         $whereClause = "";
@@ -63,10 +72,10 @@ class Transaction{
         select ROUND((openingBalance + COALESCE(rec,0) - COALESCE(pay,0)),3) AS openingBalance  from account a
         LEFT JOIN 
         (select SUM(amount) rec, creditAccount from transaction where type = 'REC' and deleted=0 and creditAccount = 'CASH A/C' ".$whereClause." ) r 
-        ON a.name = r.creditAccount
+        ON a.aliasName = r.creditAccount OR a.name = r.creditAccount
         LEFT JOIN 
         (select SUM(amount) pay, debitAccount from transaction where type = 'PAY' and deleted=0  and debitAccount = 'CASH A/C' ".$whereClause." ) p 
-        ON a.name = p.debitAccount
+        ON a.aliasName = p.debitAccount OR a.name = p.debitAccount
         where 
         a.name = 'CASH A/C'
         AND a.deleted = 0
@@ -81,7 +90,7 @@ class Transaction{
         select 
         COALESCE(SUM(t.amount),0) amount
         from transaction t
-        LEFT JOIN account a ON (t.debitAccount= a.name OR t.creditAccount = a.name) 
+        LEFT JOIN account a ON (t.debitAccount= a.name OR t.creditAccount = a.name OR t.debitAccount= a.aliasName OR t.creditAccount = a.aliasName) 
         where a.id = :id AND  t.date <= :date AND t.type IN ('REC','PAY','JOU') AND t.deleted = 0
         ";	
 
@@ -112,7 +121,6 @@ class Transaction{
 	    return $stmt;	
     }
 
-
     function readRECTransaction(){	
         $query = "    
         select 
@@ -122,7 +130,7 @@ class Transaction{
         t.narration, 
         t.amount 
         from transaction t
-        LEFT JOIN account a ON a.name = t.debitAccount
+        LEFT JOIN account a ON a.name = t.debitAccount OR a.aliasName = t.debitAccount 
         WHERE 
         (t.type = 'REC' OR t.type = 'JOU') 
         AND a.id = :accountId
@@ -143,7 +151,7 @@ class Transaction{
         t.narration, 
         t.amount 
         from transaction t
-        LEFT JOIN account a ON a.name = t.creditAccount
+        LEFT JOIN account a ON a.name = t.creditAccount OR a.aliasName = t.creditAccount
         WHERE 
         (t.type = 'PAY' OR t.type = 'JOU') 
         AND a.id = :accountId
@@ -164,7 +172,7 @@ class Transaction{
         t.narration, 
         t.amount 
         from transaction t
-        LEFT JOIN account a ON a.name = t.creditAccount
+        LEFT JOIN account a ON a.name = t.creditAccount OR a.aliasName = t.creditAccount
         WHERE 
         (t.type = 'REC' OR t.type = 'JOU') 
         AND a.id = :accountId
@@ -185,7 +193,7 @@ class Transaction{
         t.narration, 
         t.amount 
         from transaction t
-        LEFT JOIN account a ON a.name = t.debitAccount
+        LEFT JOIN account a ON a.name = t.debitAccount OR a.aliasName = t.debitAccount
         WHERE 
         (t.type = 'PAY' OR t.type = 'JOU') 
         AND a.id = :accountId
@@ -316,7 +324,7 @@ class Transaction{
                        narration = :narration,
                        username = :username ";
         
-           $stmt = $this->conn->prepare($query);
+                       $stmt = $this->conn->prepare($query);
         
         // sanitize
         $this->type=htmlspecialchars(strip_tags($this->type));
@@ -341,6 +349,40 @@ class Transaction{
                return false;
            }
        }	
-}
 
+       function checkForDuplicate(){
+        $query = "select * from transaction where 
+        type=:type AND
+        date = :date AND
+        debitAccount = :debitAccount AND
+        creditAccount = :creditAccount AND
+        amount = :amount AND
+        deleted = 0";	
+
+        $stmt = $this->conn->prepare($query);
+
+        // sanitize
+        $this->type=htmlspecialchars(strip_tags($this->type));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        $this->debitAccount=htmlspecialchars(strip_tags($this->debitAccount));
+        $this->crediAccount=htmlspecialchars(strip_tags($this->creditAccount));
+                
+        // bind new values
+        $stmt->bindParam(':type', $this->type);
+        $stmt->bindParam(':date', $this->date);
+        $stmt->bindParam(':debitAccount', $this->debitAccount);
+        $stmt->bindParam(':creditAccount', $this->creditAccount);
+        $stmt->bindParam(':amount', $this->amount);
+
+        $stmt->execute();	 	
+	    return $stmt;
+       }
+
+       function readInvalid(){
+        $query = "select * from transaction where (debitAccount NOT IN (select aliasName from account) OR creditAccount NOT IN (select aliasName from account)) AND deleted = 0";	
+	    $stmt = $this->conn->prepare($query);	
+        $stmt->execute();	 	
+	    return $stmt;	
+    }
+}
 ?>

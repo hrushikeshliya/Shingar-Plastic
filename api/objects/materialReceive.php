@@ -13,6 +13,7 @@ class MaterialReceive{
     public $quantity;
     public $narration;
     public $username;
+    public $itemId;
 
     // constructor with $db as database connection
     public function __construct($db){
@@ -126,13 +127,28 @@ class MaterialReceive{
 	    return $stmt;	
     }
     
-	function readJobberReport(){	
+	function readJobberReport(){
+        
+        $whereClause = "";
+
+        if($this->startDate != "") {
+            $whereClause = $whereClause." AND mr.date>='".$this->startDate."'";
+        }
+
+        if($this->endDate != "") {
+            $whereClause = $whereClause." AND mr.date<='".$this->endDate."'";
+        }
+
+        if($this->itemId != "") {
+            $whereClause = $whereClause." AND mi.itemId = ".$this->itemId;
+        }
+
         $query = "
         SELECT mr.date, i.name, SUM(mr.quantity) quantity, mr.rate, SUM(mr.jobCharge) jobCharge
         FROM materialReceive mr
         LEFT JOIN materialIssue mi ON mr.issueId = mi.id AND mi.deleted = 0
         LEFT JOIN item i ON i.id = mi.itemId
-        WHERE mr.deleted = 0
+        WHERE mr.deleted = 0".$whereClause."
         GROUP BY i.id, mr.date, mr.rate
         ORDER BY i.name, mr.date DESC, mr.rate
         ";	

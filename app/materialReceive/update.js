@@ -5,7 +5,7 @@ $(document).ready(function(){
         
         var id = $(this).attr('data-id');
         
-        $.getJSON("http://shingarplastic.com/api/materialReceive/readOne.php?id=" + id, function(data){  // Change Needed HERE
+        $.getJSON(apiURL+"/materialReceive/readOne.php?id=" + id, function(data){  // Change Needed HERE
 
 		var update_html="";
 		 
@@ -20,7 +20,7 @@ $(document).ready(function(){
 					update_html+="<td>Id</td>";
 					update_html+="<td>"+id+"</td>";
 					update_html+="<td>date</td>";
-					update_html+="<td><input type='date' value='"+data.date+"' name='date' class='form-control' required /></td>";
+					update_html+="<td><input type='date' value='"+data.date+"' name='date'   min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control' required /></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
@@ -39,7 +39,7 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Job Charge</td>";
-					update_html+="<td><input type='text' id='jobCharge' value='"+data.jobCharge+"' name='jobCharge' class='form-control' required readOnly/></td>";
+					update_html+="<td><input type='text' id='jobCharge' value='"+parseFloat(data.jobCharge).toFixed(2)+"' name='jobCharge' class='form-control' required readOnly/></td>";
 					update_html+="<td>Narration</td>";
 					update_html+="<td><input type='text' value='"+data.narration+"' name='narration' class='form-control'/></td>";
 				update_html+="</tr>";
@@ -72,7 +72,7 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/materialReceive/update.php",  // Change Needed HERE
+		    url: apiURL+"/materialReceive/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

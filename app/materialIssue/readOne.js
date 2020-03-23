@@ -6,18 +6,18 @@ $(document).ready(function(){
 	var  materialReceiveDetail = "";
 	var totalCharge = 0;
 	var totalQuantity = 0;
-	$.getJSON("http://shingarplastic.com/api/materialIssue/readOne.php?id=" + id, function(data){   // Change Needed HERE
+	$.getJSON(apiURL+"/materialIssue/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
-	$.getJSON("http://shingarplastic.com/api/materialReceive/read.php?issueId="+id, function(data1){    // Change Needed HERE
+	$.getJSON(apiURL+"/materialReceive/read.php?issueId="+id, function(data1){    // Change Needed HERE
 		
 		$.each(data1.materialReceive, function(key, val) {   // Change Needed HERE
-			totalCharge += val.jobCharge;
-			totalQuantity += val.quantity;
-			materialReceiveDetail += "<tr><th>"+val.id+"</th><th>"+val.date+"</th><th>"+val.quantity+"</th><th>"+val.rate+"</th><th>"+val.jobCharge+"</th><th>"+val.username+"</th><th>"+val.narration+"</th></tr>";	 
+			totalCharge += +val.jobCharge;
+			totalQuantity += +val.quantity;
+			materialReceiveDetail += "<tr><th>"+val.id+"</th><th>"+val.date+"</th><th>"+val.quantity+"</th><th>"+val.rate+"</th><th>"+parseFloat(val.jobCharge).toFixed(2)+"</th><th>"+val.username+"</th><th>"+val.narration+"</th></tr>";	 
 		});
 	 
 		if(totalCharge != 0) {
-			materialReceiveDetail += "<tr><th></th><th>TOTAL</th><th>"+totalQuantity+"</th><th></th><th>"+totalCharge+"</th><th></th><th></th></tr>";	 
+			materialReceiveDetail += "<tr><th></th><th>TOTAL</th><th>"+totalQuantity+"</th><th></th><th>"+parseFloat(totalCharge).toFixed(2)+"</th><th></th><th></th></tr>";	 
 		}
 
 		var read_one_html="";

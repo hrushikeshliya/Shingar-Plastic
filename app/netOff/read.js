@@ -46,13 +46,13 @@ function getCurrentBalance() {
     var accName = '';
 
     console.log("Get Current Balance For : "+id+" : As Of : "+date);
-    $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id +dateParam, function(data){  
+    $.getJSON(apiURL+"/account/readOne.php?id=" + id +dateParam, function(data){  
         openingBalance = parseFloat(data.openingBalance);
         closingBalance = openingBalance;
         accType = data.accountType;
-        accName = data.name;
+        accName = data.aliasName;
 
-    $.getJSON("http://shingarplastic.com/api/transaction/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
+    $.getJSON(apiURL+"/transaction/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
         paymentTillDate = parseFloat(data.payment[0].amount);
 
         if(accType == 'DEBTORS') {
@@ -74,23 +74,32 @@ function getCurrentBalance() {
             $("#narration").val('DISCOUNT BEING TAKEN');
             $("#type").val('JOU');
         }
-    $.getJSON("http://shingarplastic.com/api/sale/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
+        console.log(closingBalance);
+    $.getJSON(apiURL+"/sale/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
         saleTillDate = parseFloat(data.sale[0].amount);    
         closingBalance += saleTillDate;
-    $.getJSON("http://shingarplastic.com/api/purchase/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        console.log("AFTER SALE "+closingBalance);
+    $.getJSON(apiURL+"/purchase/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
         purchaseTillDate = parseFloat(data.purchase[0].amount);
         closingBalance -= purchaseTillDate
-    $.getJSON("http://shingarplastic.com/api/saleReturn/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        console.log("AFTER PURCHASE "+closingBalance);
+    $.getJSON(apiURL+"/saleReturn/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
         saleReturnTillDate = parseFloat(data.saleReturn[0].amount);
         closingBalance -= saleReturnTillDate;
-    $.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        console.log("AFTER SALE RETURN "+closingBalance);
+    $.getJSON(apiURL+"/purchaseReturn/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
         purchaseReturnTillDate = parseFloat(data.purchaseReturn[0].amount);
         closingBalance += purchaseReturnTillDate;
-    $.getJSON("http://shingarplastic.com/api/materialReceive/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
-        jobTillDate = parseFloat(data.materialReceive[0].amount);
+        console.log("AFTER PURCHASE RETURN "+closingBalance);
+    $.getJSON(apiURL+"/materialReceive/read.php?type=amountTillDate&id=" + id+dateParam, function(data){  
+        jobTillDate = data.materialReceive[0].amount;
         closingBalance -= jobTillDate;
-           
+        
+        console.log("AFTER MATERIAL RCV "+closingBalance);
+
         closingBalance = closingBalance.toFixed(2)
+
+        console.log("FINAL "+closingBalance);
         $("#currentBalance").val(closingBalance);
         $("#netOffAmt").val(closingBalance);
         $("#netOffAmt").attr('max',Math.abs(closingBalance));
@@ -123,7 +132,7 @@ function show(){
         
         update_html+="<tr>";
             update_html+="<td class='text-align-right'>Date</th>";
-            update_html+="<td class='text-align-left'><input type='date' id='date' name='date' class='form-control' required /></td>";
+            update_html+="<td class='text-align-left'><input type='date' id='date' name='date'   min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"'  class='form-control' required /><input type='hidden' name='username' id='username' value='"+$.cookie('username')+"'></td>";
         update_html+="</tr>";
 
         update_html+="<tr>";
@@ -167,7 +176,7 @@ function show(){
 
     update_html+="</form>";
 
-$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
+$.getJSON(apiURL+"/account/read.php", function(data){
 
     var dataList = $("#accountNameList");
     dataList.empty();
@@ -188,12 +197,29 @@ $(document).on('submit', '#create-form', function(){
     var form_data=JSON.stringify($(this).serializeObject());
     
     $.ajax({
-        url: "http://shingarplastic.com/api/transaction/create.php?type=netOff",  // Change Needed HERE
+        url: apiURL+"/transaction/create.php?type=netOff",  // Change Needed HERE
         type : "POST",
         contentType : 'multipart/form-data',
         data : form_data,
         success : function(result) {
+            alert(result["message"]);
             show();
+
+            $("#netOffAmt").keyup(function(){
+                calculateJVAmt();
+            });
+        
+            $("#netOffAmt").change(function(){
+                calculateJVAmt();
+            });
+        
+            $("#date").change(function(){
+                getCurrentBalance();
+            });
+        
+            $("#accountName").change(function(){
+                getCurrentBalance();
+            });
         },
         error: function(xhr, resp, text) {
             console.log(xhr, resp, text);

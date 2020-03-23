@@ -15,25 +15,24 @@ $type = isset($_GET['type']) ? $_GET['type'] : "NULL";
 
 $issueId = isset($_GET['issueId']) ? $_GET['issueId'] : 'NULL'; 
 
+if(isset($_GET['startDate'])) {
+    $obj->startDate = $_GET['startDate'];
+}
+
+if(isset($_GET['endDate'])) {
+    $obj->endDate = $_GET['endDate'];
+}
+
+if(isset($_GET['accountId'])) {
+    $obj->accountId = $_GET['accountId'];
+}
+
+if(isset($_GET['itemId'])) {
+    $obj->itemId = $_GET['itemId'];
+}
+
 if($type== 'NULL'){
     if($issueId == 'NULL'){
-
-        if(isset($_GET['startDate'])) {
-            $obj->startDate = $_GET['startDate'];
-        }
-        
-        if(isset($_GET['endDate'])) {
-            $obj->endDate = $_GET['endDate'];
-        }
-
-        if(isset($_GET['accountId'])) {
-            $obj->accountId = $_GET['accountId'];
-        }
-
-        if(isset($_GET['itemId'])) {
-            $obj->itemId = $_GET['itemId'];
-        }
-
         $stmt = $obj->read();
     } else {
         $obj->issueId = $issueId; 
@@ -63,6 +62,15 @@ if($num>0){
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
         extract($row); 
+
+        $item=array(
+            "date" => $date,
+            "name" => $name,
+            "quantity" => floatval($quantity),
+            "rate" => floatval(number_format($rate,2)),
+            "jobCharge" => floatval(number_format($jobCharge,2))
+        );
+
         array_push($arr["materialReceive"], $row); // Change Array Name
     }
  

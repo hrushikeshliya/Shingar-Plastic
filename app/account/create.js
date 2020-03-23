@@ -11,7 +11,7 @@ $(document).ready(function(){
     status_options_html+="<option value='0'>InActive</option>";
     status_options_html+="</select>";
     
-        $.getJSON("http://shingarplastic.com/api/city/readCity.php", function(data){ 
+        $.getJSON(apiURL+"/city/readCity.php", function(data){ 
             
             city_options_html+="<select name='city' class='form-control'>";
             city_options_html+="<option value=''>---</option>";
@@ -21,7 +21,7 @@ $(document).ready(function(){
             city_options_html+="</select>";  
         });   
 
-        $.getJSON("http://shingarplastic.com/api/city/readState.php", function(data){ 
+        $.getJSON(apiURL+"/city/readState.php", function(data){ 
             
             state_options_html+="<select name='state' class='form-control'>";
             state_options_html+="<option value=''>---</option>";
@@ -31,7 +31,7 @@ $(document).ready(function(){
             state_options_html+="</select>";  
         }); 
 
-        $.getJSON("http://shingarplastic.com/api/accountType/read.php", function(data){ 
+        $.getJSON(apiURL+"/accountType/read.php", function(data){ 
             
             accountType_options_html+="<select name='typeId' class='form-control' required>";
             $.each(data.accountType, function(key, val){
@@ -40,7 +40,7 @@ $(document).ready(function(){
             accountType_options_html+="</select>";  
         });          
 
-        $.getJSON("http://shingarplastic.com/api/transport/read.php", function(data){ 
+        $.getJSON(apiURL+"/transport/read.php", function(data){ 
             
             transport_options_html+="<select name='transportId' class='form-control'>";
             transport_options_html+="<option value=''>---</option>";
@@ -146,7 +146,7 @@ $(document).on('submit', '#create-form', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/account/create.php",  // Change Needed HERE
+    url: apiURL+"/account/create.php",  // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

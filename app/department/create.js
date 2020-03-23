@@ -60,7 +60,7 @@ $(document).on('submit', '#createForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/department/create.php",   // Change Needed HERE
+    url: apiURL+"/department/create.php",   // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

@@ -3,9 +3,9 @@ $(document).ready(function(){
 var currentHeading = ""; 
 var navList = "";
 var date=new Date();
-var username = $.cookie('username');;
+var username = $.cookie('username');
 
-	$.getJSON("http://shingarplastic.com/api/navBar/read.php?username="+username, function(data){
+	$.getJSON(apiURL+"/navBar/read.php?username="+username, function(data){
 		$.each(data.navBar, function(key, val){
 			$.each(val.navGroup, function(key2, val2){
 				if (currentHeading != val2.heading) {
@@ -39,7 +39,8 @@ var username = $.cookie('username');;
 	create_html += "    <div class='collapse navbar-collapse' id='myNavbar'>";
 	create_html += "      <ul class='nav navbar-nav'>";
 	create_html +=         navList;
-	create_html += "      </ul>";
+	create_html += "      </ul>";;
+	create_html += "      <li class='text-center'><a style='color:red !important'>Financial Year : "+ $.cookie('financialYear')  +"<BR>"+$.cookie('startDate') +" : "+$.cookie('endDate') +"</a></li>";
 	create_html += "      <li><a>Date : "+ date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear(); +"</a></li>";
 	create_html += "      <li><a>User : "+$.cookie('username');+"</a></li>";
 	create_html += "      <li><a href='index.php'><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>";
@@ -48,8 +49,5 @@ var username = $.cookie('username');;
 	create_html += "</nav>";
 
 	$("#nav").html(create_html);
-        
-});
-
-  
+	});
 });

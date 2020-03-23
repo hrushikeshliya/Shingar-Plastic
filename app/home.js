@@ -1,62 +1,59 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
-    var monthlyTotal = 0;
-    var yearlyTotal = 0;
+    $.getJSON(apiURL + "/sale/read.php?type=summary&financialYear="+$.cookie('financialYear'), function (data) {
 
-$.getJSON("http://shingarplastic.com/api/sale/read.php?type=monthlySummary", function(data){  
+        $.getJSON(apiURL + "/transaction/readInvalid.php", function (data2) {
 
-    $.getJSON("http://shingarplastic.com/api/sale/read.php?type=yearlySummary", function(data2){  
-    
-        var pageContent = "";
+            var pageContent = "";
 
-        pageContent += "	<img src='images/factory.jpg' style='margin-left:25%; '>";
-        
-        pageContent += `
-        <HR>
-        <table class='table table-responsive table-bordered' style='margin-top:50px'>
-        <tr>
-        <td>Department</td>
-        <td>Monthly Summary</td>
-        <td>Yearly Summary <BR>(7th Nov 2018 - 31st Oct 2019)</td>
-        </tr>
-        `;
+            pageContent += `
+            <img src='images/factory.jpg' style='margin-left:25%; width:50%; height:350px;'>
+            <div id="summaryGrid" style="height: 150px;width:100%; margin-top:50px;" class="ag-theme-balham"></div>
+            <div class='text-danger' style="margin-top:10px;">*Following Account Name Ledger's Have Error Kindly Edit & select Actual Account Name From Daybook</div>
+            <div id="invalidGrid" style="height: 150px;width:100%; margin-top:10px;" class="ag-theme-balham"></div>`;
 
-        // CHANGE IN QUERY AS WELL
-        
+            $("#page-content").html(pageContent);
 
+            var summaryRowData = data.sale;
 
-        $.each(data.sale, function(key, val) {  
-            $.each(data2.sale, function(key2, val2) {  
-                if (val.departmentName == val2.departmentName) {
-                    monthlyTotal += +parseFloat(val.netSale).toFixed(3);
-                    yearlyTotal += +parseFloat(val2.netSale).toFixed(3);
-                    pageContent += `
-                    <tr>
-                    <td>`+val.departmentName+`</td>
-                    <td>`+parseFloat(val.netSale).toFixed(3)+`</td>
-                    <td>`+parseFloat(val2.netSale).toFixed(3)+`</td>
-                    </tr>
-                    `;
-                }
-            });
+            var summaryColumnDefs = [
+                { headerName: "Department", field: "departmentName" },
+                { headerName: "Monthly Summary", field: "monthlySummary" },
+                { headerName: "Yearly Summary", field: "yearlySummary" }
+            ];
+
+            var summaryGridOptions = {
+                columnDefs: summaryColumnDefs,
+                rowData: summaryRowData
+            };
+
+            var invalidRowData = data2.transaction;
+
+            var invalidColumnDefs = [
+                { headerName: "Id", field: "id" },
+                { headerName: "Date", field: "date" },
+                { headerName: "Type", field: "type" },
+                { headerName: "Debit Account", field: "debitAccount" },
+                { headerName: "Credit Account", field: "creditAccount" },
+                { headerName: "Narration", field: "narration" },
+                { headerName: "Amount", field: "amount" }
+            ];
+
+            var invalidGridOptions = {
+                columnDefs: invalidColumnDefs,
+                rowData: invalidRowData
+            };
+
+            // lookup the container we want the Grid to use
+            var invalidGridDiv = document.querySelector('#invalidGrid');
+            var summaryGridDiv = document.querySelector('#summaryGrid');
+
+            // create the grid passing in the div to use together with the columns & data we want to use
+            new agGrid.Grid(invalidGridDiv, invalidGridOptions);
+            new agGrid.Grid(summaryGridDiv, summaryGridOptions);
         });
-        pageContent += `
-
-        <tr>
-        <td>TOTAL</td>
-        <td>`+parseFloat(monthlyTotal).toFixed(2)+`</td>
-        <td>`+parseFloat(yearlyTotal).toFixed(2)+`</td>
-        </tr>
-        </table>
-
-        `;
-
-    $("#page-content").html(pageContent);
     });
-});
 
+    changePageTitle("Welcome To Shingar Plastic");
 
-
-changePageTitle("Welcome To Shingar Plastic");
- 
 });

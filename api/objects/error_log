@@ -1,0 +1,57 @@
+[19-Nov-2017 10:01:04 Etc/GMT] PHP Parse error:  syntax error, unexpected '>' in /home/shing65j/public_html/api/objects/roles.php on line 29
+[19-Nov-2017 10:01:04 Etc/GMT] PHP Parse error:  syntax error, unexpected '>' in /home/shing65j/public_html/api/objects/roles.php on line 29
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[01-Nov-2019 11:44:20 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:155
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(155): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 155
+[01-Nov-2019 11:46:25 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:155
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(155): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 155
+[01-Nov-2019 11:48:32 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:155
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(155): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 155
+[01-Nov-2019 11:48:43 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:155
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(155): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 155
+[01-Nov-2019 11:49:01 Etc/GMT] PHP Notice:  Undefined property: MaterialReceive::$itemId in /home/shing65j/public_html/api/objects/materialReceive.php on line 141
+[01-Nov-2019 11:49:07 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:155
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(155): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 155
+[01-Nov-2019 11:49:17 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:155
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(155): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 155
+[01-Nov-2019 11:49:23 Etc/GMT] PHP Notice:  Undefined property: MaterialReceive::$itemId in /home/shing65j/public_html/api/objects/materialReceive.php on line 141
+[01-Nov-2019 11:49:41 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:155
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(155): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 155
+[01-Nov-2019 11:52:13 Etc/GMT] PHP Notice:  Undefined property: MaterialReceive::$itemId in /home/shing65j/public_html/api/objects/materialReceive.php on line 141
+[01-Nov-2019 11:54:12 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'm.itemId' in 'where clause'' in /home/shing65j/public_html/api/objects/materialReceive.php:156
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/materialReceive.php(156): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/materialReceive/read.php(42): MaterialReceive->readJobberReport()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/materialReceive.php on line 156

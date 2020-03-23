@@ -41,10 +41,11 @@ session_start();
     var items = 1;
     var subTotal = 0;
     var grandTotal = 0;
+    var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
 
     function getRate() {
         var id = $("#itemIdList option:selected").val();
-                $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){  
+                $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){  
                     var rate = data.purchaseRate;
                     $("#itemRate").val(rate);
                 });
@@ -53,7 +54,7 @@ session_start();
 
     function getInvoiceId() {
         var id = $("#departmentId option:selected").val();
-                $.getJSON("http://shingarplastic.com/api/department/read.php?id=" + id, function(data){  
+                $.getJSON(apiURL2+"/department/read.php?id=" + id, function(data){  
                     console.log('IN HERE : '+data.department[0].billSeriesPurchase);
                     $("#purchaseInvoiceId").val(data.department[0].billSeriesPurchase);
                 });
@@ -61,7 +62,7 @@ session_start();
 
     function getBillLimit() {
         var id = $("#accountId").val();
-                $.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){  
+                $.getJSON(apiURL2+"/account/readOne.php?id=" + id, function(data){  
                     //$("#billLimit").val(data.billLimit);
                 });
     }
@@ -75,7 +76,7 @@ session_start();
 
             if(quantity !=0 && selectedIndex != 0) {
                 var id = $("#itemIdList option:selected").val();
-                $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
+                $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
 
                             var taxable = '';
                             var amount = (rate * quantity)

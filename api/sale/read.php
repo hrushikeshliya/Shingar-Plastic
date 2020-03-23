@@ -14,33 +14,33 @@ $db = $database->getConnection();
 $sale = new Sale($db);  //Change ClassName
 
 $type = isset($_GET['type']) ? $_GET['type'] : "NULL";
+$financialYear = isset($_GET['financialYear']) ? $_GET['financialYear'] : "NULL";
+
+if(isset($_GET['startDate'])) {
+    $sale->startDate = $_GET['startDate'];
+}
+
+if(isset($_GET['endDate'])) {
+    $sale->endDate = $_GET['endDate'];
+}
+
+if(isset($_GET['departmentId'])) {
+    $sale->departmentId = $_GET['departmentId'];
+}
+
+if(isset($_GET['accountId'])) {
+    $sale->accountId = $_GET['accountId'];
+}
+
+if(isset($_GET['itemId'])) {
+    $sale->itemId = $_GET['itemId'];
+}
 
 if($type=='sale' || $type=='saleReturn') {
 
     $id= isset($_GET['id']) ? $_GET['id'] : "NULL";
     
     if($id == "NULL") {
-
-        if(isset($_GET['startDate'])) {
-            $sale->startDate = $_GET['startDate'];
-        }
-        
-        if(isset($_GET['endDate'])) {
-            $sale->endDate = $_GET['endDate'];
-        }
-
-        if(isset($_GET['departmentId'])) {
-            $sale->departmentId = $_GET['departmentId'];
-        }
-
-        if(isset($_GET['accountId'])) {
-            $sale->accountId = $_GET['accountId'];
-        }
-
-        if(isset($_GET['itemId'])) {
-            $sale->itemId = $_GET['itemId'];
-        }
-
         $stmt = $sale->read();
     } else {
         $sale->id = $id;
@@ -102,31 +102,23 @@ if($type=='sale' || $type=='saleReturn') {
     }
 
     $stmt = $sale->readAmountTillDate();
-} else if($type=='monthlySummary') {
-    $stmt = $sale->readMonthlySummary();
-} else if($type=='yearlySummary') {
-    $stmt = $sale->readYearlySummary();
-} 
+} else if($type=='summary') {
+    $stmt = $sale->readSummary($financialYear);
+}
 
-if($type=='distinctAccount' || $type=='distinctInvoiceId' || $type=='saleReport' || $type=='amountTillDate' || $type=='monthlySummary' || $type=='yearlySummary') {
+if($type=='distinctAccount' || $type=='distinctInvoiceId' || $type=='saleReport' || $type=='amountTillDate' || $type=='summary') {
 
 $num = $stmt->rowCount();
      
-if($num>0){
-    $arr=array();
-    $arr["sale"]=array();
+$arr=array();
+$arr["sale"]=array();
  
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        extract($row);
-        array_push($arr["sale"], $row); 
-    }
- 
-    echo json_encode($arr);
-} else{
-    echo json_encode(
-        array("message" => "No Records found.")
-    );
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+    extract($row);
+    array_push($arr["sale"], $row); 
 }
+ 
+echo json_encode($arr);
 }
 
 ?>

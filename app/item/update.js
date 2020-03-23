@@ -4,7 +4,7 @@ $(document).ready(function(){
         
         var id = $(this).attr('data-id');
         
-        $.getJSON("http://shingarplastic.com/api/item/readOne.php?id=" + id, function(data){  // Change Needed HERE
+        $.getJSON(apiURL+"/item/readOne.php?id=" + id, function(data){  // Change Needed HERE
  
 		 var id = data.id;
 		 var name = data.name;
@@ -13,7 +13,7 @@ $(document).ready(function(){
 
 		 var itemGroup_options_html = "";
 
-		 $.getJSON("http://shingarplastic.com/api/itemGroup/read.php", function(data2){ 
+		 $.getJSON(apiURL+"/itemGroup/read.php", function(data2){ 
 				 
 			 itemGroup_options_html+="<select name='itemGroup' class='form-control'>";
 			 $.each(data2.itemGroup, function(key2, val2){
@@ -111,7 +111,7 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/item/update.php",  // Change Needed HERE
+		    url: apiURL+"/item/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

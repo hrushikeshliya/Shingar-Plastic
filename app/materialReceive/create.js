@@ -5,7 +5,7 @@ $(document).ready(function(){
     var issues_options_html = "<select id='issueId' name='issueId' class='form-control' onchange=getStats() required>";
     issues_options_html+="<option value=''>Id => Date | Quantity (Psc) | Item Name</option></select>";
 
-    $.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data){ 
+    $.getJSON(apiURL+"/account/read.php?type=JOBBER", function(data){ 
             
         jobber_options_html+="<select id='jobberId' name='jobberId' class='form-control' onchange=getIssues()>";
         jobber_options_html+="<option value=''></option>";
@@ -31,7 +31,7 @@ $(document).ready(function(){
  
         create_html+="<tr>";
             create_html+="<td>Date</td>";
-            create_html+="<td><input type='date' name='date' class='form-control' required /></td>";
+            create_html+="<td><input type='date' name='date'   min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control' required /></td>";
             create_html+="<td>Jobber</td>";
             create_html+="<td>"+jobber_options_html+"</td>";
         create_html+="</tr>";
@@ -89,7 +89,7 @@ $(document).on('submit', '#createForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/materialReceive/create.php",   // Change Needed HERE
+    url: apiURL+"/materialReceive/create.php",   // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

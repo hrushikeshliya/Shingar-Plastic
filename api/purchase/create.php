@@ -38,6 +38,7 @@ if($obj->create()){
             $detail->type = "purchase";
             $detail->itemId = $data->itemId[$x];
             $detail->itemName = $data->itemName[$x];
+            $detail->narration = $data->itemNarration[$x];
             $detail->quantity = $data->quantity[$x];
             $detail->rate = $data->rate[$x];
             $detail->amount = $data->amount[$x];
@@ -51,6 +52,7 @@ if($obj->create()){
         $detail->type = "purchase";
         $detail->itemId = $data->itemId;
         $detail->itemName = $data->itemName;
+        $detail->narration = $data->itemNarration;
         $detail->quantity = $data->quantity;
         $detail->rate = $data->rate;
         $detail->amount = $data->amount;

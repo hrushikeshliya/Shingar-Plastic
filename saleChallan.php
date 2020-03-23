@@ -26,6 +26,7 @@
             border : 2px solid !important;
         }
     }
+    
 </style>
 </head>
 <body>

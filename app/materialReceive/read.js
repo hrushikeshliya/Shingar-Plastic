@@ -1,8 +1,8 @@
 $(document).ready(function(){
-    show("","","","");
+    show($.cookie('startDate'),$.cookie('endDate'),"","");
 
     $(document).on('click', '.read-button', function(){
-        show("","","","");
+        show($.cookie('startDate'),$.cookie('endDate'),"","");
     });
 
     $(document).on('click', '.search-button', function(){
@@ -48,7 +48,7 @@ function show(startDate, endDate, accountId, itemId){
         params += "&itemId="+itemId;
     }
  
-$.getJSON("http://shingarplastic.com/api/materialReceive/read.php?temp=temp"+params, function(data){    // Change Needed HERE
+$.getJSON(apiURL+"/materialReceive/read.php?temp=temp"+params, function(data){    // Change Needed HERE
  
  
 read_html="";
@@ -57,12 +57,12 @@ read_html+="<div class='row readOnlyContent' id='read'>";
 
     read_html+="<div class='col-lg-2'>";
     read_html+="From : ";
-    read_html+="<input type='date' id='startDate' name='startDate' value='"+startDate+"' class='form-control pull-left m-b-15px'/>";
+    read_html+="<input type='date' id='startDate' name='startDate' value='"+startDate+"'  min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control pull-left m-b-15px'/>";
     read_html+="</div>";
 
     read_html+="<div class='col-lg-2'>";
     read_html+="To : ";
-    read_html+="<input type='date' id='endDate' name='endDate' value='"+endDate+"' class='form-control pull-left m-b-15px'/>";
+    read_html+="<input type='date' id='endDate' name='endDate' value='"+endDate+"'  min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control pull-left m-b-15px'/>";
     read_html+="</div>";
 
     read_html+="<div class='col-lg-2'>";
@@ -70,7 +70,7 @@ read_html+="<div class='row readOnlyContent' id='read'>";
     read_html+="<select id='accountId' name='accountId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data3){    
+    $.getJSON(apiURL+"/account/read.php?type=JOBBER", function(data3){    
         $.each(data3.account, function(key3, val3){
             if(accountId == val3.id) {
                 read_html += "<option value="+val3.id+" selected>"+val3.aliasName+"</option>";
@@ -88,7 +88,7 @@ read_html+="<div class='row readOnlyContent' id='read'>";
     read_html+="<select id='itemId' name='itemId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/item/read.php", function(data4){    
+    $.getJSON(apiURL+"/item/read.php", function(data4){    
         $.each(data4.item, function(key4, val4){
             if(itemId == val4.id) {
                 read_html += "<option value="+val4.id+" selected>"+val4.name+"</option>";
@@ -140,7 +140,7 @@ $.each(data.materialReceive, function(key, val) {   // Change Needed HERE
         read_html+="<td>" + val.itemName + "</td>";
         read_html+="<td>" + val.quantity + "</td>";
         read_html+="<td>" + val.rate+ "</td>";
-        read_html+="<td>" + val.jobCharge + "</td>";
+        read_html+="<td>" + parseFloat(val.jobCharge).toFixed(2) + "</td>";
         read_html+="<td>" + val.narration + "</td>";
         read_html+="<td align='center' class='readOnlyContent'>";
 
@@ -170,7 +170,7 @@ read_html+="<HR>";
 
 $("#page-content").html(read_html);
 $("#totalQty").html(totalQty);
-$("#totalAmt").html(parseFloat(totalAmt).toFixed(3));
+$("#totalAmt").html(parseFloat(totalAmt).toFixed(2));
 changePageTitle("Material Receive Register");  // Change Needed HERE
 
 });

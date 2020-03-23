@@ -15,17 +15,19 @@
  
     <link href="app/assets/css/style.css?<?php echo date('l jS \of F Y h:i:s A'); ?>" rel="stylesheet" />
     <style type="text/css">
-    @page 
-    {
-        size: A4;   /* auto is the initial value */
-        margin: 3mm;  /* this affects the margin in the printer settings */
-    }
+
 
     @media print {
-        table {
+
+@page {                
+  size: A4;
+  margin: 3mm;
+}
+
+table {
             border : 2px solid !important;
         }
-    }
+}
 
 </style>
 </head>

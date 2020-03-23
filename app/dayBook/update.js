@@ -5,7 +5,7 @@ $(document).ready(function(){
         var id = $(this).attr('data-id');
 		var username = $.cookie('username');
 		
-        $.getJSON("http://shingarplastic.com/api/transaction/readOne.php?id=" + id, function(data){  // Change Needed HERE
+        $.getJSON(apiURL+"/transaction/readOne.php?id=" + id, function(data){  // Change Needed HERE
 
 		var update_html = "";
 		
@@ -71,13 +71,13 @@ $(document).ready(function(){
 		changePageTitle("Edit Day Book Entry");  // Change Needed HERE
 		
 
-		$.getJSON("http://shingarplastic.com/api/account/read.php", function(data){
+		$.getJSON(apiURL+"/account/read.php", function(data){
 
 			var dataList = $("#accountNameList");
 			dataList.empty();
-				
+			var parser = new DOMParser;
 			$.each(data.account, function(key, val){
-				var opt = $("<option></option>").attr("value", val.aliasName);
+				var opt = $("<option></option>").attr("value", parser.parseFromString(val.aliasName,'text/html').body.textContent);
 				dataList.append(opt);
 			});
 		});
@@ -93,7 +93,7 @@ $(document).ready(function(){
 		var obj = jQuery.parseJSON(form_data);
 
 		$.ajax({
-		    url: "http://shingarplastic.com/api/transaction/update.php",  // Change Needed HERE
+		    url: apiURL+"/transaction/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

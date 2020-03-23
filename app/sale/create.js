@@ -14,11 +14,11 @@ function create() {
     var create_html="";
     var invoiceId = "";
 
-$.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", function(data){ 
+$.getJSON(apiURL+"/singleValues/read.php?type=sale", function(data){ 
 
     invoiceId = data.singleValues[0].id;
 
-    $.getJSON("http://shingarplastic.com/api/item/read.php", function(data){ 
+    $.getJSON(apiURL+"/item/read.php", function(data){ 
             
         item_options_html+="<select id='itemIdList' class='form-control' onchange=getRate()>";
         item_options_html+="<option value=''>Select Item</option>";
@@ -27,7 +27,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
         });
         item_options_html+="</select>";
 
-        $.getJSON("http://shingarplastic.com/api/department/read.php?type=active", function(data){ 
+        $.getJSON(apiURL+"/department/read.php?type=active", function(data){ 
                 
             department_options_html+="<select id='departmentId' name='departmentId' class='form-control' onchange=getInvoiceId() required>";
             department_options_html+="<option value=''></option>";
@@ -36,7 +36,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
             });
             department_options_html+="</select>";
         
-            $.getJSON("http://shingarplastic.com/api/transport/read.php", function(data){ 
+            $.getJSON(apiURL+"/transport/read.php", function(data){ 
                 
                 transport_options_html+="<select name='transportId' id='transportId' class='form-control'>";
                 $.each(data.transport, function(key, val){
@@ -44,7 +44,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
                 });
                 transport_options_html+="</select>";
 
-                $.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){ 
+                $.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data){ 
                 
                     billName_options_html+="<select id='billNameId' name='billNameId' class='form-control' required>";
                     billName_options_html+="<option value=''></option>";
@@ -53,7 +53,7 @@ $.getJSON("http://shingarplastic.com/api/singleValues/read.php?type=sale", funct
                     });
                     billName_options_html+="</select>";
 
-                    $.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){ 
+                    $.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data){ 
                 
                         account_options_html+="<select id='accountId' name='accountId' class='form-control' onchange=getBillLimit() required>";
                         account_options_html+="<option value=''></option>";
@@ -179,7 +179,7 @@ $(document).on('submit', '#createForm', function(){
 var form_data=JSON.stringify($(this).serializeObject());
 
 $.ajax({
-    url: "http://shingarplastic.com/api/sale/create.php",   // Change Needed HERE
+    url: apiURL+"/sale/create.php",   // Change Needed HERE
     type : "POST",
     contentType : 'multipart/form-data',
     data : form_data,

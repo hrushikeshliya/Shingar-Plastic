@@ -15,11 +15,11 @@ function update(id) {
     var create_html="";
     var invoiceId = "";
 
-$.getJSON("http://shingarplastic.com/api/purchase/read.php?type=purchase&id=" + id, function(mainData){ 
+$.getJSON(apiURL+"/purchase/read.php?type=purchase&id=" + id, function(mainData){ 
 
     invoiceId = id;
 
-    $.getJSON("http://shingarplastic.com/api/item/read.php", function(data){ 
+    $.getJSON(apiURL+"/item/read.php", function(data){ 
             
         item_options_html+="<select id='itemIdList' class='form-control' onchange=getRate()>";
         item_options_html+="<option value=''>Select Item</option>";
@@ -28,7 +28,7 @@ $.getJSON("http://shingarplastic.com/api/purchase/read.php?type=purchase&id=" + 
         });
         item_options_html+="</select>";
 
-        $.getJSON("http://shingarplastic.com/api/department/read.php?type=active", function(data){ 
+        $.getJSON(apiURL+"/department/read.php?type=active", function(data){ 
                 
             department_options_html+="<select id='departmentId' name='departmentId' class='form-control'  required readonly>";
             $.each(data.department, function(key, val){
@@ -38,7 +38,7 @@ $.getJSON("http://shingarplastic.com/api/purchase/read.php?type=purchase&id=" + 
             });
             department_options_html+="</select>";
         
-                $.getJSON("http://shingarplastic.com/api/account/read.php?type=CREDITORS", function(data){ 
+                $.getJSON(apiURL+"/account/read.php?type=CREDITORS", function(data){ 
                 
                     account_options_html+="<select id='accountId' name='accountId' class='form-control' onchange=getBillLimit() required>";
                     account_options_html+="<option value=''></option>";
@@ -148,7 +148,7 @@ changePageTitle("Edit Purchase Entry"); // Change Needed HERE
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/purchase/update.php",  // Change Needed HERE
+		    url: apiURL+"/purchase/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

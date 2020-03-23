@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 	var id = $(this).attr('data-id');
 	
-	$.getJSON("http://shingarplastic.com/api/account/readOne.php?id=" + id, function(data){    // Change Needed HERE
+	$.getJSON(apiURL+"/account/readOne.php?id=" + id, function(data){    // Change Needed HERE
 		
 		var read_one_html="";
 		

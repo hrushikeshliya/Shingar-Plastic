@@ -5,13 +5,13 @@ $(document).ready(function(){
         
         var id = $(this).attr('data-id');
         
-        $.getJSON("http://shingarplastic.com/api/materialIssue/readOne.php?id=" + id, function(data){  // Change Needed HERE
+        $.getJSON(apiURL+"/materialIssue/readOne.php?id=" + id, function(data){  // Change Needed HERE
 
 		var item_options_html = "";
 		var process_options_html = "";
 		var jobber_options_html = "";
 	
-		$.getJSON("http://shingarplastic.com/api/item/read.php", function(data1){ 
+		$.getJSON(apiURL+"/item/read.php", function(data1){ 
 				
 			item_options_html+="<select name='itemId' class='form-control'>";
 			$.each(data1.item, function(key, val){
@@ -23,7 +23,7 @@ $(document).ready(function(){
 			});
 			item_options_html+="</select>";
 		
-				$.getJSON("http://shingarplastic.com/api/account/read.php?type=JOBBER", function(data1){ 
+				$.getJSON(apiURL+"/account/read.php?type=JOBBER", function(data1){ 
 				
 					jobber_options_html+="<select name='jobberId' class='form-control'>";
 					$.each(data1.account, function(key, val){
@@ -48,7 +48,7 @@ $(document).ready(function(){
 					update_html+="<td>Id</td>";
 					update_html+="<td>"+id+"</td>";
 					update_html+="<td>Date</td>";
-					update_html+="<td><input type='date' value='"+data.date+"' name='date' class='form-control' required /></td>";
+					update_html+="<td><input type='date' value='"+data.date+"' name='date'   min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"' class='form-control' required /></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";
@@ -95,7 +95,7 @@ $(document).ready(function(){
 		var form_data=JSON.stringify($(this).serializeObject());
 		
 		$.ajax({
-		    url: "http://shingarplastic.com/api/materialIssue/update.php",  // Change Needed HERE
+		    url: apiURL+"/materialIssue/update.php",  // Change Needed HERE
 		    type : "POST",
 		    contentType : 'multipart/form-data',
 		    data : form_data,

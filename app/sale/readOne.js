@@ -1,17 +1,5 @@
 $(document).ready(function(){
 	genearateInvoice("");
-
-	$(document).on('click', '.print-button', function(){
-        //$("#invoice").printMe();
-        $("#read").hide();
-        $("#print").hide();
-		$("#page-title").hide();
-        window.print();
-        $("#read").show();
-        $("#print").show();
-		$("#page-title").show();
-
-	});
 });
 
 function genearateInvoice(passedHsn) {
@@ -19,7 +7,7 @@ function genearateInvoice(passedHsn) {
 	var billType = $_GET('type');
 	var id = $_GET('id');
 
-	$.getJSON("http://shingarplastic.com/api/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
+	$.getJSON(apiURL+"/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
 
 		var read_one_html = "";
 		var billTO = "";
@@ -53,11 +41,37 @@ function genearateInvoice(passedHsn) {
 		var d = new Date(data.sale[0].date);
 		var n = d.getFullYear();
 
+		var y1 = 0;
+		var y2 = 0;
+		var fy = "";
+
+		var compare_dates = function(date1,date2){
+			if (date1>date2) return false;
+			else if (date1<date2) return true;
+			else return true; 
+		}
+	
+		if(compare_dates(d,new Date('2019-03-31'))){
+			y1 = n 
+			y2 = n+1
+		} else {
+			fy = "FY"
+			console.log(d)
+			console.log(d.getMonth())
+			if(d.getMonth()<3){
+				y1 = n-1
+				y2 = n
+			} else {
+				y1 = n
+				y2 = n+1
+			}
+		}
+
 		read_one_html+="<tr>";
 			read_one_html+="<td colspan=3>"+billTO+"</td>";
 			read_one_html+="<td colspan=3>";
 			read_one_html+="<div>";
-			read_one_html+="Invoice No : " + data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+n+"-"+(n+1)+"<BR><BR>";
+			read_one_html+="Invoice No : " + data.sale[0].billCode+"/"+data.sale[0].invoiceId+"/"+fy+y1+"-"+y2+"<BR><BR>";
 			read_one_html+="Date (YYYY-MM-DD) : " + data.sale[0].date+"<BR><BR>";
 
 			var lrNo = '';
@@ -87,11 +101,15 @@ function genearateInvoice(passedHsn) {
 
 				var narration = val.narration == null ? '' : val.narration;
 
-				if((val.hsnSac == "3926" || val.hsnSac == "7117") && billType == "invoice") {
+				if((val.hsnSac == "3926" || val.hsnSac == "7117" || val.hsnSac == "3923") && billType == "invoice") {
 					read_one_html+="<tr>";
 						read_one_html+="<td>"+srNo+"</td>";
 						if(data.sale[0].showName == "0") {
-							read_one_html+="<td>Bangles</td>";
+							if(val.hsnSac == "3923"){
+								read_one_html+="<td>Dabi</td>";
+							} else {
+								read_one_html+="<td>Bangles</td>";
+							}
 						} else {
 							read_one_html+="<td>"+val.itemName+"</td>";
 						}
@@ -104,9 +122,15 @@ function genearateInvoice(passedHsn) {
 					quantityTotal += parseFloat(val.quantity);
 				} else if (val.hsnSac == '11111') {
 					cartoons += val.quantity;
-					deductions += amount;
+					deductions += +amount;
 				}  else {
-					deductions += amount;
+					console.log(val.itemName);
+					console.log(val.quantity);
+					console.log(val.rate);
+					console.log(val.hsnSac);
+					console.log(deductions);
+					deductions += +amount;
+					console.log(deductions);
 				}
 			});
 			

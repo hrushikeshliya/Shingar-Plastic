@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    show("","","","","");
+    show($.cookie("startDate"),$.cookie("endDate"),"","","");
 
     $(document).on('click', '.search-button', function(){
         var startDate = $("#startDate").val();
@@ -17,27 +17,27 @@ function show(startDate, endDate, departmentId, accountId, itemId){
     var totalQty = 0;
     var totalAmt = 0;
     
-    if(startDate != "") {
+    if(startDate != undefined) {
         params += "&startDate="+startDate;
     }
     
-    if(endDate != "") {
+    if(endDate != undefined) {
         params += "&endDate="+endDate;
     }
     
-    if(departmentId != "") {
+    if(departmentId != undefined) {
         params += "&departmentId="+departmentId;
     }
     
-    if(accountId != "") {
+    if(accountId != undefined) {
         params += "&accountId="+accountId;
     }
     
-    if(itemId != "") {
+    if(itemId != undefined) {
         params += "&itemId="+itemId;
     }
  
-$.getJSON("http://shingarplastic.com/api/purchaseReturn/read.php?type=purchaseReturn"+params, function(data){    // Change Needed HERE
+$.getJSON(apiURL+"/purchaseReturn/read.php?type=purchaseReturn"+params, function(data){    // Change Needed HERE
  
  
 read_html="";
@@ -59,7 +59,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='departmentId' name='departmentId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/department/read.php", function(data2){    
+    $.getJSON(apiURL+"/department/read.php", function(data2){    
         $.each(data2.department, function(key2, val2){
             if(departmentId == val2.Id) {
                 read_html += "<option value="+val2.Id+" selected>"+val2.name+"</option>";
@@ -77,7 +77,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='accountId' name='accountId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/account/read.php?type=CREDITORS", function(data3){    
+    $.getJSON(apiURL+"/account/read.php?type=CREDITORS", function(data3){    
         $.each(data3.account, function(key3, val3){
             if(accountId == val3.id) {
                 read_html += "<option value="+val3.id+" selected>"+val3.aliasName+"</option>";
@@ -95,7 +95,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='itemId' name='itemId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON("http://shingarplastic.com/api/item/read.php", function(data4){    
+    $.getJSON(apiURL+"/item/read.php", function(data4){    
         $.each(data4.item, function(key4, val4){
             if(itemId == val4.id) {
                 read_html += "<option value="+val4.id+" selected>"+val4.name+"</option>";
@@ -211,11 +211,11 @@ read_html+="<HR>";
 
 $("#page-content").html(read_html);
 $("#totalQty").html(totalQty);
-$("#totalAmt").html(parseFloat(totalAmt).toFixed(3));
+$("#totalAmt").html(parseFloat(totalAmt).toFixed(2));
 
 changePageTitle("Purchase Return Register");  // Change Needed HERE
 
-$.getJSON("http://shingarplastic.com/api/account/read.php?type=CREDITORS", function(data){
+$.getJSON(apiURL+"/account/read.php?type=CREDITORS", function(data){
 
     var dataList = $("#accountNameList");
     dataList.empty();

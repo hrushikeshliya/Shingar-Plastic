@@ -1,6 +1,31 @@
-[19-Nov-2017 10:01:04 Etc/GMT] PHP Parse error:  syntax error, unexpected '>' in /home/shing65j/public_html/api/objects/roles.php on line 29
-[19-Nov-2017 10:01:04 Etc/GMT] PHP Parse error:  syntax error, unexpected '>' in /home/shing65j/public_html/api/objects/roles.php on line 29
-[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
-[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
-[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
-[19-Nov-2017 10:01:34 Etc/GMT] PHP Notice:  Undefined variable: id in /home/shing65j/public_html/api/roles/read.php on line 30
+[07-Nov-2019 13:59:12 Etc/GMT] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[07-Nov-2019 13:59:12 Etc/GMT] PHP Notice:  Undefined property: stdClass::$username in /home/shing65j/public_html/api/transaction/create.php on line 28
+[07-Nov-2019 13:59:12 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: no parameters were bound' in /home/shing65j/public_html/api/objects/transaction.php:378
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/transaction.php(378): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/transaction/create.php(36): Transaction->checkForDuplicate()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/transaction.php on line 378
+[07-Nov-2019 14:00:52 Etc/GMT] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[07-Nov-2019 14:00:52 Etc/GMT] PHP Notice:  Undefined property: stdClass::$username in /home/shing65j/public_html/api/transaction/create.php on line 28
+[07-Nov-2019 14:00:52 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: no parameters were bound' in /home/shing65j/public_html/api/objects/transaction.php:378
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/transaction.php(378): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/transaction/create.php(36): Transaction->checkForDuplicate()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/transaction.php on line 378
+[07-Nov-2019 14:05:26 Etc/GMT] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[07-Nov-2019 14:05:26 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: no parameters were bound' in /home/shing65j/public_html/api/objects/transaction.php:378
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/transaction.php(378): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/transaction/create.php(36): Transaction->checkForDuplicate()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/transaction.php on line 378
+[07-Nov-2019 14:21:35 Etc/GMT] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[07-Nov-2019 14:23:26 Etc/GMT] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[07-Nov-2019 14:23:26 Etc/GMT] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: no parameters were bound' in /home/shing65j/public_html/api/objects/transaction.php:378
+Stack trace:
+#0 /home/shing65j/public_html/api/objects/transaction.php(378): PDOStatement->execute()
+#1 /home/shing65j/public_html/api/transaction/create.php(36): Transaction->checkForDuplicate()
+#2 {main}
+  thrown in /home/shing65j/public_html/api/objects/transaction.php on line 378

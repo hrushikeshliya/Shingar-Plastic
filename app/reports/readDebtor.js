@@ -3,8 +3,11 @@ $(document).ready(function(){
 });
 
 function show(){
-    $.getJSON("http://shingarplastic.com/api/reports/read.php?type=sale", function(data){  // Change Needed HERE
- 
+    $.getJSON(apiURL+"/reports/read.php?type=sale", function(data){  // Change Needed HERE
+
+        openingTotal = 0
+        closingTotal = 0
+
 read_html="";
 
 read_html+="<div class='row'>";
@@ -173,33 +176,41 @@ if(october>0 && payment>october && payment!=0) {
 read_html+="     <tr>";
 read_html+="        <td>"+val.aliasName+"</td>";
 read_html+="        <td>"+val.name+"</td>";
-read_html+="        <td>"+parseFloat(openingBalance).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(november).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(december).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(january).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(february).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(march).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(april).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(may).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(june).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(july).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(august).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(september).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(october).toFixed(3)+"</td>";
-read_html+="        <td>"+parseFloat(val.closingBalance).toFixed(3)+"</td>";
+read_html+="        <td>"+parseFloat(openingBalance).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(november).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(december).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(january).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(february).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(march).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(april).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(may).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(june).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(july).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(august).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(september).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(october).toFixed(2)+"</td>";
+read_html+="        <td>"+parseFloat(val.closingBalance).toFixed(2)+"</td>";
 read_html+="     </tr>";
+
+openingTotal += +parseFloat(val.openingBalance).toFixed(2);
+closingTotal += +parseFloat(val.closingBalance).toFixed(2);
+
 
 });
 
 read_html+="   </tbody>";
 read_html+="</table>";
 
+openingTotal = parseFloat(openingTotal).toFixed(2);
+closingTotal = parseFloat(closingTotal).toFixed(2);
+
+read_html+=`Opening Total : ${openingTotal} <BR> Closing Total : ${closingTotal}`;
 read_html+="</div>";
 
 $("#page-content").html(read_html);
 changePageTitle("Buyer's Report");  // Change Needed HERE
 
-$.getJSON("http://shingarplastic.com/api/account/read.php?type=DEBTORS", function(data){
+$.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data){
 
     var dataList = $("#accountNameList");
     dataList.empty();
