@@ -5,6 +5,16 @@ $(document).ready(function(){
 function show(){
 var username = $.cookie('username');
 
+$.getJSON(apiURL+"/account/read.php", function(accountData){
+		
+    var creditAccountList = ""
+    var debitAccountList = ""
+
+    $.each(accountData.account, function(key, accountDataVal){
+        creditAccountList += `<option value='${accountDataVal.id}'>${accountDataVal.aliasName}</option>`;
+        debitAccountList += `<option value='${accountDataVal.id}'>${accountDataVal.aliasName}</option>`;
+    });
+
 create_html="";
 
 create_html+="<div class='row'>";
@@ -38,8 +48,8 @@ create_html+="</tr>";
     create_html+="</tr>";
      
     create_html+="<tr>";
-        create_html+="<td><input list='accountNameList' id='debitAccount' name='debitAccount' class='form-control pull-left m-b-15px' required/></td>";
-        create_html+="<td><input list='accountNameList' id='creditAccount' name='creditAccount' class='form-control pull-left m-b-15px' required/></td>";
+        create_html+="<td><select id='debitAccountId' name='debitAccountId' class='form-control pull-left m-b-15px' required>"+debitAccountList+"</select></td>";
+        create_html+="<td><select id='creditAccountId' name='creditAccountId' class='form-control pull-left m-b-15px' required>"+creditAccountList+"</select></td>";
         create_html+="<td><input type='number' id='amount' name='amount' min='0.001' step='0.001' class='form-control' required></td>";
     create_html+="</tr>";
 
@@ -56,15 +66,6 @@ create_html+="</form>";
 $("#page-content").html(create_html);
 changePageTitle("Journal Entry");  // Change Needed HERE
 
-$.getJSON(apiURL+"/account/read.php", function(data){
-
-    var dataList = $("#accountNameList");
-    dataList.empty();
-
-	$.each(data.account, function(key, val){
-        var opt = $("<option></option>").attr("value", val.aliasName);
-        dataList.append(opt);
-    });
 });
 
 
@@ -78,6 +79,7 @@ $(document).on('submit', '#update-form', function(){
         contentType : 'multipart/form-data',
         data : form_data,
         success : function(result) {
+            alert("Success");
             show();
         },
         error: function(xhr, resp, text) {

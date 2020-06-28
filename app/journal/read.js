@@ -20,15 +20,21 @@ if(endDate != "") {
     params += "&endDate="+endDate;
 }
 
- 
+$.getJSON(apiURL+"/account/read.php", function(data){ 
+
+    var accountList = "<option>All</option>"
+    $.each(data.account, function(key, val){
+        accountList += `<option value='${val.aliasName}'>${val.aliasName}</option>`
+    });
+
 $.getJSON(apiURL+"/transaction/read.php?type=JOU"+params, function(data){  // Change Needed HERE
  
- 
+    
 read_html=`
 
 <div class='row readOnlyContent'>
 
-<div class='col-lg-2'>From : <input type='date' id='startDate' name='startDate' value='${startDate}' min='${+$.cookie('startDate')}' max='${$.cookie('endDate')}' class='form-control pull-left m-b-15px'/></div>
+<div class='col-lg-2'>From : <input type='date' id='startDate' name='startDate' value='${startDate}' min='${$.cookie('startDate')}' max='${$.cookie('endDate')}' class='form-control pull-left m-b-15px'/></div>
 
 <div class='col-lg-2'>To : <input type='date' id='endDate' name='endDate' value='${endDate}'  min='${$.cookie('startDate')}' max='${$.cookie('endDate')}' class='form-control pull-left m-b-15px'/></div>
 
@@ -38,12 +44,9 @@ read_html=`
 </div>
 </div>
 
-    <div class='col-md-4'>
-        <input type='text' list='accountNameList' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>
-            <datalist id='accountNameList'></datalist>
+    <div class='col-md-4'> Select Account : 
+        <select type='text' id='myInput' class='form-control pull-left m-b-15px' onchange='search()' placeholder='Search'>${accountList}</select>
     </div>
-
-
 
     <div class='col-lg-2'><br>
         <div id='print' class='btn btn-primary pull-right m-b-15px print-button'>
@@ -98,15 +101,6 @@ read_html+="</table>";
 $("#page-content").html(read_html);
 changePageTitle("Journal Register");  // Change Needed HERE
 
-$.getJSON(apiURL+"/account/read.php", function(data){
-
-    var dataList = $("#accountNameList");
-    dataList.empty();
-
-	$.each(data.account, function(key, val){
-        var opt = $("<option></option>").attr("value", val.name);
-        dataList.append(opt);
-    });
 });
 
 

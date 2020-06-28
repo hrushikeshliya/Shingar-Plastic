@@ -16,7 +16,6 @@ $obj = new Transaction($db);
 
 $account = new Account($db);
 
-
 $obj->type = isset($_GET['type']) ? $_GET['type'] : die(); 
 
 $currentDate = "";

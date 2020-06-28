@@ -30,6 +30,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             "date" => $row['date'],
             "debitAccount" => $row['debitAccount'],
             "creditAccount" => $row['creditAccount'],
+            "debitAccountId" => $row['debitAccountId'],
+            "creditAccountId" => $row['creditAccountId'],
             "amount" => $row['amount'],
             "narration" => $row['narration'],
         );

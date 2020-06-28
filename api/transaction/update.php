@@ -19,9 +19,11 @@ $obj = new Transaction($db);
 $data = json_decode(file_get_contents("php://input"));
  
 $obj->id = $data->id; 
-$obj->debitAccount = $data->debitAccount; 
 $obj->date = $data->date; 
+$obj->debitAccount = $data->debitAccount; 
 $obj->creditAccount = $data->creditAccount; 
+$obj->debitAccountId = $data->debitAccountId;
+$obj->creditAccountId = $data->creditAccountId;
 $obj->amount = $data->amount; 
 $obj->narration = $data->narration; 
 $obj->username = $data->username; 

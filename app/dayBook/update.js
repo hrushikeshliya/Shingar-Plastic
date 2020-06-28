@@ -5,12 +5,31 @@ $(document).ready(function(){
         var id = $(this).attr('data-id');
 		var username = $.cookie('username');
 		
+		$.getJSON(apiURL+"/account/read.php", function(accountData){
+		
+			var creditAccountList = ""
+			var debitAccountList = ""
+
         $.getJSON(apiURL+"/transaction/readOne.php?id=" + id, function(data){  // Change Needed HERE
 
-		var update_html = "";
-		
-		update_html+="<datalist id='accountNameList'>";
-		update_html+="</datalist>";		
+			$.each(accountData.account, function(key, accountDataVal){
+
+				var debitAccountSelected = ""
+				var creditAccountSelected = ""
+
+				if(data.debitAccountId == accountDataVal.id){
+					debitAccountSelected = "selected"
+				}
+
+				if(data.creditAccountId == accountDataVal.id){
+					creditAccountSelected = "selected"
+				}
+
+				creditAccountList += `<option value='${accountDataVal.id}' ${creditAccountSelected}>${accountDataVal.aliasName}</option>`;
+				debitAccountList += `<option value='${accountDataVal.id}' ${debitAccountSelected}>${accountDataVal.aliasName}</option>`;
+			});
+
+		var update_html = "";	
 
 		update_html+="<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
 		    update_html+="<span class='glyphicon glyphicon-arrow-left'></span> Go Back";
@@ -40,11 +59,11 @@ $(document).ready(function(){
 				update_html+="<td><input type='date' name='date' id='date' value='"+data.date+"' class='form-control'></td>";
 				
 				if(data.type == 'REC'){
-					update_html+="<td><input list='accountNameList' id='debitAcccount' name='debitAccount' value='"+data.debitAccount+"' class='form-control pull-left m-b-15px' required/></td>";
-					update_html+="<input type='hidden' name='creditAccount' value='CASH A/C'>";
+					update_html+="<td><select id='debitAcccountId' name='debitAccountId' value='"+data.debitAccountId+"' class='form-control pull-left m-b-15px' required>"+debitAccountList+"</select></td>";
+					update_html+="<input type='hidden' name='creditAccountId' value=29>";
 				} else {
-					update_html+="<input type='hidden' name='debitAccount' value='CASH A/C'>";
-					update_html+="<td><input list='accountNameList' id='creditAcccount' name='creditAccount' value='"+data.creditAccount+"' class='form-control pull-left m-b-15px' required/></td>";
+					update_html+="<input type='hidden' name='debitAccountId' value=29>";
+					update_html+="<td><select id='creditAcccountId' name='creditAccountId' value='"+data.creditAccountId+"' class='form-control pull-left m-b-15px' required>"+creditAccountList+"</select></td>";
 				}
 
 				update_html+="<td><input type='number' id='amount' min='0.001' step='0.001' name='amount' value='"+data.amount+"' class='form-control pull-left m-b-15px' required></td>";
@@ -70,21 +89,8 @@ $(document).ready(function(){
 		$("#page-content").html(update_html);
 		changePageTitle("Edit Day Book Entry");  // Change Needed HERE
 		
-
-		$.getJSON(apiURL+"/account/read.php", function(data){
-
-			var dataList = $("#accountNameList");
-			dataList.empty();
-			var parser = new DOMParser;
-			$.each(data.account, function(key, val){
-				var opt = $("<option></option>").attr("value", parser.parseFromString(val.aliasName,'text/html').body.textContent);
-				dataList.append(opt);
-			});
 		});
-
-
-		});
-	     	     
+		});   	     
 	});
      
 	$(document).on('submit', '#update-form', function(){
@@ -98,7 +104,7 @@ $(document).ready(function(){
 		    contentType : 'multipart/form-data',
 		    data : form_data,
 		    success : function(result) {
-		        show(obj.date,obj.date);
+		        alert("Success");
 		    },
 		    error: function(xhr, resp, text) {
 		        console.log(xhr, resp, text);

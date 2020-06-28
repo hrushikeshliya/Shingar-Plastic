@@ -31,7 +31,7 @@ $(document).ready(function(){
 		    read_one_html+="</tr>";
 									
 		    read_one_html+="<tr>";
-		        read_one_html+="<td>Opening Balance</td>";
+		        read_one_html+="<td>Initial Opening Balance</td>";
 				read_one_html+="<td>" + data.openingBalance + "</td>";
 		        read_one_html+="<td>Current Balance</td>";
 				read_one_html+="<td>" + data.currentBalance + "</td>";

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    show($.cookie("startDate"),$.cookie("endDate"),"","","");
+    show($.cookie("endDate"),$.cookie("endDate"),"","","");
 
     $(document).on('click', '.read-button', function(){
         show($.cookie("startDate"),$.cookie("endDate"),"","","");

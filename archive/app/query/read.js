@@ -15,7 +15,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON(apiURL+"/query/read.php", function(data){  // Change Needed HERE
+$.getJSON(apiURL+"/query/read.php"+"&ts="+Math.random(), function(data){  // Change Needed HERE
  
  
 read_html="";

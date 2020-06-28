@@ -69,9 +69,9 @@ $(document).ready(function(){
 
 				update_html+="<tr>";
 					update_html+="<td>Account Name</td>";
-					update_html+="<td><input value=\"" + data.name + "\" type='text' name='name' class='form-control' required readOnly/></td>";
+					update_html+="<td><input value=\"" + data.name + "\" type='text' name='name' class='form-control' required/></td>";
 					update_html+="<td>Alias Name</td>";
-					update_html+="<td><input value=\"" + data.aliasName + "\" type='text' name='aliasName' class='form-control' required readOnly/></td>";
+					update_html+="<td><input value=\"" + data.aliasName + "\" type='text' name='aliasName' class='form-control' required/></td>";
 				update_html+="</tr>";
 
 				update_html+="<tr>";

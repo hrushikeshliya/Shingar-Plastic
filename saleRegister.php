@@ -50,11 +50,11 @@ var subTotal = 0;
 var taxableAmount = 0;
 var taxAmount = 0;
 var grandTotal = 0;
-var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+var apiURL2 = "http://shingarplastic.com/api";
 
 function getRate() {
     var id = $("#itemIdList option:selected").val();
-            $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){  
+            $.getJSON(apiURL2+"/item/readOne.php?id=" + id+"&ts="+Math.random(), function(data){  
                 var rate = data.saleRate;
                 $("#itemRate").val(rate);
             });
@@ -63,14 +63,14 @@ function getRate() {
 
 function getInvoiceId() {
     var id = $("#departmentId option:selected").val();
-            $.getJSON(apiURL2+"/department/read.php?id=" + id, function(data){  
+            $.getJSON(apiURL2+"/department/read.php?id=" + id+"&ts="+Math.random(), function(data){  
                 $("#salesInvoiceId").val(data.department[0].billSeriesSales);
             });
 }
 
 function getBillLimit() {
     var id = $("#accountId").val();
-            $.getJSON(apiURL2+"/account/readOne.php?id=" + id, function(data){  
+            $.getJSON(apiURL2+"/account/readOne.php?id=" + id+"&ts="+Math.random(), function(data){  
                 $("#billLimit").val(data.billLimit);
                 $("#transportId").val(data.transportId);
                 $("#billNameId").val(id);
@@ -86,7 +86,7 @@ function addItem() {
 
         if(quantity !=0 && selectedIndex != 0) {
             var id = $("#itemIdList option:selected").val();
-            $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
+            $.getJSON(apiURL2+"/item/readOne.php?id=" + id+"&ts="+Math.random(), function(data){   // Change Needed HERE
 
                         var taxable = data.hsnSac == "7117" || data.hsnSac == "3923" ? '*':'';
                         var amount = (rate * quantity)

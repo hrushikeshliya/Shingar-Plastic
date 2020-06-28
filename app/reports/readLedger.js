@@ -1,17 +1,20 @@
 $(document).ready(function(){
-    show("","");
+    show($.cookie("startDate"),$.cookie("endDate"),$.cookie("startDate"),$.cookie("endDate"));
 
     $(document).on('click', '.search-button', function(){
-      var startDate = $("#startDate").val();
-      var endDate = $("#endDate").val();
-      show(startDate, endDate);
+      var partialStartDate = $("#startDate").val();
+      var partialEndDate = $("#endDate").val();
+      show($.cookie("startDate"),$.cookie("endDate"),partialStartDate,partialEndDate);
   });
 });
 
 
-function show(startDate, endDate){
- 
-$.getJSON(apiURL+"/reports/read.php?type=ledger&id="+$_GET('id')+"&subType="+$_GET('subType'), function(data){  // Change Needed HERE
+function show(startDate, endDate, partialStartDate, partialEndDate){
+
+let url = `${apiURL}/reports/read.php?type=ledger&id=${$_GET('id')}&subType=${$_GET('subType')}&startDate=${startDate}&endDate=${endDate}&partialStartDate=${partialStartDate}&partialEndDate=${partialEndDate}`; 
+$.getJSON( url, function(data){  // Change Needed HERE
+
+console.log(data)
 
 debitSubTotal = 0;
 creditSubTotal = 0;
@@ -37,17 +40,20 @@ if ($_GET('subType')=='DEBTORS') {
 } else if ($_GET('subType')=='JOBBER') {
   creditTitle = "Job Work / Payment Received";
   debitTitle = "Payment Made";
-} else {
+} else if ($_GET('id')==29) {
   creditTitle = "Payment Made";
   debitTitle = "Payment Received";
+} else {
+  creditTitle = "Payment Received";
+  debitTitle = "Payment Made";
 }
 
 classNet = "in active";
 classPartial = "";
 
 if(startDate != "" || endDate != ""){
-  classNet = "";
-  classPartial = "in active";
+  //classNet = "";
+  //classPartial = "in active";
 }
 
 read_html="";
@@ -58,7 +64,7 @@ read_html+=`
 
   <ul class="nav nav-tabs">
     <li class="`+classNet+`"><a data-toggle="tab" href="#ledger">Net Ledger`+netOffTitle+`</a></li>
-    <li><a data-toggle="tab" href="#fullledger">Full Transaction Ledger</a></li>
+    <li><a data-toggle="tab" href="#fullledger">Full Transaction Ledger <span class='text-danger'> (${$.cookie("startDate")} - ${$.cookie("endDate")}) </span> </a></li>
     <li class="`+classPartial+`"><a data-toggle="tab" href="#partialledger">Partial Transaction Ledger</a></li>
   </ul>
 
@@ -98,11 +104,6 @@ read_html+=`
 
     debitTransactionLength = data.debitTransactionsNet.length;
     creditTransactionLength = data.creditTransactionsNet.length;
-
-    console.log("NET");
-    console.log("Debit : "+debitTransactionLength);
-    console.log("Credit : "+creditTransactionLength);
-
     loopCount = debitTransactionLength>creditTransactionLength ? debitTransactionLength:creditTransactionLength;
 
     var i;
@@ -165,6 +166,17 @@ read_html+=`
     <tr>
     <td></td>
     <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class='text-danger'>Expected Closing Balance</td>
+    <td class='text-right text-danger'>`+parseFloat(data.closingBalanceNetExpected).toFixed(2)+`</td>
+    </tr>
+
+    <tr>
+    <td></td>
+    <td></td>
     <td class='text-info text-right'>Ledger Tally</td>
     <td class='text-right text-info'>`+(parseFloat(data.openingBalanceNet+debitSubTotalNet).toFixed(2))+`</td>
     <td></td>
@@ -209,11 +221,6 @@ read_html+=`
 
     debitTransactionLength = data.debitTransactions.length;
     creditTransactionLength = data.creditTransactions.length;
-
-    console.log("FULL");
-    console.log("Debit : "+debitTransactionLength);
-    console.log("Credit : "+creditTransactionLength);
-    
     loopCount = debitTransactionLength>creditTransactionLength ? debitTransactionLength:creditTransactionLength;
 
     var i;
@@ -250,8 +257,6 @@ read_html+=`
         }
     }
 
-
-
       read_html+=`
 
       <tr>
@@ -279,6 +284,17 @@ read_html+=`
       <tr>
       <td></td>
       <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class='text-danger'>Expected Closing Balance</td>
+      <td class='text-right text-danger'>`+parseFloat(data.closingBalanceExpected).toFixed(2)+`</td>
+      </tr>
+
+      <tr>
+      <td></td>
+      <td></td>
       <td class='text-info text-right'>Ledger Tally</td>
       <td class='text-right text-info'>`+(parseFloat(data.openingBalance+debitSubTotal).toFixed(2))+`</td>
       <td></td>
@@ -293,18 +309,18 @@ read_html+=`
 
 
     read_html += `
-    <div id="partialledger" class="tab-pane fade `+classPartial+`">
+    <div id="partialledger" class="tab-pane fade ${classPartial}">
 
     <BR>
     <div class='row readOnlyContent'>
     <div class='col-lg-2'>
       From : 
-      <input type='date' id='startDate' name='startDate' value='`+startDate+`' class='form-control pull-left m-b-15px'/>
+      <input type='date' id='startDate' name='startDate' value='${data.partialStartDate}' min='${startDate}' max='${endDate}' class='form-control pull-left m-b-15px'/>
     </div>
 
     <div class='col-lg-2'>
       To : 
-      <input type='date' id='endDate' name='endDate' value='`+endDate+`' class='form-control pull-left m-b-15px'/>
+      <input type='date' id='endDate' name='endDate' value='${data.partialEndDate}' min='${startDate}' max='${endDate}' class='form-control pull-left m-b-15px'/>
     </div>
 
     <div class='col-lg-6'><br>
@@ -336,7 +352,7 @@ read_html+=`
       <td></td>
       <td></td>
       <td class='text-success'>Opening Balance</td>
-      <td class='text-right text-success'>`+parseFloat(data.openingBalance).toFixed(2)+`</td>
+      <td class='text-right text-success'>`+parseFloat(data.openingBalancePartial).toFixed(2)+`</td>
       <td></td>
       <td></td>
       <td></td>
@@ -344,21 +360,18 @@ read_html+=`
       </tr>`;
       
 
-    const debitTransactionsPartial = data.debitTransactions.filter(function(transaction){
-        return transaction.date >= startDate && transaction.date <= endDate
-    })
+  //const debitTransactionsPartial = data.debitTransactions.filter(function(transaction){
+  //      return transaction.date >= startDate && transaction.date <= endDate
+  //  })
 
-    const creditTransactionsPartial = data.creditTransactions.filter(function(transaction){
-      return transaction.date >= startDate && transaction.date <= endDate
-  })
+  //const creditTransactionsPartial = data.creditTransactions.filter(function(transaction){
+  //    return transaction.date >= startDate && transaction.date <= endDate
+  //})
 
+    const debitTransactionsPartial = data.debitTransactionsPartial
+    const creditTransactionsPartial = data.creditTransactionsPartial
     debitTransactionLength = debitTransactionsPartial.length;
     creditTransactionLength = creditTransactionsPartial.length;
-
-    console.log("PATIAL");
-    console.log("Debit : "+debitTransactionLength);
-    console.log("Credit : "+creditTransactionLength);
-    
     loopCount = debitTransactionLength>creditTransactionLength ? debitTransactionLength:creditTransactionLength;
 
     var i;
@@ -394,9 +407,7 @@ read_html+=`
         }
     }
 
-
-
-      read_html+=`
+    read_html+=`
 
       <tr>
       <td></td>
@@ -417,18 +428,29 @@ read_html+=`
       <td></td>
       <td></td>
       <td class='text-danger'>Closing Balance</td>
-      <td class='text-right text-danger'>`+parseFloat(data.closingBalance).toFixed(2)+`</td>
+      <td class='text-right text-danger'>`+parseFloat(data.closingBalancePartial).toFixed(2)+`</td>
+      </tr>
+
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class='text-danger'>Expected Closing Balance</td>
+      <td class='text-right text-danger'>`+parseFloat(data.closingBalancePartialExpected).toFixed(2)+`</td>
       </tr>
 
       <tr>
       <td></td>
       <td></td>
       <td class='text-info text-right'>Ledger Tally</td>
-      <td class='text-right text-info'>`+(parseFloat(data.openingBalance+debitSubTotal).toFixed(2))+`</td>
+      <td class='text-right text-info'>`+(parseFloat(data.openingBalancePartial+debitSubTotal).toFixed(2))+`</td>
       <td></td>
       <td></td>
       <td class='text-info text-right'>Ledger Tally</td>
-      <td class='text-right text-info'>`+(parseFloat(data.closingBalance+creditSubTotal).toFixed(2))+`</td>
+      <td class='text-right text-info'>`+(parseFloat(data.closingBalancePartial+creditSubTotal).toFixed(2))+`</td>
       </tr>
 
       </table>

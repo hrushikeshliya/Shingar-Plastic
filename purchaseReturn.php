@@ -42,7 +42,7 @@ session_start();
     var total = 0;
     var totalAmount = 0;
     var currentMaxLimit = 0;
-    var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+    var apiURL2 = "http://shingarplastic.com/api";
 
     function getInvoiceId() {
         var accountId = $("#accountId option:selected").val();
@@ -51,7 +51,7 @@ session_start();
         .append($("<option>Select Invoice Id</option>")
         .attr("value",""));
 
-        $.getJSON(apiURL2+"/purchase/read.php?type=distinctInvoiceId&id=" + accountId, function(data){ 
+        $.getJSON(apiURL2+"/purchase/read.php?type=distinctInvoiceId&id=" + accountId+"&ts="+Math.random(), function(data){ 
             $.each(data.purchase, function(key, val) {
 
                 var d = new Date(val.date);
@@ -72,7 +72,7 @@ session_start();
         .append($("<option>Select Return Item [Returnable Quantity] </option>")
         .attr("value",""));
 
-        $.getJSON(apiURL2+"/invoiceDetail/read.php?type=purchase&id=" + invoiceId, function(data){ 
+        $.getJSON(apiURL2+"/invoiceDetail/read.php?type=purchase&id=" + invoiceId+"&ts="+Math.random(), function(data){ 
             $.each(data.invoiceDetail, function(key, val) {
                 $('#itemIdList')
                 .append($("<option></option>")
@@ -114,7 +114,7 @@ session_start();
                 var id = $("#itemIdList option:selected").val().split("|")[1];
                 var rate = $("#itemIdList option:selected").val().split("|")[3];
 
-                $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
+                $.getJSON(apiURL2+"/item/readOne.php?id=" + id+"&ts="+Math.random(), function(data){   // Change Needed HERE
 
                             var amount = (rate * quantity)
                             total += amount;

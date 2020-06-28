@@ -56,11 +56,11 @@
 var items = 1;
 var subTotal = 0;
 var grandTotal = 0;
-var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+var apiURL2 = "http://shingarplastic.com/api";
 
 function getRate() {
     var id = $("#itemIdList option:selected").val();
-            $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){  
+            $.getJSON(apiURL2+"/item/readOne.php?id=" + id+"&ts="+Math.random(), function(data){  
                 var rate = data.purchaseRate;
                 $("#itemRate").val(rate);
             });
@@ -76,7 +76,7 @@ function addItem() {
 
         if(quantity !=0 && selectedIndex != 0) {
             var id = $("#itemIdList option:selected").val();
-            $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){   // Change Needed HERE
+            $.getJSON(apiURL2+"/item/readOne.php?id=" + id+"&ts="+Math.random(), function(data){   // Change Needed HERE
 
                         var taxable = '';
                         var amount = parseFloat(rate * quantity).toFixed(3);

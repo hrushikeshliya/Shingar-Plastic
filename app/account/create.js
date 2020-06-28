@@ -77,7 +77,7 @@ $(document).ready(function(){
         create_html+="</tr>";
 
         create_html+="<tr>";
-            create_html+="<td>Opening Balance";
+            create_html+="<td>Initial Opening Balance";
             create_html+="</td>";
             create_html+="<td><input type='number' value=0 min=0 step='0.001' name='openingBalance' class='form-control' required />";
             create_html+="<select name='openingDirection' class='form-control'>";

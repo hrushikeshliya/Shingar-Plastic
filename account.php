@@ -39,7 +39,7 @@
 
 <script>
     
-    var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+    var apiURL2 = "http://shingarplastic.com/api";
 
     function reloadCity() {
         var selectedState = $("#state option:selected").val();
@@ -47,7 +47,7 @@
         $('#city')
         .empty();
 
-        $.getJSON(apiURL2+"/city/readByState.php?stateName=" + selectedState, function(data){ 
+        $.getJSON(apiURL2+"/city/readByState.php?stateName=" + selectedState+"&ts="+Math.random(), function(data){ 
             $.each(data.records, function(key, val) {
                 $('#city')
                 .append($("<option></option>")

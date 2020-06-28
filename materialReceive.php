@@ -35,7 +35,7 @@
 
 <script>
     
-    var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+    var apiURL2 = "http://shingarplastic.com/api";
 
     function getIssues() {
         var jobberId = $("#jobberId option:selected").val();
@@ -49,7 +49,7 @@
         $('#rate').val("");
         $('#jobCharge').val("");
 
-        $.getJSON(apiURL2+"/materialIssue/read.php?type=jobber&id=" + jobberId, function(data){ 
+        $.getJSON(apiURL2+"/materialIssue/read.php?type=jobber&id=" + jobberId+"&ts="+Math.random(), function(data){ 
 
             if(data.materialIssue != undefined) {
                 $('#issueId')
@@ -77,7 +77,7 @@
     function getStats() {
         var issueId =  $("#issueId option:selected").val();
 
-        $.getJSON(apiURL2+"/materialIssue/readOne.php?id=" + issueId, function(data){ 
+        $.getJSON(apiURL2+"/materialIssue/readOne.php?id=" + issueId+"&ts="+Math.random(), function(data){ 
             $('#selectedIssue').val(issueId);
             $('#issuedQuantity').val(data.quantity);
             $('#pendingQuantity').val(data.pendingQuantity);

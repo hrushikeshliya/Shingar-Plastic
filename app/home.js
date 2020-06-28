@@ -33,10 +33,11 @@ $(document).ready(function () {
                 { headerName: "Id", field: "id" },
                 { headerName: "Date", field: "date" },
                 { headerName: "Type", field: "type" },
-                { headerName: "Debit Account", field: "debitAccount" },
-                { headerName: "Credit Account", field: "creditAccount" },
+                { headerName: "Debit Account", field: "debitAccountName" },
+                { headerName: "Credit Account", field: "creditAccountName" },
                 { headerName: "Narration", field: "narration" },
-                { headerName: "Amount", field: "amount" }
+                { headerName: "Amount", field: "amount" },
+                { headerName: "Entry By", field: "username" }
             ];
 
             var invalidGridOptions = {

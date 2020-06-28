@@ -59,21 +59,43 @@ function getCurrentBalance() {
             closingBalance -= paymentTillDate;
             $("#debitAccount").val(accName);
             $("#creditAccount").val('DISCOUNT A/C');
+
+            $("#debitAccountId").val(id);
+            $("#creditAccountId").val(30);
+
             $("#narration").val('DISCOUNT BEING GIVEN');
             $("#type").val('JOU');
         } else if (accType == 'CREDITORS') {
             closingBalance += paymentTillDate;
             $("#debitAccount").val('DISCOUNT A/C');
             $("#creditAccount").val(accName);
+
+            $("#debitAccountId").val(30);
+            $("#creditAccountId").val(id);
+
             $("#narration").val('DISCOUNT BEING TAKEN');
             $("#type").val('JOU');
         } else if (accType == 'JOBBER') {
             closingBalance += paymentTillDate;
             $("#debitAccount").val('DISCOUNT A/C');
             $("#creditAccount").val(accName);
+
+            $("#debitAccountId").val(30);
+            $("#creditAccountId").val(id);
+
             $("#narration").val('DISCOUNT BEING TAKEN');
             $("#type").val('JOU');
+        } else {
+            $("#debitAccount").val('');
+            $("#creditAccount").val('');
+
+            $("#debitAccountId").val(0);
+            $("#creditAccountId").val(0);
+
+            $("#narration").val('NETOFF NOT PERMITTED FOR THIS ACCOUNT');
+            $("#type").val('');
         }
+
         console.log(closingBalance);
     $.getJSON(apiURL+"/sale/read.php?type=amountTillDate&id=" + id +dateParam, function(data){  
         saleTillDate = parseFloat(data.sale[0].amount);    
@@ -122,59 +144,67 @@ function show(){
     accountName_options += "<datalist id='accountNameList'>";
     accountName_options += "</datalist>";
 
-    update_html+="<form id='create-form' action='#' method='post' border='0'>";
-        update_html+="<table class='table table-bordered table-hover'>";
+    update_html+=`
+    
+    <form id='create-form' action='#' method='post' border='0'>
+            <table class='table table-bordered table-hover'>
 
-        update_html+="<tr>";
-            update_html+="<td class='text-align-right'>Account Name</th>";
-            update_html+="<td class='text-align-left'>"+accountName_options+"</td>";
-        update_html+="</tr>";
-        
-        update_html+="<tr>";
-            update_html+="<td class='text-align-right'>Date</th>";
-            update_html+="<td class='text-align-left'><input type='date' id='date' name='date'   min='"+$.cookie('startDate')+"' max='"+$.cookie('endDate')+"'  class='form-control' required /><input type='hidden' name='username' id='username' value='"+$.cookie('username')+"'></td>";
-        update_html+="</tr>";
+            <tr>
+                <td class='text-align-right'>Account Name</th>
+                <td class='text-align-left'>${accountName_options}</td>
+            </tr>
+            
+            <tr>
+                <td class='text-align-right'>Date</th>
+                <td class='text-align-left'><input type='date' id='date' name='date'   min='${$.cookie('startDate')}' max='${$.cookie('endDate')}'  class='form-control' required />
+                <input type='hidden' name='username' id='username' value='${$.cookie('username')}'></td>
+            </tr>
 
-        update_html+="<tr>";
-            update_html+="<td class='text-align-right'>Current Balance</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 id='currentBalance' name='currentBalance' class='form-control' required disabled/></td>";
-        update_html+="</tr>";
+            <tr>
+                <td class='text-align-right'>Current Balance</th>
+                <td class='text-align-left'><input value='0' type='number' step=0.001 id='currentBalance' name='currentBalance' class='form-control' required disabled/></td>
+            </tr>
 
-        update_html+="<tr>";
-            update_html+="<td class='text-align-right'>Net Off Balance</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 id='netOffAmt' name='netOffAmt' class='form-control' required /></td>";
-        update_html+="</tr>";
+            <tr>
+                <td class='text-align-right'>Net Off Balance</th>
+                <td class='text-align-left'><input value='0' type='number' step=0.001 id='netOffAmt' name='netOffAmt' class='form-control' required /></td>
+            </tr>
 
-        update_html+="<tr>";
-            update_html+="<td class='text-align-right'>J/V Amount</th>";
-            update_html+="<td class='text-align-left'><input value='0' type='number' step=0.001 id='amount' name='amount' class='form-control' required readonly/></td>";
-        update_html+="</tr>";
+            <tr>
+                <td class='text-align-right'>J/V Amount</th>
+                <td class='text-align-left'><input value='0' type='number' step=0.001 id='amount' name='amount' class='form-control' required readonly/></td>
+            </tr>
 
-        update_html+="<tr>";
-            update_html+="<td class='text-align-right'>Debit Account</th>";
-            update_html+="<td class='text-align-left'><input type='text' id='debitAccount' name='debitAccount' class='form-control' required readonly/></td>";
-        update_html+="</tr>";
+            <tr>
+                <td class='text-align-right'>Debit Account</th>
+                <td class='text-align-left'>
+                    <input type='text' id='debitAccount' name='debitAccount' class='form-control' required readonly/>
+                    <input type='hidden' id='debitAccountId' name='debitAccountId' class='form-control' required/>
+                </td>
+            </tr>
 
-        update_html+="<tr>";
-            update_html+="<td class='text-align-right'>Credit Account</th>";
-            update_html+="<td class='text-align-left'><input type='text' id='creditAccount' name='creditAccount' class='form-control' required readonly/></td>";
-        update_html+="</tr>";
+            <tr>
+                <td class='text-align-right'>Credit Account</th>
+                <td class='text-align-left'>
+                    <input type='text' id='creditAccount' name='creditAccount' class='form-control' required readonly/>
+                    <input type='hidden' id='creditAccountId' name='creditAccountId' class='form-control' required/>
+                </td>
+            </tr>
 
-        update_html+="<tr>";
-            update_html+="<td class='text-align-center' colspan=2><input type='text' id='narration' name='narration' class='form-control' readonly/><input type='text' id='type' name='type' class='form-control' readonly/></th>";
-        update_html+="</tr>";
+            <tr>
+                <td class='text-align-center' colspan=2><input type='text' id='narration' name='narration' class='form-control' readonly/><input type='text' id='type' name='type' class='form-control' readonly/></th>
+            </tr>
 
-    update_html+="<tr>"
-        update_html+="<td colspan = '2' class = 'text-align-center'>";
-            update_html+="<button type='submit' class='btn btn-info'>";
-                update_html+="<span class='glyphicon glyphicon-edit'></span> Submit";
-            update_html+="</button>";
-        update_html+="</td>";
-        update_html+="<tr>"
+            <tr>
+                <td colspan = '2' class = 'text-align-center'>
+                    <button type='submit' class='btn btn-info'>
+                        <span class='glyphicon glyphicon-edit'></span> Submit
+                    </button>
+                </td>
+            <tr>
+        </table>
 
-        update_html+="</table>";
-
-    update_html+="</form>";
+    </form>`;
 
 $.getJSON(apiURL+"/account/read.php", function(data){
 

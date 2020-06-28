@@ -35,11 +35,11 @@
 
 <script>
 
-var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+var apiURL2 = "http://shingarplastic.com/api";
 
     function getRate() {
         var id = $("#itemId option:selected").val();
-                $.getJSON(apiURL2+"/item/readOne.php?id=" + id, function(data){  
+                $.getJSON(apiURL2+"/item/readOne.php?id=" + id+"&ts="+Math.random(), function(data){  
                     var rate = data.jobRate;
                     $("#jobRate").val(rate);
                 });
@@ -48,7 +48,7 @@ var apiURL2 = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
 function getIssues() {
         var jobberId = $("#jobberId option:selected").val();
 
-        $.getJSON(apiURL2+"/materialIssue/read.php?type=jobber&id=" + jobberId, function(data){ 
+        $.getJSON(apiURL2+"/materialIssue/read.php?type=jobber&id=" + jobberId+"&ts="+Math.random(), function(data){ 
 
             $("#issuedMaterials").hide();
 
