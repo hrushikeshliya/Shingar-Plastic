@@ -26,7 +26,7 @@ var compare_dates = function(startDate,currentDate,endDate){
     }
 }
 
-$.getJSON(apiURL+"/reports/read.php?type=ledger&id="+$_GET('id')+"&subType="+$_GET('subType'), function(data){  // Change Needed HERE
+$.getJSON(apiURL+"/reports/read.php?type=ledger&id="+$_GET('id')+"&subType="+$_GET('subType')+"&ts="+Math.random(), function(data){  // Change Needed HERE
 
 debitSubTotal = 0;
 creditSubTotal = 0;

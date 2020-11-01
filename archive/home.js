@@ -3,9 +3,9 @@ $(document).ready(function(){
     var monthlyTotal = 0;
     var yearlyTotal = 0;
 
-$.getJSON(apiURL+"/sale/read.php?type=monthlySummary", function(data){  
+$.getJSON(apiURL+"/sale/read.php?type=monthlySummary"+"&ts="+Math.random(), function(data){  
 
-    $.getJSON(apiURL+"/sale/read.php?type=yearlySummary", function(data2){  
+    $.getJSON(apiURL+"/sale/read.php?type=yearlySummary"+"&ts="+Math.random(), function(data2){  
     
         var pageContent = "";
 

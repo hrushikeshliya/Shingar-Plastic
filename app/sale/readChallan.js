@@ -17,7 +17,7 @@ function genearateInvoice(passedHsn) {
 	var billType = $_GET('type');
 	var id = $_GET('id');
 
-	$.getJSON(apiURL+"/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
+	$.getJSON(apiURL+"/sale/read.php?type=sale&id=" + id+"&ts="+Math.random(), function(data){   // Change Needed HERE
 
 		var read_one_html = "";
 		var billTO = "";

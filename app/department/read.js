@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON(apiURL+"/department/read.php", function(data){    // Change Needed HERE
+$.getJSON(apiURL+"/department/read.php?ts="+Math.random(), function(data){    // Change Needed HERE
  
  
 read_html="";

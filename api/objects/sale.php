@@ -57,14 +57,14 @@ class Sale{
         $query = "SELECT s.*,
         d.name departmentName,d.billName,d.billCode,d.bankDetails,d.contactDetails, d.billAddress, d.others, 
         a.name accountName,a.aliasName,t.name transportName, 
-        ba.name baAccountName, ba.aliasName baAliasName, COALESCE(hr.hasReturn,0) hasReturn
+        ba.name baAccountName, ba.aliasName baAliasName, COALESCE(hr.hasReturn,0) hasReturn, s.deleted
         FROM sale s 
         LEFT JOIN department d ON s.departmentId = d.id 
         LEFT JOIN account a ON s.accountId = a.id
         LEFT JOIN account ba ON s.billNameId = ba.id 
         LEFT JOIN transport t ON s.transportId = t.id 
         LEFT JOIN (select invoiceId, true hasReturn from saleReturn  where deleted = 0 group by invoiceId) hr ON hr.invoiceId = s.id
-        WHERE s.deleted = 0 ".$whereClause." ORDER BY s.date DESC, d.name, s.id DESC";	
+        WHERE 1=1 ".$whereClause." ORDER BY s.date DESC, d.name, s.id DESC";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	

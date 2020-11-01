@@ -5,7 +5,7 @@ var navList = "";
 var date=new Date();
 var username = $.cookie('username');
 
-	$.getJSON(apiURL+"/navBar/read.php?username="+username, function(data){
+	$.getJSON(apiURL+"/navBar/read.php?username="+username+"&ts="+Math.random(), function(data){
 		$.each(data.navBar, function(key, val){
 			$.each(val.navGroup, function(key2, val2){
 				if (currentHeading != val2.heading) {

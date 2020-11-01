@@ -27,7 +27,7 @@ function show(startDate, endDate, itemId){
         params += "&itemId="+itemId;
     }
 
-    $.getJSON(apiURL+"/materialReceive/read.php?type=jobberReport"+params, function(data){  // Change Needed HERE
+    $.getJSON(apiURL+"/materialReceive/read.php?type=jobberReport"+params+"&ts="+Math.random(), function(data){  // Change Needed HERE
  
         read_html="";
 
@@ -48,7 +48,7 @@ function show(startDate, endDate, itemId){
         read_html+="<select id='itemId' name='itemId' class='form-control pull-left m-b-15px'>";
         read_html+="<option></option>";
     
-        $.getJSON(apiURL+"/item/read.php", function(data4){    
+        $.getJSON(apiURL+"/item/read.php"+"?ts="+Math.random(), function(data4){    
             $.each(data4.item, function(key4, val4){
                 if(itemId == val4.id) {
                     read_html += "<option value="+val4.id+" selected>"+val4.name+"</option>";

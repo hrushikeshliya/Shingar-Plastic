@@ -7,14 +7,14 @@ function genearateInvoice(passedHsn) {
 	var billType = $_GET('type');
 	var id = $_GET('id');
 
-	$.getJSON(apiURL+"/sale/read.php?type=sale&id=" + id, function(data){   // Change Needed HERE
+	$.getJSON(apiURL+"/sale/read.php?type=sale&id=" + id+"&ts="+Math.random(), function(data){   // Change Needed HERE
 
 		var read_one_html = "";
 		var billTO = "";
 		var decimal = 0;
 
 		decimal = 2;
-		billTO = "<b>Consignor :</b><br><b>"+data.sale[0].baAccountName+"</b><BR>"+data.sale[0].baAddress1+"<BR>"+data.sale[0].baAddress2+"<BR>City : "+data.sale[0].baCity+" - "+data.sale[0].baPincode+"<BR>State: "+data.sale[0].baState+"<BR><BR> GST : "+data.sale[0].baGstNo;
+		billTO = "<b>Consignee :</b><br><b>"+data.sale[0].baAccountName+"</b><BR>"+data.sale[0].baAddress1+"<BR>"+data.sale[0].baAddress2+"<BR>City : "+data.sale[0].baCity+" - "+data.sale[0].baPincode+"<BR>State: "+data.sale[0].baState+"<BR><BR> GST : "+data.sale[0].baGstNo;
 
 		var cartoons = 0;
 		var deductions = 0;

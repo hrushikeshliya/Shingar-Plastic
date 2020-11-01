@@ -6,9 +6,9 @@ $(document).ready(function(){
 	var  materialReceiveDetail = "";
 	var totalCharge = 0;
 	var totalQuantity = 0;
-	$.getJSON(apiURL+"/materialIssue/readOne.php?id=" + id, function(data){   // Change Needed HERE
+	$.getJSON(apiURL+"/materialIssue/readOne.php?id=" + id+"&ts="+Math.random(), function(data){   // Change Needed HERE
 
-	$.getJSON(apiURL+"/materialReceive/read.php?issueId="+id, function(data1){    // Change Needed HERE
+	$.getJSON(apiURL+"/materialReceive/read.php?issueId="+id+"&ts="+Math.random(), function(data1){    // Change Needed HERE
 		
 		$.each(data1.materialReceive, function(key, val) {   // Change Needed HERE
 			totalCharge += +val.jobCharge;

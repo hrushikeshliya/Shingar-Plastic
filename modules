@@ -1,0 +1,30 @@
+* Simple
+** Complex
+
+> Account: CRUD *
+    Account Type: CRUD *
+> Item: CRUD *
+    Item Group: CRUD *
+> Transport: CRUD *
+> Department: CRUD *
+> City / State: CRUD *
+> Users: Auth0 / ockta / AWS (** free)
+    Roles: ??
+    Change Password: ??
+>Daily Accounting
+    Day Book: CRUD **
+    Journal: CRUD **
+    NetOff: C **
+>sale: CRUD **
+    Sale return:CRUD **
+>Purchase:CRUD **
+    Purchase return: CRUD **
+>Material Issue: CRUD **
+    Material Recieve: CRUD **
+>Reports
+    Buyer
+    Supplier
+    Sale
+    Purchase
+    Job
+    Ledger

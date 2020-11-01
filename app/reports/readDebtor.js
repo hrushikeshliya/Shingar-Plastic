@@ -5,7 +5,6 @@ $(document).ready(function(){
 function show(startDate, endDate){
     $.getJSON(`${apiURL}/reports/read.php?type=sale&startDate=${startDate}&endDate=${endDate}`, function(data){  // Change Needed HERE
 
-
 read_html=`<div id="summaryGrid" style="height:80vh;width:100%;" class="ag-theme-balham"></div>`;
 
 $("#page-content").html(read_html);
@@ -64,8 +63,9 @@ var summaryGridDiv = document.querySelector('#summaryGrid');
 // create the grid passing in the div to use together with the columns & data we want to use
 new agGrid.Grid(summaryGridDiv, summaryGridOptions);
 
+var res = data.reports.map(bill => bill.closingBalance).reduce((acc, bill) => bill + acc);
 
-changePageTitle("Buyer's Report");  // Change Needed HERE
+changePageTitle(`Buyer's Report : Total Closing Balance ${res}`);  // Change Needed HERE
 
 
 }); 

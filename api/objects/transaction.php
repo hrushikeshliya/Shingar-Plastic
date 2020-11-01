@@ -409,9 +409,9 @@ class Transaction{
             round(sum( coalesce(( s.subTotal-COALESCE(sr.totalAmount,0) +((( s.taxableAmount * s.billLimit )* `s`.`tax` )/ 10000 )), 0 )),2) AS `total`
         from account a 
         inner join accountType aty on a.typeId = aty.Id AND aty.name = 'DEBTORS'
-        left join sale s on s.accountId = a.id and s.deleted = 0
+        left join sale s on s.accountId = a.id and s.deleted = 0 and s.deleted = 0 AND s.date>='".$startDate."' AND s.date<='".$endDate."'
         left join saleReturn sr on sr.invoiceId = s.id AND sr.deleted = 0 AND sr.date>='".$startDate."' AND sr.date<='".$endDate."'
-        where a.deleted = 0 and aty.deleted = 0 and s.deleted = 0 AND s.date>='".$startDate."' AND s.date<='".$endDate."'
+        where a.deleted = 0 and aty.deleted = 0
         group by a.id
 
         ) s
@@ -445,7 +445,7 @@ class Transaction{
         inner join accountType aty on a.typeId = aty.Id AND aty.name = 'CREDITORS'
         left join purchase s on s.accountId = a.id and s.deleted = 0
         left join purchaseReturn sr on sr.invoiceId = s.id AND sr.deleted = 0 AND sr.date>='".$startDate."' AND sr.date<='".$endDate."'
-        where a.deleted = 0 and aty.deleted = 0 and s.deleted = 0 AND s.date>='".$startDate."' AND s.date<='".$endDate."'
+        where a.deleted = 0 and aty.deleted = 0 and ((s.deleted = 0 AND s.date>='".$startDate."' AND s.date<='".$endDate."') or s.date is null)
         group by a.id
 
         ) s

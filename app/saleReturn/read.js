@@ -38,7 +38,7 @@ function show(startDate, endDate, departmentId, accountId, itemId){
     }
     
 
-$.getJSON(apiURL+"/saleReturn/read.php?type=saleReturn"+params, function(data){    // Change Needed HERE
+$.getJSON(apiURL+"/saleReturn/read.php?type=saleReturn"+params+"&ts="+Math.random(), function(data){    // Change Needed HERE
  
 read_html="";
 
@@ -59,7 +59,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='departmentId' name='departmentId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON(apiURL+"/department/read.php", function(data2){    
+    $.getJSON(apiURL+"/department/read.php"+"?ts="+Math.random(), function(data2){    
         $.each(data2.department, function(key2, val2){
             if(departmentId == val2.Id) {
                 read_html += "<option value="+val2.Id+" selected>"+val2.name+"</option>";
@@ -77,7 +77,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='accountId' name='accountId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data3){    
+    $.getJSON(apiURL+"/account/read.php?type=DEBTORS"+"&ts="+Math.random(), function(data3){    
         $.each(data3.account, function(key3, val3){
             if(accountId == val3.id) {
                 read_html += "<option value="+val3.id+" selected>"+val3.aliasName+"</option>";
@@ -95,7 +95,7 @@ read_html+="<div class='row readOnlyContent'>";
     read_html+="<select id='itemId' name='itemId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON(apiURL+"/item/read.php", function(data4){    
+    $.getJSON(apiURL+"/item/read.php"+"?ts="+Math.random(), function(data4){    
         $.each(data4.item, function(key4, val4){
             if(itemId == val4.id) {
                 read_html += "<option value="+val4.id+" selected>"+val4.name+"</option>";
@@ -214,7 +214,7 @@ $("#totalAmt").html(parseFloat(totalAmt).toFixed(2));
 
 changePageTitle("Sale Return Register");  // Change Needed HERE
 
-$.getJSON(apiURL+"/account/read.php?type=DEBTORS", function(data){
+$.getJSON(apiURL+"/account/read.php?type=DEBTORS"+"&ts="+Math.random(), function(data){
 
     var dataList = $("#accountNameList");
     dataList.empty();

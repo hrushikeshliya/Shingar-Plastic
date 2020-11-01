@@ -5,7 +5,7 @@ $(document).ready(function(){
         var name = $(this).attr('data-name');
         var api = $(this).attr('data-api');
 
-        $.getJSON(apiURL+"/"+api, function(data){ 
+        $.getJSON(apiURL+"/"+api+"&ts="+Math.random(), function(data){ 
             JSONToCSVConvertor(data[data["exportKey"]],name,true);
         });
 
@@ -15,7 +15,7 @@ $(document).ready(function(){
 
 function show(){
  
-$.getJSON(apiURL+"/query/read.php"+"&ts="+Math.random(), function(data){  // Change Needed HERE
+$.getJSON(apiURL+"/query/read.php"+"?ts="+Math.random(), function(data){  // Change Needed HERE
  
  
 read_html="";

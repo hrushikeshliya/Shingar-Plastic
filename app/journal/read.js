@@ -20,14 +20,14 @@ if(endDate != "") {
     params += "&endDate="+endDate;
 }
 
-$.getJSON(apiURL+"/account/read.php", function(data){ 
+$.getJSON(apiURL+"/account/read.php?ts="+Math.random(), function(data){ 
 
     var accountList = "<option>All</option>"
     $.each(data.account, function(key, val){
         accountList += `<option value='${val.aliasName}'>${val.aliasName}</option>`
     });
 
-$.getJSON(apiURL+"/transaction/read.php?type=JOU"+params, function(data){  // Change Needed HERE
+$.getJSON(apiURL+"/transaction/read.php?type=JOU"+params+"&ts="+Math.random(), function(data){  // Change Needed HERE
  
     
 read_html=`

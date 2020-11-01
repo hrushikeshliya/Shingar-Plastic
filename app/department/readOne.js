@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 	var id = $(this).attr('data-id');
 	
-	$.getJSON(apiURL+"/department/readOne.php?id=" + id, function(data){   // Change Needed HERE
+	$.getJSON(apiURL+"/department/readOne.php?id=" + id+"&ts="+Math.random(), function(data){   // Change Needed HERE
 
 		var read_one_html="";
 		

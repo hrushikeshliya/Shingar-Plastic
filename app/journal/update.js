@@ -1,35 +1,35 @@
-$(document).ready(function(){
- 
-    $(document).on('click', '.update-button', function(){
-        
-        var id = $(this).attr('data-id');
+$(document).ready(function () {
+
+	$(document).on('click', '.update-button', function () {
+
+		var id = $(this).attr('data-id');
 		var username = $.cookie('username');
-		
-		$.getJSON(apiURL+"/account/read.php", function(accountData){
-		
+
+		$.getJSON(apiURL + "/account/read.php?ts=" + Math.random(), function (accountData) {
+
 			var creditAccountList = ""
 			var debitAccountList = ""
 
-        $.getJSON(apiURL+"/transaction/readOne.php?id=" + id, function(data){  // Change Needed HERE
+			$.getJSON(apiURL + "/transaction/readOne.php?id=" + id + "&ts=" + Math.random(), function (data) {  // Change Needed HERE
 
-			$.each(accountData.account, function(key, accountDataVal){
+				$.each(accountData.account, function (key, accountDataVal) {
 
-				var debitAccountSelected = ""
-				var creditAccountSelected = ""
+					var debitAccountSelected = ""
+					var creditAccountSelected = ""
 
-				if(data.debitAccountId == accountDataVal.id){
-					debitAccountSelected = "selected"
-				}
+					if (data.debitAccountId == accountDataVal.id) {
+						debitAccountSelected = "selected"
+					}
 
-				if(data.creditAccountId == accountDataVal.id){
-					creditAccountSelected = "selected"
-				}
+					if (data.creditAccountId == accountDataVal.id) {
+						creditAccountSelected = "selected"
+					}
 
-				creditAccountList += `<option value='${accountDataVal.id}' ${creditAccountSelected}>${accountDataVal.aliasName}</option>`;
-				debitAccountList += `<option value='${accountDataVal.id}' ${debitAccountSelected}>${accountDataVal.aliasName}</option>`;
-			});
+					creditAccountList += `<option value='${accountDataVal.id}' ${creditAccountSelected}>${accountDataVal.aliasName}</option>`;
+					debitAccountList += `<option value='${accountDataVal.id}' ${debitAccountSelected}>${accountDataVal.aliasName}</option>`;
+				});
 
-		var update_html = `
+				var update_html = `
 		
 		<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>
 		    <span class='glyphicon glyphicon-arrow-left'></span> Go Back
@@ -78,31 +78,37 @@ $(document).ready(function(){
 		        </tr>
 		 
 		    </table>
-		</form>`;		
+		</form>`;
 
-		$("#page-content").html(update_html);
-		changePageTitle("Edit Journal Entry");  // Change Needed HERE
-		
+				$("#page-content").html(update_html);
+				changePageTitle("Edit Journal Entry");  // Change Needed HERE
+
+			});
 		});
-	});	     
 	});
-     
-	$(document).on('submit', '#update-form', function(){
-	
-		var form_data=JSON.stringify($(this).serializeObject());
-		
+
+	$(document).on('submit', '#update-form', function () {
+
+		var form_data = JSON.stringify($(this).serializeObject());
+
 		$.ajax({
-		    url: apiURL+"/transaction/update.php",  // Change Needed HERE
-		    type : "POST",
-		    contentType : 'multipart/form-data',
-		    data : form_data,
-		    success : function(result) {
+			url: apiURL + "/transaction/update.php",  // Change Needed HERE
+			type: "POST",
+			crossDomain: true,
+
+			header: {
+				"Access-Control-Allow-Headers": "*",
+				"Access-Control-Allow-Origin": "*",
+			},
+
+			data: form_data,
+			success: function (result) {
 				alert("Success");
-		    },
-		    error: function(xhr, resp, text) {
-		        console.log(xhr, resp, text);
-		    }
+			},
+			error: function (xhr, resp, text) {
+				console.log(xhr, resp, text);
+			}
 		});
-	    return false;
+		return false;
 	});
 });

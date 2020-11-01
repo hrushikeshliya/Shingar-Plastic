@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
-    $.getJSON(apiURL + "/sale/read.php?type=summary&financialYear="+$.cookie('financialYear'), function (data) {
+    $.getJSON(apiURL + "/sale/read.php?type=summary&financialYear="+$.cookie('financialYear')+"&ts="+Math.random(), function (data) {
 
-        $.getJSON(apiURL + "/transaction/readInvalid.php", function (data2) {
+        $.getJSON(apiURL + "/transaction/readInvalid.php?ts="+Math.random(), function (data2) {
 
             var pageContent = "";
 

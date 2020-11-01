@@ -20,7 +20,7 @@ function show(startDate, endDate){
         params += "&endDate="+endDate;
     }
 
-    $.getJSON(apiURL+"/transaction/read.php?type=dayBook"+params, function(data){  // Change Needed HERE
+    $.getJSON(apiURL+"/transaction/read.php?type=dayBook"+params+"&ts="+Math.random(), function(data){  // Change Needed HERE
  
    
 read_html="";

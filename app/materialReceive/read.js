@@ -48,7 +48,7 @@ function show(startDate, endDate, accountId, itemId){
         params += "&itemId="+itemId;
     }
  
-$.getJSON(apiURL+"/materialReceive/read.php?temp=temp"+params, function(data){    // Change Needed HERE
+$.getJSON(apiURL+"/materialReceive/read.php?temp=temp"+params+"&ts="+Math.random(), function(data){    // Change Needed HERE
  
  
 read_html="";
@@ -70,7 +70,7 @@ read_html+="<div class='row readOnlyContent' id='read'>";
     read_html+="<select id='accountId' name='accountId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON(apiURL+"/account/read.php?type=JOBBER", function(data3){    
+    $.getJSON(apiURL+"/account/read.php?type=JOBBER"+"&ts="+Math.random(), function(data3){    
         $.each(data3.account, function(key3, val3){
             if(accountId == val3.id) {
                 read_html += "<option value="+val3.id+" selected>"+val3.aliasName+"</option>";
@@ -88,7 +88,7 @@ read_html+="<div class='row readOnlyContent' id='read'>";
     read_html+="<select id='itemId' name='itemId' class='form-control pull-left m-b-15px'>";
     read_html+="<option></option>";
 
-    $.getJSON(apiURL+"/item/read.php", function(data4){    
+    $.getJSON(apiURL+"/item/read.php?ts="+Math.random(), function(data4){    
         $.each(data4.item, function(key4, val4){
             if(itemId == val4.id) {
                 read_html += "<option value="+val4.id+" selected>"+val4.name+"</option>";
