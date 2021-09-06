@@ -1,79 +1,84 @@
-$(document).ready(function(){
-    show(); 
-    
-    $(document).on('click', '.read-button', function(){
+$(document).ready(function () {
     show();
+
+    $(document).on('click', '.read-button', function () {
+        show();
     });
 
 });
 
-function show(){
- 
-$.getJSON(`${apiURL}/account/read.php?startDate=${$.cookie("startDate")}&endDate=${$.cookie("endDate")}`, function(data){  // Change Needed HERE
+function show() {
 
-read_html=`
+    var ts = new Date().getTime();
+    $.getJSON(`${apiURL}/account/read.php?startDate=${$.cookie("startDate")}&endDate=${$.cookie("endDate")}$ts=${ts}`, function (data) {  // Change Needed HERE
 
-<div class='row'>
-<div class='col-md-4'>
-<input type='text' id='myInput' class='form-control pull-left m-b-15px' onkeyup='search()' placeholder='Search'>
-</div>
-<div id='create' class='btn btn-success pull-right m-b-15px create-button'>
-<span class='glyphicon glyphicon-plus'></span> Create Account
-</div>
-</div>
 
-<table class='table table-bordered table-hover' id='myTable'>
- 
-    <tr>
-        <th class='text-align-center'>ID</th>
-        <th class='text-align-center'>Alias Name</th>
-        <th class='text-align-center'>Account Name</th>
-        <th class='text-align-center'>Account Type</th>
-        <th class='text-align-center'>Opg Bal. ${$.cookie('startDate')} </th>
-        <th class='text-align-center'>Cur Bal. ${$.cookie('endDate')} </th>
-        <th class='text-align-center'>Ledger</th>
-        <th class='text-align-center'></th>
-    </tr>`;
-     
+        read_html = `
+        
+        <div class='row'>
+        <div id='create' class='btn btn-success pull-right m-b-15px create-button'>
+        <span class='glyphicon glyphicon-plus'></span> Create Account
+        </div>
+        </div>`
 
-$.each(data.account, function(key, val) {  // Change Needed HERE
-    
-    read_html+=`<tr>
- 
-        <td>${val.id}</td>
-        <td>${val.aliasName}</td>
-        <td>${val.name}</td>
-        <td>${val.accountType}</td>
-        <td>${parseFloat(val.openingBalanceCurrent).toFixed(2)}</td>
-        <td>${parseFloat(val.closingBalanceCurrent).toFixed(2)}</td>
-        <td align='center'>
-        <a class='btn btn-warning m-b-10px  ledger-button' target='_blank' href='../ledger.php?id=${val.id}&subType=${val.accountType}'>
-        <span class='glyphicon glyphicon-list'></span>
-        </a>
-        </td>
+        read_html += `<div id="summaryGrid" style="height:80vh;width:100%;" class="ag-theme-balham"></div>`;
 
-        <td class='text-center'>
+        $("#page-content").html(read_html);
 
-            <button class='btn btn-primary m-r-10px m-b-10px read-one-button' data-id='${val.id}'>
-                <span class='glyphicon glyphicon-eye-open'></span>
-            </button>
- 
-            <button class='btn btn-info m-r-10px  m-b-10px update-button' data-id='${val.id}'>
-                <span class='glyphicon glyphicon-edit'></span>
-            </button>
- 
-            <button class='btn btn-danger m-b-10px  delete-button' data-id='${val.id}'>
-                <span class='glyphicon glyphicon-remove'></span>
-            </button>
-        </td>
- 
-    </tr>`;
- 
-});
+        var summaryRowData = data.account;
 
-read_html+="</table>";
-$("#page-content").html(read_html);
-changePageTitle("Account Administration");  // Change Needed HERE
-});
- 
+        var summaryColumnDefs = [
+            { headerName: "Id", field: "id", sortable: true, filter: true, width: 60 },
+            { headerName: "Alias Name", field: "aliasName", sortable: true, filter: true },
+            { headerName: "Account Name", field: "name", sortable: true, filter: true },
+            { headerName: "Account Type", field: "accountType", sortable: true, filter: true },
+            { headerName: "Opening", field: "openingBalanceCurrent", sortable: true, filter: true, valueFormatter: currencyFormatter },
+            { headerName: "Closing", field: "closingBalanceCurrent", sortable: true, filter: true, valueFormatter: currencyFormatter },
+            { headerName: "", field: "id", sortable: true, filter: true, cellRenderer: ledgerLinkRenderer, width: 45 },
+            { headerName: "", field: "id", sortable: true, filter: true, cellRenderer: detailLinkRenderer, width: 45 },
+            { headerName: "", field: "id", sortable: true, filter: true, cellRenderer: editLinkRenderer, width: 45 },
+            { headerName: "", field: "id", sortable: true, filter: true, cellRenderer: deleteLinkRenderer, width: 45 },
+        ];
+
+        var summaryGridOptions = {
+            columnDefs: summaryColumnDefs,
+            defaultColDef: {
+                resizable: true
+            },
+            rowData: summaryRowData,
+            components: {
+                customLoadingCellRenderer: CustomLoadingCellRenderer,
+            },
+
+            loadingCellRenderer: 'customLoadingCellRenderer',
+            loadingCellRendererParams: {
+                loadingMessage: 'One moment please...',
+            },
+
+            // fetch 100 rows per at a time
+            cacheBlockSize: 100,
+
+            // only keep 10 blocks of rows
+            maxBlocksInCache: 10,
+
+            animateRows: true,
+            debug: true
+        };
+
+        function ledgerLinkRenderer(params) {
+            return `
+                <a class='btn btn-sm btn-warning ledger-button' target='_blank' href='../ledger.php?id=${params.data.id}&subType=${params.data.accountType}'>
+                <span class='glyphicon glyphicon-list'></span>
+                </a>
+            `
+        }
+
+        var summaryGridDiv = document.querySelector('#summaryGrid');
+
+        // create the grid passing in the div to use together with the columns & data we want to use
+        new agGrid.Grid(summaryGridDiv, summaryGridOptions);
+
+        changePageTitle("Account Administration");  // Change Needed HERE
+    });
+
 }

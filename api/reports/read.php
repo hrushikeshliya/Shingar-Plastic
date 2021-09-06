@@ -10,13 +10,15 @@ include_once '../config/database.php';
 include_once '../objects/reports.php';
 include_once '../objects/transaction.php';
 include_once '../objects/account.php';
- 
+include_once '../objects/invoiceDetail.php';
+
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
  
 $transactions = new Transaction($db);
 $account = new Account($db);
+$invoice_details = new InvoiceDetail($db);
 
 // set ID property of User to be edited
 $type = isset($_GET['type']) ? $_GET['type'] : die();
@@ -448,6 +450,14 @@ if($type=='sale' || $type=='purchase') {
     $closingBalanceNet = $openingBalanceNet + $netDebit - $netCredit;
     $closingBalancePartial = $openingBalancePartial + $partialDebit - $partialCredit;
 
+    $summary_by_hsn = array();
+    $stmt_summary_hsn = $invoice_details->read_summary_by_hsn();
+
+    while ($row_summary_hsn = $stmt_summary_hsn->fetch(PDO::FETCH_ASSOC)){
+        extract($row_summary_hsn);
+        array_push($summary_by_hsn, $row_summary_hsn);
+    }
+
     $arr["debitTransactions"] = $debitTransactions; 
     $arr["creditTransactions"] = $creditTransactions; 
     $arr["openingBalance"] = floatVal($openingBalance); 
@@ -472,6 +482,8 @@ if($type=='sale' || $type=='purchase') {
 
     $arr["partialStartDate"] = $partialStartDate;
     $arr["partialEndDate"] = $partialEndDate;
+
+    $arr["hsn_summary"] = $summary_by_hsn;
 }
 
 // make it json format

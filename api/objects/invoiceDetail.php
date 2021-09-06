@@ -181,7 +181,18 @@ class InvoiceDetail{
            }
        }
 
-	
+function read_summary_by_hsn(){
+     $query = "select invoiceId, id.`type`,sum(amount) amount, 
+            case when lsc.summaryName is null then 'Net' else lsc.summaryName end as summary_name from invoiceDetail id 
+            left join item i2 on id.itemId = i2.id
+            left join ledger_summary_category lsc on lsc.hsnSac = i2.hsnSac 
+            where id.deleted = 0 group by id.invoiceId, id.`type`, lsc.summaryName 
+            order by id.`type`, id.invoiceId";
+
+        $stmt = $this->conn->prepare($query);	
+        $stmt->execute();	 	
+        return $stmt;   
+}	
 }
 
 ?>

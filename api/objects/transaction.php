@@ -237,7 +237,7 @@ class Transaction{
         CASE 
         WHEN aty.name = 'JOBBER' THEN (a.openingBalance+COALESCE(credit.amount,0)-COALESCE(job.amount,0))
         WHEN aty.name = 'DEBTORS' THEN (a.openingBalance-COALESCE(debit.amount,0)-COALESCE(credit.amount,0)+COALESCE(sale.amount,0)-COALESCE(saleReturn.amount,0))
-        WHEN aty.name = 'CREDITORS' THEN (a.openingBalance+COALESCE(credit.amount,0)-COALESCE(purchase.amount,0)+COALESCE(purchaseReturn.amount,0))
+        WHEN aty.name = 'CREDITORS' THEN (a.openingBalance+COALESCE(credit.amount,0)-COALESCE(debit.amount,0)-COALESCE(purchase.amount,0)+COALESCE(purchaseReturn.amount,0))
         ELSE (a.openingBalance-COALESCE(debit.amount,0)+COALESCE(credit.amount,0))
         END balance
         from account a
@@ -317,7 +317,7 @@ class Transaction{
             CASE 
             WHEN aty.name = 'JOBBER' THEN (a.openingBalance+COALESCE(credit.amount,0)-COALESCE(job.amount,0))
             WHEN aty.name = 'DEBTORS' THEN (a.openingBalance-COALESCE(debit.amount,0)-COALESCE(credit.amount,0)+COALESCE(sale.amount,0)-COALESCE(saleReturn.amount,0))
-            WHEN aty.name = 'CREDITORS' THEN (a.openingBalance+COALESCE(credit.amount,0)-COALESCE(purchase.amount,0)+COALESCE(purchaseReturn.amount,0))
+            WHEN aty.name = 'CREDITORS' THEN (a.openingBalance+COALESCE(credit.amount,0)-COALESCE(debit.amount,0)-COALESCE(purchase.amount,0)+COALESCE(purchaseReturn.amount,0))
             ELSE (a.openingBalance-COALESCE(debit.amount,0)+COALESCE(credit.amount,0))
             END balance
             from account a
@@ -461,7 +461,7 @@ class Transaction{
             $query = "
             
             select CONCAT('JOB_',mr.id) id, mr.date, 'JOB' account, mr.jobCharge amount, mr.narration,
-            'CREDIT TRANSACTION' transactionType
+            'CREDIT TRANSACTION' transactionType, 0 invoice_id, '' type, 0 taxAmount
             FROM materialReceive mr
             LEFT JOIN materialIssue mi ON mr.issueID = mi.id
             LEFT JOIN account a ON a.id = mi.jobberId
@@ -472,7 +472,7 @@ class Transaction{
             UNION
     
             SELECT  CONCAT('SAL_',d.billCode,'_',s.invoiceId ) id, s.date, 'SALES' account, (s.subTotal+(s.taxableAmount*s.billLimit*tax/10000)) amount, s.narration,
-            'DEBIT TRANSACTION' transactionType 
+            'DEBIT TRANSACTION' transactionType, s.id invoice_id, 'sale' type, s.taxAmount 
             FROM sale s
             LEFT JOIN department d ON s.departmentId = d.Id
             LEFT JOIN account a ON s.accountId = a.id
@@ -484,7 +484,7 @@ class Transaction{
     
             SELECT  
             CONCAT('SAL_RET_',d.billCode,'_',sr.returnId ) id, sr.date, 'SALES RETURN' account, sr.totalAmount amount, sr.narration,
-            'CREDIT TRANSACTION' transactionType 
+            'CREDIT TRANSACTION' transactionType, sr.id invoice_id, 'saleReturn' type, 0 taxAmount  
             FROM sale s
             LEFT JOIN saleReturn sr ON s.id = sr.invoiceId and sr.deleted = 0
             LEFT JOIN department d ON s.departmentId = d.Id
@@ -498,7 +498,7 @@ class Transaction{
     
             SELECT  
             CONCAT('PUR_',d.billCode,'_',s.invoiceId ) id, s.date, 'PURCHASE' account, s.grandTotal amount, s.narration,
-            'CREDIT TRANSACTION' transactionType  
+            'CREDIT TRANSACTION' transactionType, s.id invoice_id, 'purchase' type, 0 taxAmount   
             FROM purchase s
             LEFT JOIN department d ON s.departmentId = d.Id
             LEFT JOIN account a ON s.accountId = a.id
@@ -510,7 +510,7 @@ class Transaction{
     
             SELECT  
             CONCAT('PUR_RET_',d.billCode,'_',sr.returnId ) id, sr.date, 'PURCHASE RETURN' account, sr.totalAmount amount, sr.narration,
-            'DEBIT TRANSACTION' transactionType  
+            'DEBIT TRANSACTION' transactionType, sr.id invoice_id, 'purchaseReturn' type, 0 taxAmount   
             FROM purchase s
             LEFT JOIN purchaseReturn sr ON s.id = sr.invoiceId AND sr.deleted = 0
             LEFT JOIN department d ON s.departmentId = d.Id
@@ -532,7 +532,7 @@ class Transaction{
                     WHEN t.creditAccountId IN (29,30) AND t.debitAccountId = :accountId THEN 'CREDIT TRANSACTION'
                     WHEN t.debitAccountId IN (29,30) AND t.creditAccountId = :accountId THEN 'DEBIT TRANSACTION'
                     ELSE 'TRANSACTION'
-                END transactionType
+                END transactionType, 0 invoice_id, '' type, 0 taxAmount
             from transaction t
             LEFT JOIN account da ON t.debitAccountId = da.id
             LEFT JOIN account ca ON t.creditAccountId = ca.id
@@ -548,7 +548,7 @@ class Transaction{
             CONCAT(t.type,'_',t.id) id, t.date, ca.aliasName account,  
             t.amount,
             t.narration,  
-            'CREDIT TRANSACTION' transactionType
+            'CREDIT TRANSACTION' transactionType, 0 invoice_id, '' type, 0 taxAmount 
             from transaction t
             LEFT JOIN account da ON da.id = t.debitAccountId
             LEFT JOIN account ca ON ca.id = t.creditAccountId
@@ -565,7 +565,7 @@ class Transaction{
             da.aliasName account,  
             t.amount, 
             t.narration, 
-            'DEBIT TRANSACTION' transactionType
+            'DEBIT TRANSACTION' transactionType, 0 invoice_id, '' type, 0 taxAmount 
             from transaction t
             LEFT JOIN account da ON da.id = t.debitAccountId
             LEFT JOIN account ca ON ca.id = t.creditAccountId
@@ -644,11 +644,25 @@ class Transaction{
 
     function readAmountTillDate(){	
         $query = "
-        select 
-        COALESCE(SUM(t.amount),0) amount
+select sum(amount) amount from (
+select 
+        case 
+        when at2.name = 'CREDITORS' and t.`type` = 'REC' then COALESCE(SUM(t.amount),0)*-1 
+        when at2.name = 'CREDITORS' and t.`type` = 'PAY' then COALESCE(SUM(t.amount),0)
+        when at2.name = 'CREDITORS' and t.`type` = 'JOU' then COALESCE(SUM(t.amount),0) 
+        when at2.name = 'DEBTORS' and t.`type` = 'REC' then COALESCE(SUM(t.amount),0) 
+        when at2.name = 'DEBTORS' and t.`type` = 'PAY' then COALESCE(SUM(t.amount),0)*-1 
+        when at2.name = 'DEBTORS' and t.`type` = 'JOU' then COALESCE(SUM(t.amount),0) 
+        else
+		COALESCE(SUM(t.amount),0) end amount 
         from transaction t
         LEFT JOIN account a ON (t.debitAccountId= a.Id OR t.creditAccountId = a.Id) 
-        where a.id = :id AND  t.date <= :date AND t.type IN ('REC','PAY','JOU') AND t.deleted = 0
+        LEFT JOIN accountType at2 on a.typeId = at2.Id 
+        where a.id = :id 
+        AND  t.date <= :date
+        AND t.type IN ('REC','PAY','JOU') 
+        AND t.deleted = 0 
+        group by t.`type`)a 
         ";	
 
         $stmt = $this->conn->prepare($query);	

@@ -29,7 +29,12 @@ $obj->grandTotal = $data->grandTotal;
 $obj->billLimit = $data->billLimit;
 $obj->invoiceId = $data->purchaseInvoiceId;
 
-if($obj->create()){
+$stmt = $obj->bill_exists();
+$num = $stmt->rowCount();
+
+if($num==0){
+    
+    $obj->create();
     
     if(is_array($data->itemName)) {
         for($x = 0; $x < count($data->itemName); $x++) {

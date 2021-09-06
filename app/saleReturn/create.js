@@ -88,9 +88,9 @@ function create() {
             create_html += "</table>";
             create_html += "</form>";
 
-            $("#page-content").html(create_html);
+            $("#page-content").html("<img id='loaderDiv' src='images/loading.gif' alt='Loading'  width='50' height='50'>" + create_html);
             changePageTitle("Create Sale Return Entry"); // Change Needed HERE
-
+            $("#loaderDiv").hide();
         });
     });
 
@@ -115,7 +115,13 @@ $(document).on('submit', '#createForm', function () {
             total = 0;
             totalAmount = 0;
             currentMaxLimit = 0;
+
+            if (result['message'] != 'Success') {
+                alert(result['message']);
+            }
+            $("#loaderDiv").hide();
             create();
+
         },
         error: function (xhr, resp, text) {
             console.log(xhr, resp, text);

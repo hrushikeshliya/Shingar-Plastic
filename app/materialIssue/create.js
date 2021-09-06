@@ -7,7 +7,6 @@ function show() {
     var username = $.cookie('username');
 
     var item_options_html = "";
-    var process_options_html = "";
     var jobber_options_html = "";
 
     $.getJSON(apiURL + "/item/read.php?ts=" + Math.random(), function (data) {

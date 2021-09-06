@@ -8,7 +8,6 @@ $(document).ready(function () {
 		$.getJSON(apiURL + "/materialIssue/readOne.php?id=" + id + "&ts=" + Math.random(), function (data) {  // Change Needed HERE
 
 			var item_options_html = "";
-			var process_options_html = "";
 			var jobber_options_html = "";
 
 			$.getJSON(apiURL + "/item/read.php?ts=" + Math.random(), function (data1) {

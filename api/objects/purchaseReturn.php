@@ -109,6 +109,25 @@ class PurchaseReturn{
         
     }
 
+            function bill_exists() {
+
+        $query = " select * from purchaseReturn s2, 
+        (select * from calendar_year cy where CURRENT_DATE() BETWEEN start_date and end_date) cy
+        where 
+        invoiceId = :invoiceId 
+        and departmentId = :departmentId
+        and date BETWEEN start_date and end_date";
+
+        $stmt = $this->conn->prepare($query);
+
+        // bind new values
+        $stmt->bindParam(':invoiceId', $this->invoiceId);
+        $stmt->bindParam(':departmentId', $this->departmentId);
+
+	    $stmt->execute();	 	
+	    return $stmt;
+    }
+
     function create(){
         
             $query = "INSERT INTO

@@ -278,6 +278,7 @@ $(document).ready(function () {
 
 			data: form_data,
 			success: function (result) {
+				alert("Success");
 				show("", "", "", "", "");
 			},
 			error: function (xhr, resp, text) {

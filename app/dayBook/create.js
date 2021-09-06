@@ -120,7 +120,6 @@ function create() {
 
             data: form_data,
             success: function (result) {
-                create();
                 alert("Success");
                 show(date, date);
             },
