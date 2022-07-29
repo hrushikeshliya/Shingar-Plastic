@@ -30,13 +30,15 @@ function genearateInvoice(passedHsn) {
 			Select HSN/SAC To Generate Challan : &nbsp;&nbsp;`;
 
 		$.each(data.sale[0].invoiceDetail, function (key, val) {
-			if (hsnSacList.indexOf(val.hsnSac) == -1) {
-				hsnSacList.push(val.hsnSac);
 
-				if (passedHsn.includes(val.hsnSac) || passedHsn == "*") {
-					sepChallan_html += `<label class="checkbox-inline"><input type="checkbox" value="` + val.hsnSac + `" name='hsnCodes' checked>` + val.hsnSac + `</label>`;
+			var currentHsnSacMaipulated = val.hsnSac+val.hsnSacException
+			if (hsnSacList.indexOf(currentHsnSacMaipulated) == -1) {
+				hsnSacList.push(currentHsnSacMaipulated);
+
+				if (passedHsn.includes(currentHsnSacMaipulated) || passedHsn == "*") {
+					sepChallan_html += `<label class="checkbox-inline"><input type="checkbox" value="` + currentHsnSacMaipulated +`" name='hsnCodes' checked>` + currentHsnSacMaipulated +`</label>`;
 				} else {
-					sepChallan_html += `<label class="checkbox-inline"><input type="checkbox" value="` + val.hsnSac + `" name='hsnCodes'>` + val.hsnSac + `</label>`;
+					sepChallan_html += `<label class="checkbox-inline"><input type="checkbox" value="` + currentHsnSacMaipulated +`" name='hsnCodes'>` + currentHsnSacMaipulated +`</label>`;
 				}
 			}
 		});
@@ -65,7 +67,7 @@ function genearateInvoice(passedHsn) {
 
 		read_one_html += "<tr><td colspan=6><h2 class='text-danger text-center'>S.P.</h2>";
 
-		if (passedHsn.includes('7117') || passedHsn == "*") {
+		if (passedHsn.includes('71170') || passedHsn == "*") {
 			taxAmount = parseFloat(data.sale[0].taxAmount).toFixed(decimal);
 		} else {
 			taxAmount = 0;
@@ -132,7 +134,7 @@ function genearateInvoice(passedHsn) {
 		quantityTotal = 0;
 		$.each(data.sale[0].invoiceDetail, function (key, val) {
 
-			if (passedHsn.includes(val.hsnSac) || passedHsn == "*") {
+			if (passedHsn.includes(val.hsnSac+val.hsnSacException) || passedHsn == "*") {
 
 				var rate = parseFloat(billLimit * val.rate).toFixed(decimal);
 				var amount = parseFloat(billLimit * val.amount).toFixed(decimal);

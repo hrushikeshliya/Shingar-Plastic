@@ -26,7 +26,7 @@ class InvoiceDetail{
     function readOneSale(){	
         $query = "
         SELECT id.*,s.billLimit,COALESCE(ir.returnQuantity,0) returnQuantity,
-        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac, i.hsnSacException 
         FROM invoiceDetail id 
         LEFT JOIN sale s ON id.invoiceId = s.id 
         LEFT JOIN department d ON s.departmentId = d.id 
@@ -48,7 +48,7 @@ class InvoiceDetail{
     function readOnePurchase(){	
         $query = "
         SELECT id.*,p.billLimit,COALESCE(ir.returnQuantity,0) returnQuantity,
-        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac, i.hsnSacException 
         FROM invoiceDetail id 
         LEFT JOIN purchase p ON id.invoiceId = p.id 
         LEFT JOIN department d ON p.departmentId = d.id 
@@ -70,7 +70,7 @@ class InvoiceDetail{
     function readOneSaleReturn(){	
         $query = "
         SELECT idd.narration saleNarration,id.*,s.billLimit,
-        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac, i.hsnSacException 
         FROM invoiceDetail id 
         LEFT JOIN invoiceDetail idd ON idd.id = id.detailId
 		LEFT JOIN saleReturn sr ON id.invoiceId = sr.id
@@ -91,7 +91,7 @@ class InvoiceDetail{
     function readOnePurchaseReturn(){	
         $query = "
         SELECT idd.narration purchaseNarration,id.*,p.billLimit,
-        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac 
+        d.id departmentId ,d.billSeriesSales, d.billSeriesSalesReturn, billSeriesPurchase, billSeriesPurchaseReturn,i.hsnSac, i.hsnSacException 
         FROM invoiceDetail id 
         LEFT JOIN invoiceDetail idd ON idd.id = id.detailId
 		LEFT JOIN purchaseReturn pr ON id.invoiceId = pr.id
@@ -185,8 +185,8 @@ function read_summary_by_hsn(){
      $query = "select invoiceId, id.`type`,sum(amount) amount, 
             case when lsc.summaryName is null then 'Net' else lsc.summaryName end as summary_name from invoiceDetail id 
             left join item i2 on id.itemId = i2.id
-            left join ledger_summary_category lsc on lsc.hsnSac = i2.hsnSac 
-            where id.deleted = 0 group by id.invoiceId, id.`type`, lsc.summaryName 
+            left join ledger_summary_category lsc on lsc.hsnSac = i2.hsnSac  and i2.hsnSacException = lsc.hsnSacException
+            where id.deleted = 0 group by id.invoiceId, id.`type`, case when lsc.summaryName is null then 'Net' else lsc.summaryName end
             order by id.`type`, id.invoiceId";
 
         $stmt = $this->conn->prepare($query);	

@@ -193,6 +193,7 @@ $(document).ready(function () {
 								create_html += "<th align='center'>Quantity</th>";
 								create_html += "<th align='center'>Rate</th>";
 								create_html += "<th align='center'>Amount</th>";
+								create_html += "<th>Tax Rate</th>";
 								create_html += "<th></th>";
 								create_html += "<th></th>";
 								create_html += "</tr>";
@@ -203,11 +204,18 @@ $(document).ready(function () {
 									var taxable = val2.hsnSac == "7117" || val2.hsnSac == "3923" ? '*' : '';
 									var markup = "<tr id='" + items + "'>";
 
+									var taxRate = "0"
+									if(val2.hsnSac  == "7117"){
+										taxRate = "3"
+									} else if(val2.hsnSac == "3923"){
+										taxRate = "18"
+									} 
 									markup += "<td><input name='itemId' value='" + val2.itemId + "' class='form-control' type='hidden'><input name='itemName' value='" + val2.itemName + "' class='form-control' readOnly></td>";
 									markup += "<td><input name='itemNarration' value='" + narration + "' class='form-control'></td>";
 									markup += "<td><input type='number' name='quantity' min=1 value='" + val2.quantity + "' class='form-control listQuantity' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
 									markup += "<td><input type='number' name='rate'  min=0.001 step=0.001 value='" + val2.rate + "' class='form-control listRate' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
 									markup += "<td><input name='amount' value='" + val2.amount + "' class='form-control amount listAmount' readOnly></td>";
+									markup += "<td><input type='hidden' class='form-control listTaxRate' value='"+taxRate+"' readonly>"+taxRate+" %</td>";
 									markup += "<td class='text-danger'><input type='hidden' class='listTaxable' value='" + taxable + "'>" + taxable + "</td>";
 									markup += "<td><a onclick=deleteItem(" + items + ") class='btn btn-danger'>Remove</a></td>";
 									markup += "</tr>";

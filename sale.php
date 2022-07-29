@@ -110,6 +110,12 @@ session_start();
                                 taxableAmount += +amount;
                             }
 
+                            var taxRate = "0"
+                            if(data.hsnSac == "7117"){
+                                taxRate = "3"
+                            } else if(data.hsnSac == "3923"){
+                                taxRate = "18"
+                            }
                             var markup = "<tr id='"+items+"'>";
                             
                             markup += "<td><input name='itemId' value='"+data.id+"' class='form-control' type='hidden'><input name='itemName' value='"+data.name+"' class='form-control' readOnly></td>";
@@ -117,6 +123,7 @@ session_start();
                             markup += "<td><input type='number' min=1 name='quantity' value='"+quantity+"' class='form-control listQuantity' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
                             markup += "<td><input type='number' min=0.001 step=0.001 name='rate' value='"+rate+"' class='form-control listRate' onkeyup=getBillAmount() onchange=getBillAmount()></td>";
                             markup += "<td><input name='amount' value='"+amount+"' class='form-control amount listAmount' readOnly></td>";
+                            markup += "<td><input type='hidden' class='form-control listTaxRate' value='"+taxRate+"' readonly> "+taxRate+" %</td>";
                             markup += "<td class='text-danger'><input type='hidden' class='listTaxable' value='"+taxable+"'>"+taxable+"</td>";
                             markup += "<td><a onclick=deleteItem("+items+") class='btn btn-danger'>Remove</a></td>";
                             markup += "</tr>";
@@ -147,35 +154,43 @@ session_start();
     
     
     function getBillAmount() {
-        var listLength = $(".listQuantity").length;
-        subTotal = 0;
-        taxableAmount = 0;
+    var listLength = $(".listQuantity").length;
+    subTotal = 0;
+    taxableAmount = 0;
+    taxAmount = 0;
 
-        for (i = 0; i < listLength; i++) { 
-            var rate = parseFloat($(".listRate").eq(i).val()).toFixed(3);
-            var amount = parseFloat($(".listQuantity").eq(i).val() * rate).toFixed(3);
-            $(".listRate").eq(i).val(rate);
-            $(".listAmount").eq(i).val(amount);
-            subTotal += +amount;
+    for (i = 0; i < listLength; i++) { 
+        
+        var rate = parseFloat($(".listRate").eq(i).val()).toFixed(3);
+        var amount = parseFloat($(".listQuantity").eq(i).val() * rate).toFixed(3);
+        var taxRate = parseFloat($(".listTaxRate").eq(i).val()).toFixed(3);
+        $(".listRate").eq(i).val(rate);
+        $(".listAmount").eq(i).val(amount);
+        //$(".listTaxRate").eq(i).val(taxRate);
+        subTotal += +amount;
 
-            if($(".listTaxable").eq(i).val() == '*') {
-                taxableAmount += $(".listQuantity").eq(i).val() * $(".listRate").eq(i).val();
-            }
+        if($(".listTaxable").eq(i).val() == '*') {
+            var current_tax_amount = 0;
+            taxableAmount += +amount;
+            var billLimit = $("#billLimit").val();
+            var tax =0;
+            tax = taxRate=0? 0: taxRate;
+            //var tax = $("#tax option:selected").val();
+            current_tax_amount = parseFloat(amount * tax/100 * billLimit /100).toFixed(3);
+            console.log("This is Tax Amount",current_tax_amount," For ",amount," @",tax,". With Limit ",billLimit,"% ****",taxRate)
+            taxAmount += +current_tax_amount
         }
-
-          var tax = $("#tax option:selected").val();
-          var billLimit = $("#billLimit").val();
-          tax = tax=0? 0: tax/100;
-
-          taxAmount = parseFloat(taxableAmount * tax * billLimit /100).toFixed(3);
-          
-              grandTotal = parseFloat(+subTotal + +taxAmount).toFixed(3);
-
-              $("#subTotal").val(subTotal);
-              $("#taxableAmount").val(taxableAmount);
-              $("#taxAmount").val(taxAmount);
-              $("#grandTotal").val(grandTotal);
     }
+
+          subTotal = parseFloat(subTotal).toFixed(3);
+          taxableAmount = parseFloat(taxableAmount).toFixed(3);
+          grandTotal = parseFloat(+subTotal + +taxAmount).toFixed(3);
+
+          $("#subTotal").val(subTotal);
+          $("#taxableAmount").val(taxableAmount);
+          $("#taxAmount").val(taxAmount);
+          $("#grandTotal").val(grandTotal);
+}
 </script>
     
 

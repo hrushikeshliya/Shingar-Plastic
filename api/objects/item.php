@@ -18,6 +18,7 @@ class Item{
     public $hsnSac;
     public $narration;
     public $active;
+    public $hsnSacException;
 
     // constructor with $db as database connection
     public function __construct($db){
@@ -108,7 +109,8 @@ class Item{
                        jobRate = :jobRate,
                        itemWeight = :itemWeight,
                        hsnSac = :hsnSac,
-                       narration = :narration
+                       narration = :narration,
+                       hsnSacException=0
                        "
                        ;
         

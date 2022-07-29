@@ -129,6 +129,7 @@ function create() {
                             create_html += "<th align='center'>Quantity</th>";
                             create_html += "<th align='center'>Rate</th>";
                             create_html += "<th align='center'>Amount</th>";
+                            create_html += "<th>Tax Rate</th>";
                             create_html += "<th></th>";
                             create_html += "<th></th>";
                             create_html += "</tr>";

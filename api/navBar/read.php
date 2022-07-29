@@ -18,12 +18,13 @@ $stmt = $navBar->read();
 $num = $stmt->rowCount();
 
 $currentHeading = "";
- 
+) 
 if($num>0){
  
     // products array
     $navBar_arr["navBar"]=array();
- 
+    $navGroup_arr["navGroup"]=array();
+    
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
     extract($row);
