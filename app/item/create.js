@@ -18,6 +18,13 @@ $(document).ready(function () {
     status_options_html += "<option value='0'>InActive</option>";
     status_options_html += "</select>";
 
+    var hsnSacException_options_html = "";
+
+    hsnSacException_options_html += "<select name='hsnSacException' class='form-control'>";
+    hsnSacException_options_html += "<option value='1'>1</option>";
+    hsnSacException_options_html += "<option value='0' selected>0</option>";
+    hsnSacException_options_html += "</select>";
+
     $(document).on('click', '.create-button', function () {
 
         var create_html = "";
@@ -54,14 +61,18 @@ $(document).ready(function () {
         create_html += "<tr>";
         create_html += "<td>HSN / SAC</td>";
         create_html += "<td><input type='number' name='hsnSac' class='form-control' required /></td>";
-        create_html += "<td>Narration</td>";
-        create_html += "<td><input type='text' name='narration' class='form-control'/></td>";
+        create_html += "<td>HSN / SAC (Net)</td>";
+        create_html += "<td>" + hsnSacException_options_html + "</td>";
         create_html += "</tr>";
 
         create_html += "<tr>";
+        create_html += "<td>Narration</td>";
+        create_html += "<td><input type='text' name='narration' class='form-control'/></td>";
         create_html += "<td>Status</td>";
         create_html += "<td>" + status_options_html + "</td>";
-
+        create_html += "</tr>";
+        
+        create_html += "<tr>";
         create_html += "<td>";
         create_html += "<button type='submit' class='btn btn-success'>";
         create_html += "Submit";

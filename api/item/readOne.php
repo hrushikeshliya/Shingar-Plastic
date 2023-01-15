@@ -34,7 +34,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             "itemWeight" => floatval($row['itemWeight']),
             "hsnSac" => $row['hsnSac'],
             "narration" => $row['narration'],
-            "active" => $row['active']
+            "active" => $row['active'],
+            "hsnSacException" => $row['hsnSacException']
         );
   
 // make it json format

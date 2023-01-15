@@ -25,7 +25,7 @@ $obj->jobRate = $data->jobRate;
 $obj->itemWeight = $data->itemWeight;
 $obj->hsnSac = $data->hsnSac;
 $obj->narration = $data->narration;
-
+$obj->hsnSacException = $data->hsnSacException;
 
 if($obj->create()){
     echo '{';

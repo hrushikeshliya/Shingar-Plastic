@@ -28,6 +28,7 @@ $obj->itemWeight = $data->itemWeight;
 $obj->hsnSac = $data->hsnSac;
 $obj->narration = $data->narration;
 $obj->active = $data->active;
+$obj->hsnSacException = $data->hsnSacException;
 
 if($obj->update()){
     echo '{';

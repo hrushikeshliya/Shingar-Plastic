@@ -67,7 +67,8 @@ class Item{
                 itemWeight = :itemWeight,
                 hsnSac = :hsnSac,
                 narration = :narration,
-                active = :active                          
+                active = :active,
+                hsnSacException = :hsnSacException                          
                 WHERE
                     Id = :id";
     
@@ -88,6 +89,7 @@ class Item{
         $stmt->bindParam(':hsnSac', $this->hsnSac);
         $stmt->bindParam(':narration', $this->narration);
         $stmt->bindParam(':active', $this->active);
+        $stmt->bindParam(':hsnSacException', $this->hsnSacException);
         $stmt->bindParam(':id', $this->id);
 
         if($stmt->execute()){
@@ -110,7 +112,7 @@ class Item{
                        itemWeight = :itemWeight,
                        hsnSac = :hsnSac,
                        narration = :narration,
-                       hsnSacException=0
+                       hsnSacException= :hsnSacException
                        "
                        ;
         
@@ -129,6 +131,7 @@ class Item{
         $stmt->bindParam(':itemWeight', $this->itemWeight);
         $stmt->bindParam(':hsnSac', $this->hsnSac);
         $stmt->bindParam(':narration', $this->narration);
+        $stmt->bindParam(':hsnSacException', $this->hsnSacException);
         
            if($stmt->execute()){
                return true;

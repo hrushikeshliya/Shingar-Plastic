@@ -10,7 +10,7 @@ $(document).ready(function () {
 			var name = data.name;
 			var rawType = data.rawType;
 			var active = data.active;
-
+			var hsnSacException = data.hsnSacException
 			var itemGroup_options_html = "";
 
 			$.getJSON(apiURL + "/itemGroup/read.php?ts=" + Math.random(), function (data2) {
@@ -38,6 +38,18 @@ $(document).ready(function () {
 
 				status_options_html += "</select>";
 
+				var hsnSacException_options_html = "";
+				hsnSacException_options_html += "<select name='hsnSacException' class='form-control'>";
+				if (hsnSacException == 0) {
+					hsnSacException_options_html += "<option value='1'>1</option>";
+					hsnSacException_options_html += "<option value='0' selected>0</option>";
+				} else {
+					hsnSacException_options_html += "<option value='1' selected>1</option>";
+					hsnSacException_options_html += "<option value='0'>0</option>";
+				}
+
+				hsnSacException_options_html += "</select>";
+				
 				var update_html = "";
 
 				update_html += "<div id='read' class='btn btn-primary pull-right m-b-15px read-button'>";
@@ -85,6 +97,9 @@ $(document).ready(function () {
 				update_html += "</tr>";
 
 				update_html += "<tr>";
+
+				update_html += "<td>HSN / SAC (Net)</td>";
+				update_html += "<td>" + hsnSacException_options_html + "</td>";
 
 				update_html += "<td><input value=\"" + id + "\" name='id' type='hidden' /></td>";
 

@@ -29,10 +29,13 @@ function genearateInvoice(passedHsn) {
 			<div class='col-md-10'>
 			Select HSN/SAC To Generate Challan : &nbsp;&nbsp;`;
 
+		console.log(passedHsn)
 		$.each(data.sale[0].invoiceDetail, function (key, val) {
 
 			var currentHsnSacMaipulated = val.hsnSac+val.hsnSacException
+			
 			if (hsnSacList.indexOf(currentHsnSacMaipulated) == -1) {
+				console.log(currentHsnSacMaipulated)
 				hsnSacList.push(currentHsnSacMaipulated);
 
 				if (passedHsn.includes(currentHsnSacMaipulated) || passedHsn == "*") {
@@ -67,9 +70,11 @@ function genearateInvoice(passedHsn) {
 
 		read_one_html += "<tr><td colspan=6><h2 class='text-danger text-center'>S.P.</h2>";
 
-		if (passedHsn.includes('71170') || passedHsn == "*") {
+		if (passedHsn.includes('71170') || passedHsn.includes("39230") || passedHsn == "*") {
+			console.log("display Tax")
 			taxAmount = parseFloat(data.sale[0].taxAmount).toFixed(decimal);
 		} else {
+			console.log("Set Tax 0")
 			taxAmount = 0;
 		}
 
