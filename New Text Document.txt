@@ -1,1 +1,0 @@
-SELECT GROUP_CONCAT(distinct s.date) as dates, d.name, s.invoiceId, count(*) FROM `sale` s left join department d on d.Id = s.departmentId where s.deleted = 0 group by year(s.date), d.name, s.invoiceId having count(*)>1 ORDER BY `count(*)` ASC

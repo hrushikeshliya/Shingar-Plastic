@@ -56,7 +56,7 @@
 var items = 1;
 var subTotal = 0;
 var grandTotal = 0;
-var apiURL2 = "http://shingarplastic.com/api";
+var apiURL2 = "https://shingarplastic.com/api";
 
 function getRate() {
     var id = $("#itemIdList option:selected").val();

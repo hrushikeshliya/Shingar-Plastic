@@ -43,7 +43,7 @@
 
 <script>
     
-    var apiURL2 = "http://shingarplastic.com/api";
+    var apiURL2 = "https://shingarplastic.com/api";
 
     function reloadCity() {
         var selectedState = $("#state option:selected").val();

@@ -33,7 +33,8 @@ function genearateInvoice(passedHsn) {
 		$.each(data.sale[0].invoiceDetail, function (key, val) {
 
 			var currentHsnSacMaipulated = val.hsnSac+val.hsnSacException
-			
+			console.log(" | " + val.hsnSac + " | " + val.hsnSacException + " = " + currentHsnSacMaipulated)
+
 			if (hsnSacList.indexOf(currentHsnSacMaipulated) == -1) {
 				console.log(currentHsnSacMaipulated)
 				hsnSacList.push(currentHsnSacMaipulated);
@@ -139,7 +140,7 @@ function genearateInvoice(passedHsn) {
 		quantityTotal = 0;
 		$.each(data.sale[0].invoiceDetail, function (key, val) {
 
-			if (passedHsn.includes(val.hsnSac+val.hsnSacException) || passedHsn == "*") {
+			if (passedHsn.includes(""+val.hsnSac+""+val.hsnSacException) || passedHsn == "*") {
 
 				var rate = parseFloat(billLimit * val.rate).toFixed(decimal);
 				var amount = parseFloat(billLimit * val.amount).toFixed(decimal);

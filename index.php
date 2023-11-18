@@ -12,8 +12,8 @@
 
 function redirectURL() {
 
-if(window.location.href != "http://shingarplastic.com.cp-in-14.webhostbox.net/") {
-	window.location.href = "http://shingarplastic.com.cp-in-14.webhostbox.net/";
+if(window.location.href != "https://shingarplastic.com.cp-in-14.webhostbox.net/") {
+	window.location.href = "https://shingarplastic.com.cp-in-14.webhostbox.net/";
 }
 }
 //redirectURL();
