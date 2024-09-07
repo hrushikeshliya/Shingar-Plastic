@@ -32,6 +32,9 @@ read_html+="<table class='table table-bordered table-hover' id='myTable'>";
         read_html+="<th class='text-align-center'>Sale Rate</th>";
         read_html+="<th class='text-align-center'>Profit</th>";
         read_html+="<th class='text-align-center'>Req Wt</th>";
+        read_html+="<th class='text-align-center'>Total Purchase Qty</th>";
+        read_html+="<th class='text-align-center'>Total Sale Qty</th>";
+        read_html+="<th class='text-align-center'>Inventory</th>";
         read_html+="<th class='text-align-center'></th>";
     read_html+="</tr>";
      
@@ -47,6 +50,10 @@ $.each(data.item, function(key, val) {   // Change Needed HERE
         read_html+="<td>" + val.saleRate + "</td>";
         read_html+="<td>" + ((((val.saleRate - val.purchaseRate) / val.purchaseRate)*100)).toFixed(2) + " % </td>";
         read_html+="<td>" + val.itemWeight + "</td>";
+
+        read_html+="<td>" + val.total_purchase + "</td>";
+        read_html+="<td>" + val.total_sale + "</td>";
+        read_html+="<td>" + val.inventory + "</td>";
 
         read_html+="<td class='text-right'>";
 

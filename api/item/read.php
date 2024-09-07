@@ -36,6 +36,9 @@ if($num>0){
             "hsnSac" => $hsnSac,
             "narration" => $narration,
             "active" => $active,
+            "total_sale" => $total_sale,
+            "total_purchase" => $total_purchase,
+            "inventory" => $inventory,
 
         );
  

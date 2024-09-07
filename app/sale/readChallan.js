@@ -32,7 +32,7 @@ function genearateInvoice(passedHsn) {
 		console.log(passedHsn)
 		$.each(data.sale[0].invoiceDetail, function (key, val) {
 
-			var currentHsnSacMaipulated = val.hsnSac+val.hsnSacException
+			var currentHsnSacMaipulated = val.hsnSac+""+val.hsnSacException
 			console.log(" | " + val.hsnSac + " | " + val.hsnSacException + " = " + currentHsnSacMaipulated)
 
 			if (hsnSacList.indexOf(currentHsnSacMaipulated) == -1) {
@@ -54,7 +54,7 @@ function genearateInvoice(passedHsn) {
 		sepChallan_html += "</div>";
 
 		decimal = 2;
-		billTO = "<b>Consignee :</b><br><b>" + data.sale[0].accountName + "</b><BR>" + data.sale[0].address1 + "<BR>" + data.sale[0].address2 + "<BR>City : " + data.sale[0].city + " - " + data.sale[0].pincode + "<BR>State: " + data.sale[0].state + "<BR><BR> GST : " + data.sale[0].gstNo;
+		billTO = "<b>Consignee :</b><br><b>" + data.sale[0].accountName + "</b><BR>" + data.sale[0].address1 + "<BR>" + data.sale[0].address2 + "<BR>City : " + data.sale[0].city + " - " + data.sale[0].pincode + "<BR>State: " + data.sale[0].state + "<BR><BR> <span class ='readOnlyContent'>GST : " + data.sale[0].gstNo+"</span>";
 
 		var deductions = 0;
 		var billLimit = billType == "invoice" ? (0 + data.sale[0].billLimit) / 10 : 1;
@@ -68,7 +68,7 @@ function genearateInvoice(passedHsn) {
 		read_one_html += "<col width='15%'>";
 		read_one_html += "<col width='15%'>";
 		read_one_html += "<col width='15%'>";
-
+		read_one_html += "<tr><td colspan=6><h4 class='text-danger text-center'>ORDER ESTIMATE</h4>";
 		read_one_html += "<tr><td colspan=6><h2 class='text-danger text-center'>S.P.</h2>";
 
 		if (passedHsn.includes('71170') || passedHsn.includes("39230") || passedHsn == "*") {
@@ -122,7 +122,7 @@ function genearateInvoice(passedHsn) {
 			lrNo = ' [' + data.sale[0].lrNo + ']';
 		}
 
-		read_one_html += "Transport (LR) : " + data.sale[0].transportName + lrNo;
+		read_one_html += "<span class ='readOnlyContent'>Transport (LR) : " + data.sale[0].transportName + lrNo +"</span>";
 
 		read_one_html += "</div></td></tr>";
 
@@ -205,7 +205,7 @@ function genearateInvoice(passedHsn) {
 		$("#page-content").html(read_one_html);
 
 
-		changePageTitle("Sale Invoice");  // Change Needed HERE
+		changePageTitle("Sale Challan");  // Change Needed HERE
 	});
 
 }

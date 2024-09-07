@@ -26,7 +26,25 @@ class Item{
     	}
 
 	function read(){	
-	    $query = "SELECT i.*,ig.name as itemGroup FROM " . $this->table_name . " i LEFT JOIN itemGroup ig ON i.itemGroupId = ig.id where i.deleted = 0 ORDER BY i.name asc";	
+	    $query = "
+        SELECT i.*,ig.name as itemGroup, 
+        COALESCE(total_sale,0) as total_sale, 
+        COALESCE(total_purchase,0) as total_purchase,
+        COALESCE(total_purchase,0) - COALESCE(total_sale,0) as inventory
+        FROM item i 
+        LEFT JOIN itemGroup ig ON i.itemGroupId = ig.id 
+        LEFT JOIN (
+        select i.itemId, sum(i.quantity) total_sale from sale s
+        inner join invoiceDetail i on i.type = 'sale' and s.id = i.invoiceId and s.deleted = false
+        group by i.itemId
+        ) ts on ts.itemId = i.id
+        LEFT JOIN (
+        select i.itemId, sum(i.quantity) total_purchase from purchase s
+        inner join invoiceDetail i on i.type = 'purchase' and s.id = i.invoiceId and s.deleted = false
+        group by i.itemId
+        ) tp on tp.itemId = i.id
+        where i.deleted = 0 ORDER BY i.name asc
+        ";	
 	    $stmt = $this->conn->prepare($query);	
 	    $stmt->execute();	 	
 	    return $stmt;	

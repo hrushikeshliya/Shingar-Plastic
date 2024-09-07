@@ -145,12 +145,12 @@ class Purchase{
         SUM((i.amount-COALESCE(r.amount,0))) amount
         
         from purchase p 
-        LEFT JOIN invoiceDetail i ON p.id = i.invoiceId
+        LEFT JOIN invoiceDetail i ON p.id = i.invoiceId and i.`type` = 'purchase'
         LEFT JOIN (
         
         select i.detailId ,SUM(quantity) quantity, SUM(amount) amount from 
         purchaseReturn pr 
-        LEFT JOIN invoiceDetail i ON i.invoiceId = pr.id
+        LEFT JOIN invoiceDetail i ON i.invoiceId = pr.id and i.`type` = 'purchaseReturn'
         where pr.deleted=0 
         GROUP BY i.detailId) r ON i.id = r.detailId
         WHERE p.deleted = 0 ".$whereClause."
