@@ -50,8 +50,8 @@ $(document).ready(function () {
             var summaryGridDiv = document.querySelector('#summaryGrid');
 
             // create the grid passing in the div to use together with the columns & data we want to use
-            new agGrid.Grid(invalidGridDiv, invalidGridOptions);
-            new agGrid.Grid(summaryGridDiv, summaryGridOptions);
+            new agGrid.createGrid(invalidGridDiv, invalidGridOptions);
+            new agGrid.createGrid(summaryGridDiv, summaryGridOptions);
         });
     });
 

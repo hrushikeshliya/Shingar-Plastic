@@ -61,7 +61,7 @@ function formatNumber(number) {
 var summaryGridDiv = document.querySelector('#summaryGrid');
 
 // create the grid passing in the div to use together with the columns & data we want to use
-new agGrid.Grid(summaryGridDiv, summaryGridOptions);
+new agGrid.createGrid(summaryGridDiv, summaryGridOptions);
 
 var res = data.reports.map(bill => bill.closingBalance).reduce((acc, bill) => bill + acc);
 
