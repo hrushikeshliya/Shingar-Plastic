@@ -40,7 +40,8 @@ if(window.location.href != "https://shingarplastic.com.cp-in-14.webhostbox.net/"
 		  <div class="form-group">
 		    <div class="col-md-offset-4 col-sm-4"> 
 				<select style="margin-top:15px" id="financialYear" name="financialYear">;
-					<option value='2023-2024' selected>2023-2024</option>
+					<option value='2024-2025' selected>2024-2025</option>
+					<option value='2023-2024'>2023-2024</option>
 					<option value='2022-2023'>2022-2023</option>
 					<option value='2021-2022'>2021-2022</option>
 					<option value='2020-2021'>2020-2021</option>

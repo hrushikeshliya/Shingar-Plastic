@@ -30,7 +30,9 @@ class Item{
         SELECT i.*,ig.name as itemGroup, 
         COALESCE(total_sale,0) as total_sale, 
         COALESCE(total_purchase,0) as total_purchase,
-        COALESCE(total_purchase,0) - COALESCE(total_sale,0) as inventory
+        COALESCE(total_sale_return,0) as total_sale_return, 
+        COALESCE(total_purchase_return,0) as total_purchase_return,
+        (COALESCE(total_purchase,0) - COALESCE(total_purchase_return,0)) - (COALESCE(total_sale,0) - COALESCE(total_sale_return,0)) as inventory
         FROM item i 
         LEFT JOIN itemGroup ig ON i.itemGroupId = ig.id 
         LEFT JOIN (
@@ -39,10 +41,20 @@ class Item{
         group by i.itemId
         ) ts on ts.itemId = i.id
         LEFT JOIN (
+        select i.itemId, sum(i.quantity) total_sale_return from sale s
+        inner join invoiceDetail i on i.type = 'saleReturn' and s.id = i.invoiceId and s.deleted = false
+        group by i.itemId
+        ) tsr on tsr.itemId = i.id
+        LEFT JOIN (
         select i.itemId, sum(i.quantity) total_purchase from purchase s
         inner join invoiceDetail i on i.type = 'purchase' and s.id = i.invoiceId and s.deleted = false
         group by i.itemId
         ) tp on tp.itemId = i.id
+        LEFT JOIN (
+        select i.itemId, sum(i.quantity) total_purchase_return from purchase s
+        inner join invoiceDetail i on i.type = 'purchaseReturn' and s.id = i.invoiceId and s.deleted = false
+        group by i.itemId
+        ) tpr on tpr.itemId = i.id
         where i.deleted = 0 ORDER BY i.name asc
         ";	
 	    $stmt = $this->conn->prepare($query);	

@@ -38,6 +38,8 @@ if($num>0){
             "active" => $active,
             "total_sale" => $total_sale,
             "total_purchase" => $total_purchase,
+            "total_sale_return" => $total_sale_return,
+            "total_purchase_return" => $total_purchase_return,
             "inventory" => $inventory,
 
         );

@@ -471,7 +471,7 @@ class Transaction{
     
             UNION
     
-            SELECT  CONCAT('SAL_',d.billCode,'_',s.invoiceId ) id, s.date, 'SALES' account, (s.subTotal+(s.taxableAmount*s.billLimit*tax/10000)) amount, s.narration,
+            SELECT  CONCAT('SAL_',d.billCode,'_',s.invoiceId ) id, s.date, 'SALES' account, (s.grandTotal) amount, s.narration,
             'DEBIT TRANSACTION' transactionType, s.id invoice_id, 'sale' type, s.taxAmount 
             FROM sale s
             LEFT JOIN department d ON s.departmentId = d.Id
@@ -644,7 +644,7 @@ class Transaction{
 
     function readAmountTillDate(){	
         $query = "
-select sum(amount) amount from (
+select COALESCE(sum(amount),0) amount from (
 select 
         case 
         when at2.name = 'CREDITORS' and t.`type` = 'REC' then COALESCE(SUM(t.amount),0)*-1 

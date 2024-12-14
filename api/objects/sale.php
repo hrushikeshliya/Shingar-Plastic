@@ -86,7 +86,7 @@ class Sale{
 
     function readAmountTillDate(){	
         $query = "
-        select COALESCE(SUM((s.subTotal+(s.taxableAmount*s.billLimit*tax/10000)) ),0) amount 
+        select COALESCE(SUM(s.grandTotal),0) amount 
         from sale s
         where 
         deleted = 0 

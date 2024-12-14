@@ -1,5 +1,5 @@
-//const apiURL = "https://shingarplastic.com.cp-in-14.webhostbox.net/api";
-//const siteURL = "https://shingarplastic.com.cp-in-14.webhostbox.net/";
+//const apiURL = "http://shingarplastic.com.cp-in-14.webhostbox.net/api";
+//const siteURL = "http://shingarplastic.com.cp-in-14.webhostbox.net/";
 
 const apiURL = "https://shingarplastic.com/api";
 const siteURL = "https://shingarplastic.com/";

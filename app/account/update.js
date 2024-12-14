@@ -180,7 +180,7 @@ $(document).ready(function () {
 			data: form_data,
 			success: function (result) {
 				show();
-				//window.location.assign("https://shingarplastic.com/account.php")
+				//window.location.assign("http://shingarplastic.com/account.php")
 			},
 			error: function (xhr, resp, text) {
 				console.log(xhr, resp, text);
